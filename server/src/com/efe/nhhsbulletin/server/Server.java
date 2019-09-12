@@ -52,7 +52,7 @@ public class Server {
       if (reqName.equals("/bulletin/available_dates")) {
         response = bulletinManager.getAvailableDates();
       } else if (reqName.equals("/bulletin/date")) {
-        response = bulletinManager.getDate();
+        response = bulletinManager.getDate(t.getRequestURI().getQuery());
       } else {
         err.handle(t);
         return;
