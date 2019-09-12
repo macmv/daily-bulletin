@@ -1,0 +1,10 @@
+# java
+*.class
+
+# pacakge
+*.jar
+
+# gradle
+.gradle
+build
+!gradle-wrapper.jar

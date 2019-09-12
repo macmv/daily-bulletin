@@ -1,5 +1,10 @@
 package com.efe.nhhsbulletin.server;
 
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
+
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -14,6 +19,15 @@ public class BulletinManager {
 
   public BulletinManager() {
 
+  }
+
+  public void collectDaily() {
+    Date today = new Date();
+    BulletinCache cache = new BulletinCache(today);
+    cache.readInternet();
+    if (cache.getData().length() > 0) {
+      cache.saveCache();
+    }
   }
 
   public String getAvailableDates() {
@@ -70,7 +84,15 @@ public class BulletinManager {
     }
 
     public void readInternet() {
-
+      Document doc = null;
+      try {
+        doc = Jsoup.connect("http://en.wikipedia.org/").get();
+      } catch (IOException e) {
+        e.printStackTrace();
+        return;
+      }
+      System.out.println(doc.title());
+      Elements newsHeadlines = doc.select("#mp-itn b a");
     }
 
     public void saveCache() {
