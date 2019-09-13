@@ -12,4 +12,5 @@ repositories {
 
 dependencies {
   compile 'org.jsoup:jsoup:1.12.1'
+  compile 'org.json:json:20190722'
 }

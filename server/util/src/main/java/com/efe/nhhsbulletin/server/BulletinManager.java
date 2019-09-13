@@ -1,5 +1,8 @@
 package com.efe.nhhsbulletin.server;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+import org.json.JSONString;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -11,7 +14,9 @@ import java.nio.file.Paths;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.logging.Logger;
 
 public class BulletinManager {
@@ -26,7 +31,7 @@ public class BulletinManager {
     Date today = new Date();
     BulletinCache cache = new BulletinCache(today);
     cache.readInternet();
-    if (cache.getData().length() > 0) {
+    if (cache.getJsonData().length() > 0) {
       cache.saveCache();
     }
   }
@@ -36,10 +41,10 @@ public class BulletinManager {
   }
 
   public String getDate(String query) {
-    String[] date_data = query.split("&"); // is ['date=2019-09-12']
+    String[] date_data = query.split("&"); // is ['d=2019-09-12']
     Date date;
     if (date_data.length == 1) {
-      String[] date_raw = date_data[0].split("="); // is ['date, '2019-09-12']
+      String[] date_raw = date_data[0].split("="); // is ['d, '2019-09-12']
       if (date_raw.length == 2 && date_raw[0].equals("d")) {
         String date_value = date_raw[1]; // is '2019-09-12'
         date = getDateFromString(date_value);
@@ -53,7 +58,7 @@ public class BulletinManager {
       return "invalid request";
     }
     BulletinCache cache = getBulletinCache(date);
-    return cache.getData();
+    return cache.getJsonData();
   }
 
   private BulletinCache getBulletinCache(Date date) {
@@ -64,7 +69,7 @@ public class BulletinManager {
 
   private class BulletinCache {
     private final Date date;
-    private String data = null;
+    private String jsonData = null;
 
     public BulletinCache(Date date) {
       this.date = date;
@@ -77,14 +82,14 @@ public class BulletinManager {
       try {
         Path p = Paths.get(getBasePath() + getPathFromDate(date));
         if (!Files.exists(p)) {
-          data = null;
+          jsonData = null;
           return;
         }
         StringBuilder sb = new StringBuilder();
         Files.lines(p).forEach((s) -> {
           sb.append(s).append("\n");
         });
-        data = sb.toString();
+        jsonData = sb.toString();
       } catch (IOException e) {
         e.printStackTrace();
       }
@@ -106,7 +111,44 @@ public class BulletinManager {
       for (int i = 1; i < raw.length; i++) {
         raw[i] = raw[i].substring(Math.min(5, raw[i].length()));
       }
-      data = String.join("\n", raw);
+      String plainTextData = String.join("\n", raw);
+      jsonData = generateJsonData(plainTextData);
+      log.info("Generated JSON: " + jsonData);
+    }
+
+    private String generateJsonData(String plainTextData) {
+      JSONObject json = new JSONObject();
+      ArrayList<String> sections = new ArrayList<>();
+      StringBuilder currentSection = null;
+      for (String line : plainTextData.split("\n")) {
+        if (line.equals("")) {
+          if (currentSection != null) {
+            sections.add(currentSection.toString());
+          }
+          currentSection = null;
+        } else {
+          if (currentSection == null) {
+            currentSection = new StringBuilder();
+          }
+          currentSection.append(line).append("\n");
+        }
+      }
+      for (String section : sections) {
+        if (section.startsWith("NATHAN HALE HIGH SCHOOL DAILY")) {
+          json.put("title", section);
+        } else if (section.startsWith("CLUBS:")) {
+          json.put("clubs", section);
+        } else if (section.startsWith("Happenings")) {
+          json.put("sports", section);
+        } else if (section.startsWith("Lunch:")) {
+          json.put("lunch", section);
+        } else {
+          if (!json.has("other")) {
+            json.put("other", section);
+          }
+        }
+      }
+      return json.toString();
     }
 
     /**
@@ -119,7 +161,7 @@ public class BulletinManager {
         return;
       }
       try {
-        Files.write(p, data.getBytes());
+        Files.write(p, jsonData.getBytes());
       } catch (IOException e) {
         e.printStackTrace();
       }
@@ -130,8 +172,8 @@ public class BulletinManager {
      * Gets the current data stored
      * @return The current data is has stored
      */
-    public String getData() {
-      return data;
+    public String getJsonData() {
+      return jsonData;
     }
   }
 
