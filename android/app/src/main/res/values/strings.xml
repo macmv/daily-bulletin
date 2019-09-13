@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">NHHS Bulletin</string>
+    <string name="tab_text_1">Bulletin</string>
+    <string name="tab_text_2">Sports</string>
+    <string name="tab_text_3">Schedule</string>
+    <string name="tab_text_4">Resources</string>
+</resources>
