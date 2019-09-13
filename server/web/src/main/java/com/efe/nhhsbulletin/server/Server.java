@@ -4,7 +4,8 @@ import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import com.sun.net.httpserver.HttpServer;
 
-import java.io.*;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.net.InetSocketAddress;
 
 public class Server {
@@ -60,11 +61,13 @@ public class Server {
       if (response == null) {
         t.sendResponseHeaders(204, 0);
       } else {
-        t.sendResponseHeaders(200, response.length());
+        // we sometimes get the utf8 quotes in the bulletin; need utf8
+        t.getResponseHeaders().set("Content-Type", "text/raw; charset=utf-8");
+        t.sendResponseHeaders(200, response.getBytes().length);
+        OutputStream out = t.getResponseBody();
+        out.write(response.getBytes());
+        out.close();
       }
-      OutputStream out = t.getResponseBody();
-      out.write(response.getBytes());
-      out.close();
     }
   }
 }
