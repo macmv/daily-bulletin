@@ -8,3 +8,7 @@
 .gradle
 build
 !gradle-wrapper.jar
+
+# idea files
+.idea
+*.hprof

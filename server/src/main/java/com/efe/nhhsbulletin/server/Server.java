@@ -57,7 +57,11 @@ public class Server {
         err.handle(t);
         return;
       }
-      t.sendResponseHeaders(200, response.length());
+      if (response == null) {
+        t.sendResponseHeaders(204, 0);
+      } else {
+        t.sendResponseHeaders(200, response.length());
+      }
       OutputStream out = t.getResponseBody();
       out.write(response.getBytes());
       out.close();

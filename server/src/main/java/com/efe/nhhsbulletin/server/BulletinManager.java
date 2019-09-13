@@ -3,18 +3,21 @@ package com.efe.nhhsbulletin.server;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
 
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.logging.Logger;
 
 public class BulletinManager {
+  private final static Logger log = Logger.getLogger(BulletinManager.class.getName());
   DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
   public BulletinManager() {
@@ -39,17 +42,17 @@ public class BulletinManager {
     Date date;
     if (date_data.length == 1) {
       String[] date_raw = date_data[0].split("="); // is ['date, '2019-09-12']
-      if (date_raw.length == 2) {
+      if (date_raw.length == 2 && date_raw[0].equals("d")) {
         String date_value = date_raw[1]; // is '2019-09-12'
         date = getDateFromString(date_value);
         if (date == null) {
           return "invalid date";
         }
       } else {
-        return "invalid date";
+        return "invalid request";
       }
     } else {
-      return "invalid date";
+      return "invalid request";
     }
     BulletinCache cache = getBulletinCache(date);
     return cache.getData();
@@ -63,16 +66,22 @@ public class BulletinManager {
 
   private class BulletinCache {
     private final Date date;
-    private String data;
+    private String data = null;
 
     public BulletinCache(Date date) {
       this.date = date;
     }
 
+    /**
+     * Loads the local cache into data
+     */
     public void readCache() {
       try {
-        Path p = Paths.get(getBaseBulletinCachePath() + getPathFromDate(date));
-        System.out.println(p.toAbsolutePath());
+        Path p = Paths.get(getBasePath() + getPathFromDate(date));
+        if (!Files.exists(p)) {
+          data = null;
+          return;
+        }
         StringBuilder sb = new StringBuilder();
         Files.lines(p).forEach((s) -> {
           sb.append(s).append("\n");
@@ -83,22 +92,46 @@ public class BulletinManager {
       }
     }
 
+    /**
+     * Loads data from nhhs website into data
+     */
     public void readInternet() {
-      Document doc = null;
+      Document doc;
       try {
-        doc = Jsoup.connect("http://en.wikipedia.org/").get();
+        doc = Jsoup.connect("https://halehs.seattleschools.org/about/calendar_and_news/daily_bulletin").get();
       } catch (IOException e) {
         e.printStackTrace();
         return;
       }
-      System.out.println(doc.title());
-      Elements newsHeadlines = doc.select("#mp-itn b a");
+      Element para = doc.select("#ctl00_ContentPlaceHolder1_ctl12_divContent").get(0);
+      String[] raw = para.html().split("\n");
+      for (int i = 1; i < raw.length; i++) {
+        raw[i] = raw[i].substring(Math.min(5, raw[i].length()));
+      }
+      data = String.join("\n", raw);
     }
 
+    /**
+     * Saves the data it has to the appropriate file
+     */
     public void saveCache() {
-
+      Path p = Paths.get(getBasePath() + getPathFromDate(date));
+      if (Files.exists(p)) {
+        log.info("File already exists for " + date);
+        return;
+      }
+      try {
+        Files.write(p, data.getBytes());
+      } catch (IOException e) {
+        e.printStackTrace();
+      }
+      log.info("Saved file for " + date);
     }
 
+    /**
+     * Gets the current data stored
+     * @return The current data is has stored
+     */
     public String getData() {
       return data;
     }
@@ -116,7 +149,7 @@ public class BulletinManager {
     }
   }
 
-  private static String getBaseBulletinCachePath() {
+  private static String getBasePath() {
     return "./cache/bulletin/";
   }
 }
