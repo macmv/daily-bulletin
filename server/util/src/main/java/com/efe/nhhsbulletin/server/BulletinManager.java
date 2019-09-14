@@ -30,9 +30,13 @@ public class BulletinManager {
   public void collectDaily() {
     Date today = new Date();
     BulletinCache cache = new BulletinCache(today);
-    cache.readInternet();
-    if (cache.getJsonData().length() > 0) {
+    cache.readCache();
+    if (cache.getJsonData() == null) {
+      cache.readInternet();
+      // check if it's not a new bulletin (aka weekend/no school)
       cache.saveCache();
+    } else {
+      log.info("File already exists for " + today);
     }
   }
 
@@ -134,6 +138,7 @@ public class BulletinManager {
         }
       }
       for (String section : sections) {
+        section = section.trim();
         if (section.startsWith("NATHAN HALE HIGH SCHOOL DAILY")) {
           json.put("title", section);
         } else if (section.startsWith("CLUBS:")) {
@@ -144,8 +149,9 @@ public class BulletinManager {
           json.put("lunch", section);
         } else {
           if (!json.has("other")) {
-            json.put("other", section);
+            json.put("other", new JSONArray());
           }
+          ((JSONArray) json.get("other")).put(section);
         }
       }
       return json.toString();

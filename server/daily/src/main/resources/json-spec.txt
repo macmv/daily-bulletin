@@ -1,0 +1,33 @@
+
+files on server
+bulletin/
+  cache/
+    YYYY-MM-DD.txt
+      {
+        "title": "Title of bulletin, should probably ignore and generate your own based on date",
+        "clubs": "Upcoming clubs, can probably parse dates so format here is TBD, but for now is string",
+        "sports": "Can also parse more information, so format is TBD, but nor now is string",
+        "lunch": "For now is a one liner (example: "today: Pizza"), but will be parsed in the future",
+        "other": [
+          "Random crap here",
+          "And some more random crap",
+          "This is what you should split up into those rounded corner boxes"
+        ]
+      }
+
+urls on server
+- /bulletin/date?d=YYYY-MM-DD
+  - Responds with the appropriate JSON file stored in bulletin/cache/
+  - Sends response code 204 if no file exists
+  - Sends response code 200 if it found and sent a file
+- /bulletin/available_dates?d=YYYY-MM
+  - Sends the available dates for that month
+  - Sends empty array is no files were found
+  - Sends JSON that looks like:
+    {
+      "dates": [
+        "YYYY-MM-DD",
+        "YYYY-MM-DD",
+        "etc, for whole month"
+      ]
+    }
