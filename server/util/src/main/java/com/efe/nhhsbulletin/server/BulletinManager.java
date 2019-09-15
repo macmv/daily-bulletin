@@ -1,9 +1,11 @@
 package com.efe.nhhsbulletin.server;
 
+import org.apache.commons.lang3.StringUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.json.JSONString;
 import org.jsoup.Jsoup;
+import org.jsoup.internal.StringUtil;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 
@@ -21,7 +23,7 @@ import java.util.logging.Logger;
 
 public class BulletinManager {
   private final static Logger log = Logger.getLogger(BulletinManager.class.getName());
-  DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+  private DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
   public BulletinManager() {
 
@@ -31,20 +33,52 @@ public class BulletinManager {
     Date today = new Date();
     BulletinCache cache = new BulletinCache(today);
     cache.readCache();
+    // checks if no file was saved for today
     if (cache.getJsonData() == null) {
       cache.readInternet();
-      // check if it's not a new bulletin (aka weekend/no school)
-      cache.saveCache();
+      BulletinCache prevCache = new BulletinCache(getPrevCache(today));
+      prevCache.readCache();
+      // checks if it is the same as the prev cache, therefore it is the weekend
+      if (cache.getJsonData().equals(prevCache.getJsonData())){
+        log.info("File is the same as prev cache");
+      } else {
+        cache.saveCache();
+        log.info("Saved new cache");
+      }
     } else {
       log.info("File already exists for " + today);
     }
+  }
+
+  /**
+   * Gets the cache that is date or closest before
+   * @param date The date to scan backward from
+   * @return The date of the cache found, or null if no caches in past year
+   */
+  private Date getPrevCache(Date date) {
+    long DAY_IN_MS = 1000 * 60 * 60 * 24;
+    for (int daysBack = 0; daysBack < 356; daysBack++) {
+      Date testDate = new Date(date.getTime() - daysBack * DAY_IN_MS);
+      BulletinCache testCache = new BulletinCache(testDate);
+      testCache.readCache();
+      if (testCache.getJsonData() != null) {
+        return testDate;
+      }
+    }
+    return null;
   }
 
   public String getAvailableDates() {
     return "available dates";
   }
 
-  public String getDate(String query) {
+  /**
+   * Gets the appropriate cache from the given url search query
+   * @param query The search query from the http req
+   *              Example: d=2019-09-12
+   * @return The raw json data
+   */
+  public String getJsonFromUrl(String query) {
     String[] date_data = query.split("&"); // is ['d=2019-09-12']
     Date date;
     if (date_data.length == 1) {
@@ -93,7 +127,7 @@ public class BulletinManager {
         Files.lines(p).forEach((s) -> {
           sb.append(s).append("\n");
         });
-        jsonData = sb.toString();
+        jsonData = sb.toString().trim();
       } catch (IOException e) {
         e.printStackTrace();
       }
