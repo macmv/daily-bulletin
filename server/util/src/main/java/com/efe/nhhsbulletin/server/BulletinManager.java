@@ -3,43 +3,46 @@ package com.efe.nhhsbulletin.server;
 import org.apache.commons.lang3.StringUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
-import org.json.JSONString;
 import org.jsoup.Jsoup;
-import org.jsoup.internal.StringUtil;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.text.DateFormat;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.logging.Logger;
 
 public class BulletinManager {
-  private final static Logger log = Logger.getLogger(BulletinManager.class.getName());
-  private DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+  private static final Logger log = Logger.getLogger(BulletinManager.class.getName());
+  private static final DateFormat dateFormat = new SimpleDateFormat("yyyy-MM/dd");
+  private final S3Manager s3Manager;
 
-  public BulletinManager() {
+  public BulletinManager(String bucketName) {
+    s3Manager = new S3Manager(bucketName);
+  }
 
+  private static String getBasePath() {
+    return "./cache/bulletin/";
+  }
+
+  public static String getKeyName(Date date) {
+    return "v0/bulletin/" + dateFormat.format(date) + ".json";
   }
 
   public void collectDaily() {
     Date today = new Date();
-    BulletinCache cache = new BulletinCache(today);
-    cache.readCache();
+    BulletinCache cache = new BulletinCache(s3Manager, today);
     // checks if no file was saved for today
-    if (cache.getJsonData() == null) {
+    if (!cache.exists()) {
       cache.readInternet();
-      BulletinCache prevCache = new BulletinCache(getPrevCache(today));
+      BulletinCache prevCache = new BulletinCache(s3Manager, getPrevCache(today));
       prevCache.readCache();
+      log.info("Diff: " + StringUtils.difference(cache.getJsonData(), prevCache.getJsonData()));
       // checks if it is the same as the prev cache, therefore it is the weekend
-      if (cache.getJsonData().equals(prevCache.getJsonData())){
+      if (cache.getJsonData().equals(prevCache.getJsonData())) {
         log.info("File is the same as prev cache");
       } else {
         cache.saveCache();
@@ -52,6 +55,7 @@ public class BulletinManager {
 
   /**
    * Gets the cache that is date or closest before
+   *
    * @param date The date to scan backward from
    * @return The date of the cache found, or null if no caches in past year
    */
@@ -59,9 +63,8 @@ public class BulletinManager {
     long DAY_IN_MS = 1000 * 60 * 60 * 24;
     for (int daysBack = 0; daysBack < 356; daysBack++) {
       Date testDate = new Date(date.getTime() - daysBack * DAY_IN_MS);
-      BulletinCache testCache = new BulletinCache(testDate);
-      testCache.readCache();
-      if (testCache.getJsonData() != null) {
+      BulletinCache testCache = new BulletinCache(s3Manager, testDate);
+      if (testCache.exists()) {
         return testDate;
       }
     }
@@ -72,65 +75,14 @@ public class BulletinManager {
     return "available dates";
   }
 
-  /**
-   * Gets the appropriate cache from the given url search query
-   * @param query The search query from the http req
-   *              Example: d=2019-09-12
-   * @return The raw json data
-   */
-  public String getJsonFromUrl(String query) {
-    String[] date_data = query.split("&"); // is ['d=2019-09-12']
-    Date date;
-    if (date_data.length == 1) {
-      String[] date_raw = date_data[0].split("="); // is ['d, '2019-09-12']
-      if (date_raw.length == 2 && date_raw[0].equals("d")) {
-        String date_value = date_raw[1]; // is '2019-09-12'
-        date = getDateFromString(date_value);
-        if (date == null) {
-          return "invalid date";
-        }
-      } else {
-        return "invalid request";
-      }
-    } else {
-      return "invalid request";
-    }
-    BulletinCache cache = getBulletinCache(date);
-    return cache.getJsonData();
-  }
-
-  private BulletinCache getBulletinCache(Date date) {
-    BulletinCache cache = new BulletinCache(date);
-    cache.readCache();
-    return cache;
-  }
-
-  private class BulletinCache {
+  private static class BulletinCache {
     private final Date date;
+    private final S3Manager s3Manager;
     private String jsonData = null;
 
-    public BulletinCache(Date date) {
+    public BulletinCache(S3Manager s3Manager, Date date) {
       this.date = date;
-    }
-
-    /**
-     * Loads the local cache into data
-     */
-    public void readCache() {
-      try {
-        Path p = Paths.get(getBasePath() + getPathFromDate(date));
-        if (!Files.exists(p)) {
-          jsonData = null;
-          return;
-        }
-        StringBuilder sb = new StringBuilder();
-        Files.lines(p).forEach((s) -> {
-          sb.append(s).append("\n");
-        });
-        jsonData = sb.toString().trim();
-      } catch (IOException e) {
-        e.printStackTrace();
-      }
+      this.s3Manager = s3Manager;
     }
 
     /**
@@ -150,11 +102,11 @@ public class BulletinManager {
         raw[i] = raw[i].substring(Math.min(5, raw[i].length()));
       }
       String plainTextData = String.join("\n", raw);
-      jsonData = generateJsonData(plainTextData);
+      jsonData = generateJsonData(plainTextData).trim();
       log.info("Generated JSON: " + jsonData);
     }
 
-    private String generateJsonData(String plainTextData) {
+    private static String generateJsonData(String plainTextData) {
       JSONObject json = new JSONObject();
       ArrayList<String> sections = new ArrayList<>();
       StringBuilder currentSection = null;
@@ -192,44 +144,24 @@ public class BulletinManager {
     }
 
     /**
-     * Saves the data it has to the appropriate file
-     */
-    public void saveCache() {
-      Path p = Paths.get(getBasePath() + getPathFromDate(date));
-      if (Files.exists(p)) {
-        log.info("File already exists for " + date);
-        return;
-      }
-      try {
-        Files.write(p, jsonData.getBytes());
-      } catch (IOException e) {
-        e.printStackTrace();
-      }
-      log.info("Saved file for " + date);
-    }
-
-    /**
      * Gets the current data stored
      * @return The current data is has stored
      */
     public String getJsonData() {
       return jsonData;
     }
-  }
 
-  private String getPathFromDate(Date date) {
-    return dateFormat.format(date) + ".txt";
-  }
-
-  private Date getDateFromString(String str) {
-    try {
-      return dateFormat.parse(str);
-    } catch (ParseException e) {
-      return null;
+    public boolean exists() {
+      return s3Manager.exists(getKeyName(date));
     }
-  }
 
-  private static String getBasePath() {
-    return "./cache/bulletin/";
+    public void readCache() {
+      jsonData = s3Manager.read(getKeyName(date)).trim();
+    }
+
+    public void saveCache() {
+      ByteArrayInputStream is = new ByteArrayInputStream(jsonData.getBytes(), 0, jsonData.getBytes().length);
+      s3Manager.write(getKeyName(date), is);
+    }
   }
 }

@@ -14,4 +14,6 @@ dependencies {
   compile 'org.jsoup:jsoup:1.12.1'
   compile 'org.json:json:20190722'
   compile 'org.apache.commons:commons-lang3:3.9'
+  compile platform('com.amazonaws:aws-java-sdk-bom:1.11.228')
+  compile 'com.amazonaws:aws-java-sdk-s3'
 }
