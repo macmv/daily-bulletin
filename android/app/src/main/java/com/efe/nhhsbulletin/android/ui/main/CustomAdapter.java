@@ -17,10 +17,12 @@ import java.util.List;
 public class CustomAdapter extends RecyclerView.Adapter {
     ArrayList personNames;
     Context context;
+
     public CustomAdapter(Context context, ArrayList personNames) {
         this.context = context;
         this.personNames = personNames;
     }
+
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         // infalte the item Layout
@@ -63,8 +65,10 @@ public class CustomAdapter extends RecyclerView.Adapter {
     public int getItemCount() {
         return personNames.size();
     }
+
     public class MyViewHolder extends RecyclerView.ViewHolder {
         TextView name;// init the item view's
+
         public MyViewHolder(View itemView) {
             super(itemView);
             // get the reference of item view's
