@@ -1,5 +1,6 @@
 package com.efe.nhhsbulletin.android;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -15,10 +16,15 @@ import com.efe.nhhsbulletin.android.ui.main.SectionsPagerAdapter;
 
 public class MainActivity extends AppCompatActivity {
 
+    private static Context appContext;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        //app context
+        appContext = getApplicationContext();
+
         SectionsPagerAdapter sectionsPagerAdapter = new SectionsPagerAdapter(this, getSupportFragmentManager());
         ViewPager viewPager = findViewById(R.id.view_pager);
         viewPager.setAdapter(sectionsPagerAdapter);
@@ -33,16 +39,10 @@ public class MainActivity extends AppCompatActivity {
                         .setAction("Action", null).show();
             }
         });*/
-        if ((CalendarView) findViewById(R.id.simpleCalendarView) != null) {
-            CalendarView simpleCalendarView = (CalendarView) findViewById(R.id.simpleCalendarView); // get the reference of CalendarView
-            // perform setOnDateChangeListener event on CalendarView
-            simpleCalendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
-                @Override
-                public void onSelectedDayChange(CalendarView view, int year, int month, int dayOfMonth) {
-                    // add code here
-                    System.out.println("change");
-                }
-            });
-        }
+    }
+
+    //get application context outside of main activity
+    public static Context getAppContext() {
+        return appContext;
     }
 }
