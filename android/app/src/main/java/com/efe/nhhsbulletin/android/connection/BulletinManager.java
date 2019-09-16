@@ -3,13 +3,19 @@ package com.efe.nhhsbulletin.android.connection;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import com.google.gson.JsonParser;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
-import java.util.Queue;
 import java.util.concurrent.ExecutionException;
 
 public class BulletinManager {
@@ -17,7 +23,7 @@ public class BulletinManager {
 
     private final S3Manager s3Manager;
     private DateFormat monthDateFormat = new SimpleDateFormat("yyyy-MM");
-    private DateFormat dateFormat = new SimpleDateFormat("yyyy-MM/dd");
+    private DateFormat dayDateFormat = new SimpleDateFormat("yyyy-MM/dd");
 
     public BulletinManager(String bucketName) {
         s3Manager = new S3Manager(bucketName);
@@ -44,7 +50,7 @@ public class BulletinManager {
         for (String fileName : files) {
             if (fileName.endsWith(".json")) {
                 try {
-                    Date d = dateFormat.parse(fileName.substring(fileName.length() - 15, fileName.length() - 5));
+                    Date d = dayDateFormat.parse(fileName.substring(fileName.length() - 15, fileName.length() - 5));
                     dates.add(d);
                 } catch (ParseException e) {
                     e.printStackTrace();
@@ -52,6 +58,23 @@ public class BulletinManager {
             }
         }
         return dates;
+    }
+
+    public BulletinInfo getBulletin(Date date) {
+        final Date d = date;
+        final StringBuilder sb = new StringBuilder();
+        try {
+            new RunInBackground(new Runnable() {
+                @Override
+                public void run() {
+                    sb.append(s3Manager.read(getBaseKey() + dayDateFormat.format(d) + ".json"));
+                }
+            }).execute().get();
+        } catch (ExecutionException | InterruptedException e) {
+            e.printStackTrace();
+        }
+        String data = sb.toString();
+        return new BulletinInfo(data);
     }
 
     private static class RunInBackground extends AsyncTask<Void, Void, Void> {
@@ -66,6 +89,52 @@ public class BulletinManager {
         protected Void doInBackground(Void... voids) {
             task.run();
             return null;
+        }
+    }
+
+    private class BulletinInfo {
+        private String title;
+        private String clubs;
+        private String sports;
+        private String lunch;
+        private List<String> other;
+
+        public BulletinInfo(String data) {
+            JSONObject json;
+            try {
+                json = new JSONObject(data);
+                title = (String) json.get("title");
+                clubs = (String) json.get("clubs");
+                sports = (String) json.get("sports");
+                lunch = (String) json.get("lunch");
+                JSONArray otherArr = (JSONArray) json.get("other");
+                other = new ArrayList<>();
+                for (int i = 0; i < otherArr.length(); i++) {
+                    other.add(otherArr.get(i).toString());
+                }
+            } catch (JSONException e) {
+                Log.w(TAG, "When parsing json, " + Arrays.toString(e.getStackTrace()));
+            }
+        }
+
+        public String getTitle() {
+            return title;
+        }
+
+        public String getClubs() {
+            return clubs;
+        }
+
+        public String getSports() {
+            return sports;
+        }
+
+        public String getLunch() {
+            return lunch;
+        }
+
+        public List<String> getOther() {
+            return other;
         }
     }
 }
