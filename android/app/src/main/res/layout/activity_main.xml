@@ -40,18 +40,21 @@
                 app:layout_constraintTop_toBottomOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <!--ImageButton
+            <ImageButton
                 android:id="@+id/imageButton"
                 style="@android:style/Widget.Material.ImageButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@color/colorPrimary"
-                android:contentDescription="Settings"
+                android:contentDescription="@string/settings"
+                android:clickable="true"
+                android:focusable="true"
+                android:onClick="createOptionsMenu"
                 android:padding="20dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/ic_more_vert_white_24dp" /-->
-            <android.support.design.widget.FloatingActionButton
+                app:srcCompat="@drawable/ic_more_vert_white_24dp" />
+            <!--android.support.design.widget.FloatingActionButton
                 android:id="@+id/imageButton"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
@@ -67,7 +70,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:rippleColor="@color/colorPrimaryDark"
-                app:srcCompat="@drawable/ic_more_vert_white_24dp" />
+                app:srcCompat="@drawable/ic_more_vert_white_24dp" /-->
 
         </android.support.constraint.ConstraintLayout>
 
