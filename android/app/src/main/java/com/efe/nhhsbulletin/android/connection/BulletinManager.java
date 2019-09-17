@@ -3,8 +3,6 @@ package com.efe.nhhsbulletin.android.connection;
 import android.os.AsyncTask;
 import android.util.Log;
 
-import com.google.gson.JsonParser;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;

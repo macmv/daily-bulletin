@@ -1,14 +1,14 @@
 package com.efe.nhhsbulletin.android.ui.main;
 
+import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.support.annotation.NonNull;
-import android.support.v4.app.Fragment;
-import android.arch.lifecycle.ViewModelProviders;
 import android.widget.Button;
 import android.widget.CalendarView;
 import android.widget.TextView;
@@ -18,7 +18,6 @@ import com.efe.nhhsbulletin.android.R;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
 
 /**
  * A placeholder fragment containing a simple view.
@@ -76,6 +75,12 @@ public class PlaceholderFragment extends Fragment {
                 final TextView titleView = root.findViewById(R.id.titleView);
                 final Button calendarButton = root.findViewById(R.id.calendarButton);
 
+                final View coverUp = root.findViewById(R.id.cover_up);
+
+                //get high school name at bottom of screen
+                //final TextView schoolName = root.findViewById(R.id.high_school_name);
+                //System.out.println(schoolName);
+
                 // get the reference of CalendarView
                 final CalendarView simpleCalendarView = root.findViewById(R.id.simpleCalendarView);
                 // perform setOnDateChangeListener event on CalendarView
@@ -85,6 +90,8 @@ public class PlaceholderFragment extends Fragment {
                         // add code to load current day's bulletin today
                         //System.out.println(String.format("Today is: %02d/%02d/%04d", month + 1, dayOfMonth, year));
                         //hide calendar and show recycler view
+                        //schoolName.setVisibility(View.GONE);
+                        coverUp.setVisibility(View.VISIBLE);
                         simpleCalendarView.setVisibility(View.GONE);
                         recyclerView.setVisibility(View.VISIBLE);
                         titleView.setVisibility(View.VISIBLE);
@@ -98,6 +105,8 @@ public class PlaceholderFragment extends Fragment {
                     @Override
                     public void onClick(View v) {
                         //show calendar and hide recycler view
+                        //schoolName.setVisibility(View.VISIBLE);
+                        coverUp.setVisibility(View.GONE);
                         simpleCalendarView.setVisibility(View.VISIBLE);
                         recyclerView.setVisibility(View.GONE);
                         titleView.setVisibility(View.GONE);

@@ -54,7 +54,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void createOptionsMenu(View view) {
         Log.i(TAG, "createOptionsMenu: called!");
-        PopupMenu popupMenu = new PopupMenu(this,  view);
+        PopupMenu popupMenu = new PopupMenu(this, view);
         popupMenu.getMenuInflater().inflate(R.menu.settings_dropdown, popupMenu.getMenu());
         popupMenu.show();
     }
