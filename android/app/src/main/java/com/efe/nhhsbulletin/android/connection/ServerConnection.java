@@ -1,9 +1,5 @@
 package com.efe.nhhsbulletin.android.connection;
 
-import android.os.AsyncTask;
-
-import java.net.URL;
-
 public class ServerConnection {
     private final BulletinManager bulletinManager;
 

@@ -1,12 +1,7 @@
 package com.efe.nhhsbulletin.android.connection;
 
 import com.amazonaws.AmazonServiceException;
-import com.amazonaws.ClientConfiguration;
-import com.amazonaws.auth.AWSCredentials;
-import com.amazonaws.auth.AWSCredentialsProvider;
-import com.amazonaws.auth.AWSCredentialsProviderChain;
 import com.amazonaws.auth.BasicAWSCredentials;
-import com.amazonaws.auth.DefaultAWSCredentialsProviderChain;
 import com.amazonaws.regions.Region;
 import com.amazonaws.regions.Regions;
 import com.amazonaws.services.s3.AmazonS3Client;
@@ -16,6 +11,7 @@ import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.amazonaws.services.s3.model.S3Object;
 import com.amazonaws.services.s3.model.S3ObjectInputStream;
 import com.amazonaws.services.s3.model.S3ObjectSummary;
+import com.efe.nhhsbulletin.android.BuildConfig;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -32,8 +28,9 @@ public class S3Manager {
 
     public S3Manager(String bucketName) {
         this.bucketName = bucketName;
-        BasicAWSCredentials creds = new BasicAWSCredentials("AKIA3VUBT6SYOPGQCH6G", "gsjDhICJCVFBm1BPrs8XmTXDBTv/e/6TYu84lGII");
-//        BasicAWSCredentials creds = new BasicAWSCredentials("", "");
+        String accessKey = BuildConfig.AWS_ACCESS_KEY_ID;
+        String secretKey = BuildConfig.AWS_SECRET_ACCESS_KEY;
+        BasicAWSCredentials creds = new BasicAWSCredentials(accessKey, secretKey);
         s3 = new AmazonS3Client(creds, Region.getRegion(Regions.DEFAULT_REGION));
     }
 

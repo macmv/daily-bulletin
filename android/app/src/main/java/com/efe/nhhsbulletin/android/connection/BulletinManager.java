@@ -92,14 +92,14 @@ public class BulletinManager {
         }
     }
 
-    private class BulletinInfo {
+    public class BulletinInfo {
         private String title;
         private String clubs;
         private String sports;
         private String lunch;
         private List<String> other;
 
-        public BulletinInfo(String data) {
+        BulletinInfo(String data) {
             JSONObject json;
             try {
                 json = new JSONObject(data);
