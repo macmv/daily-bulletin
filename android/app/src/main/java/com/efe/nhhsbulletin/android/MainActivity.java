@@ -16,8 +16,13 @@ import com.efe.nhhsbulletin.android.ui.main.SectionsPagerAdapter;
 
 public class MainActivity extends AppCompatActivity {
 
-    private static Context appContext;
     private static final String TAG = MainActivity.class.getSimpleName();
+    private static Context appContext;
+
+    //get application context outside of main activity
+    public static Context getAppContext() {
+        return appContext;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,11 +45,6 @@ public class MainActivity extends AppCompatActivity {
                         .setAction("Action", null).show();
             }
         });*/
-    }
-
-    //get application context outside of main activity
-    public static Context getAppContext() {
-        return appContext;
     }
 
     //show settings when Settings button is pressed

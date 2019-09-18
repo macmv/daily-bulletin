@@ -41,6 +41,10 @@ android {
         exclude 'META-INF/notice.txt'
         exclude 'META-INF/ASL2.0'
     }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
 }
 
 dependencies {
@@ -54,4 +58,5 @@ dependencies {
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
     implementation 'com.amazonaws:aws-android-sdk-s3:2.15.2'
     implementation 'com.amazonaws:aws-android-sdk-mobile-client:2.15.2'
+//    implementation 'com.wdullaer:materialdatetimepicker:4.2.3'
 }

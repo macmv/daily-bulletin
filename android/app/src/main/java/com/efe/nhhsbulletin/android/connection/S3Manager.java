@@ -1,5 +1,7 @@
 package com.efe.nhhsbulletin.android.connection;
 
+import android.util.Log;
+
 import com.amazonaws.AmazonServiceException;
 import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.regions.Region;

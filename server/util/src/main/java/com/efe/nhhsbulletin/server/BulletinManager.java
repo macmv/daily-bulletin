@@ -1,11 +1,14 @@
 package com.efe.nhhsbulletin.server;
 
+import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
+import org.jsoup.nodes.Entities;
+import org.jsoup.parser.Parser;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -102,6 +105,7 @@ public class BulletinManager {
         raw[i] = raw[i].substring(Math.min(5, raw[i].length()));
       }
       String plainTextData = String.join("\n", raw);
+      plainTextData = Parser.unescapeEntities(plainTextData, true);
       jsonData = generateJsonData(plainTextData).trim();
       log.info("Generated JSON: " + jsonData);
     }

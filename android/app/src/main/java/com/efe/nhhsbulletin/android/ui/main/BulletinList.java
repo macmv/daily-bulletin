@@ -14,11 +14,11 @@ import com.efe.nhhsbulletin.android.R;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CustomAdapter extends RecyclerView.Adapter {
+public class BulletinList extends RecyclerView.Adapter {
     ArrayList personNames;
     Context context;
 
-    public CustomAdapter(Context context, ArrayList personNames) {
+    public BulletinList(Context context, ArrayList personNames) {
         this.context = context;
         this.personNames = personNames;
     }
@@ -28,23 +28,19 @@ public class CustomAdapter extends RecyclerView.Adapter {
         // infalte the item Layout
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.bulletin_layout, parent, false);
         // set the view's size, margins, paddings and layout parameters
-        MyViewHolder vh = new MyViewHolder(v); // pass the view to View Holder
-        return vh;
+        return new MyViewHolder(v);
     }
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder viewHolder, int position) {
         final int pos = position;
         // set the data in items
-        TextView name = (TextView) viewHolder.itemView.findViewById(R.id.name);
+        TextView name = viewHolder.itemView.findViewById(R.id.name);
         name.setText(personNames.get(pos).toString());
         // implement setOnClickListener event on item view.
-        viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                // display a toast with person name on item click
-                Toast.makeText(context, personNames.get(pos).toString(), Toast.LENGTH_SHORT).show();
-            }
+        viewHolder.itemView.setOnClickListener(view -> {
+            // display a toast with person name on item click
+            Toast.makeText(context, personNames.get(pos).toString(), Toast.LENGTH_SHORT).show();
         });
     }
 
