@@ -8,6 +8,10 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
 import com.efe.nhhsbulletin.android.R;
+import com.efe.nhhsbulletin.android.ui.main.tab.Bulletin;
+import com.efe.nhhsbulletin.android.ui.main.tab.Resources;
+import com.efe.nhhsbulletin.android.ui.main.tab.Schedule;
+import com.efe.nhhsbulletin.android.ui.main.tab.Sports;
 
 /**
  * A [FragmentPagerAdapter] that returns a fragment corresponding to
@@ -28,7 +32,17 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
     public Fragment getItem(int position) {
         // getItem is called to instantiate the fragment for the given page.
         // Return a PlaceholderFragment (defined as a static inner class below).
-        return PlaceholderFragment.newInstance(position + 1);
+        switch (position) {
+            case 0:
+                return new Bulletin();
+            case 1:
+                return new Sports();
+            case 2:
+                return new Schedule();
+            case 3:
+                return new Resources();
+        }
+        return null;
     }
 
     @Nullable

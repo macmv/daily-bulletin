@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.PopupMenu;
+import android.widget.TextView;
 
 import com.efe.nhhsbulletin.android.ui.main.SectionsPagerAdapter;
 
@@ -57,6 +58,18 @@ public class MainActivity extends AppCompatActivity {
         PopupMenu popupMenu = new PopupMenu(this, view);
         popupMenu.getMenuInflater().inflate(R.menu.settings_dropdown, popupMenu.getMenu());
         popupMenu.show();
+    }
+
+    public void hideSchoolName() {
+        //get high school name at bottom of screen
+        final TextView schoolNameView = findViewById(R.id.high_school_name);
+        schoolNameView.setVisibility(View.GONE);
+    }
+
+    public void showSchoolName() {
+        //get high school name at bottom of screen
+        final TextView schoolNameView = findViewById(R.id.high_school_name);
+        schoolNameView.setVisibility(View.VISIBLE);
     }
 
     /*@Override

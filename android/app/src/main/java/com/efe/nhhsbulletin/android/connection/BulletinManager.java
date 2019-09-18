@@ -61,6 +61,7 @@ public class BulletinManager {
     public BulletinInfo getBulletin(Date date) {
         final Date d = date;
         final StringBuilder sb = new StringBuilder();
+        Log.i(TAG, "getBulletin: Grabbing day: " + date);
         try {
             new RunInBackground(new Runnable() {
                 @Override
