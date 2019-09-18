@@ -1,5 +1,6 @@
 package com.efe.nhhsbulletin.android;
 
+import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -9,10 +10,18 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.DatePicker;
+import android.widget.ImageButton;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 
 import com.efe.nhhsbulletin.android.ui.main.SectionsPagerAdapter;
+
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Locale;
+
+import javax.security.auth.login.LoginException;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -31,6 +40,12 @@ public class MainActivity extends AppCompatActivity {
         //app context
         appContext = getApplicationContext();
 
+//        List<Date> dates = new ServerConnection().getBulletinManager().getBulletin(new Date());
+        //BulletinManager.BulletinInfo info = new ServerConnection().getBulletinManager().getBulletin(new Date());
+//        for (Date d : dates) {
+//            Log.i(TAG, "date: " + d);
+//        }
+        //Log.i(TAG, info.getClubs());
         SectionsPagerAdapter sectionsPagerAdapter = new SectionsPagerAdapter(this, getSupportFragmentManager());
         ViewPager viewPager = findViewById(R.id.view_pager);
         viewPager.setAdapter(sectionsPagerAdapter);
@@ -45,6 +60,7 @@ public class MainActivity extends AppCompatActivity {
                         .setAction("Action", null).show();
             }
         });*/
+
     }
 
     //show settings when Settings button is pressed
@@ -60,7 +76,7 @@ public class MainActivity extends AppCompatActivity {
         popupMenu.show();
     }
 
-    public void hideSchoolName() {
+    /*public void hideSchoolName() {
         //get high school name at bottom of screen
         final TextView schoolNameView = findViewById(R.id.high_school_name);
         schoolNameView.setVisibility(View.GONE);
@@ -70,7 +86,8 @@ public class MainActivity extends AppCompatActivity {
         //get high school name at bottom of screen
         final TextView schoolNameView = findViewById(R.id.high_school_name);
         schoolNameView.setVisibility(View.VISIBLE);
-    }
+    }*/
+
 
     /*@Override
     public boolean onCreateOptionsMenu(Menu menu) {

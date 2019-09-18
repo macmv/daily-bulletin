@@ -47,23 +47,23 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0">
 
-        <CalendarView
+        <!--CalendarView
             android:id="@+id/simpleCalendarView"
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content" /-->
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
-            <Button
+            <!--Button
                 android:id="@+id/calendarButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="Calendar"
-                android:visibility="gone" />
+                android:visibility="gone" /-->
 
             <TextView
                 android:id="@+id/titleView"
@@ -73,15 +73,13 @@
                 android:padding="10dp"
                 android:text="NHHS bulletin for Month day, year"
                 android:textSize="18sp"
-                android:textStyle="bold"
-                android:visibility="gone" />
+                android:textStyle="bold" />
         </LinearLayout>
         <!--Use this in java to set dates that we have no data for yet android:maxDate="09/22/2019"-->
         <android.support.v7.widget.RecyclerView
             android:id="@+id/recyclerView"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:visibility="gone" />
+            android:layout_height="wrap_content" />
 
     </LinearLayout>
     <!--</ScrollView>-->

@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <TextView
+    <!--TextView
         android:id="@+id/high_school_name"
         android:layout_width="match_parent"
         android:layout_height="75dp"
@@ -16,7 +16,7 @@
         android:textSize="30sp"
         android:textStyle="bold"
         app:layout_anchor="@+id/view_pager"
-        app:layout_anchorGravity="bottom|center" />
+        app:layout_anchorGravity="bottom|center" /-->
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
@@ -39,6 +39,18 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageButton
+                android:id="@+id/calendarButton"
+                style="@android:style/Widget.Material.ImageButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@color/colorPrimary"
+                android:contentDescription="@string/calendar"
+                android:padding="20dp"
+                app:layout_constraintEnd_toStartOf="@+id/imageButton"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/ic_date_range_white_24dp" />
 
             <ImageButton
                 android:id="@+id/imageButton"
