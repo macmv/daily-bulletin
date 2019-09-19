@@ -58,7 +58,12 @@ public class BulletinList extends RecyclerView.Adapter {
             hideLoading();
             items.clear();
             items.add(new ListItem("Title", info.getTitle()));
+            items.add(new ListItem("Sports", info.getSports()));
             items.add(new ListItem("Clubs", info.getClubs()));
+            items.add(new ListItem("Lunch", info.getLunch()));
+            for (String str : info.getOther()) {
+                items.add(new ListItem("This should have a name parsed from the text", str));
+            }
             context.runOnUiThread(this::notifyDataSetChanged);
         });
     }
