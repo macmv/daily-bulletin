@@ -15,6 +15,7 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
+import java.util.function.Consumer;
 
 public class BulletinManager {
     public static final String TAG = BulletinManager.class.getSimpleName();
@@ -58,22 +59,12 @@ public class BulletinManager {
         return dates;
     }
 
-    public BulletinInfo getBulletin(Date date) {
+    public void getBulletin(Date date, Consumer<BulletinInfo> task) {
         final Date d = date;
-        final StringBuilder sb = new StringBuilder();
         Log.i(TAG, "getBulletin: Grabbing day: " + date);
-        try {
-            new RunInBackground(new Runnable() {
-                @Override
-                public void run() {
-                    sb.append(s3Manager.read(getBaseKey() + dayDateFormat.format(d) + ".json"));
-                }
-            }).execute().get();
-        } catch (ExecutionException | InterruptedException e) {
-            e.printStackTrace();
-        }
-        String data = sb.toString();
-        return new BulletinInfo(data);
+        new RunInBackground(() -> {
+            task.accept(new BulletinInfo(s3Manager.read(getBaseKey() + dayDateFormat.format(d) + ".json")));
+        }).execute();
     }
 
     private static class RunInBackground extends AsyncTask<Void, Void, Void> {

@@ -15,6 +15,7 @@ import android.widget.ImageButton;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 
+import com.efe.nhhsbulletin.android.connection.ServerConnection;
 import com.efe.nhhsbulletin.android.ui.main.SectionsPagerAdapter;
 
 import java.text.SimpleDateFormat;
@@ -27,6 +28,7 @@ public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = MainActivity.class.getSimpleName();
     private static Context appContext;
+    private ServerConnection server;
 
     //get application context outside of main activity
     public static Context getAppContext() {
@@ -51,6 +53,7 @@ public class MainActivity extends AppCompatActivity {
         viewPager.setAdapter(sectionsPagerAdapter);
         TabLayout tabs = findViewById(R.id.tabs);
         tabs.setupWithViewPager(viewPager);
+        server = new ServerConnection();
         /*FloatingActionButton fab = findViewById(R.id.fab);
 
         fab.setOnClickListener(new View.OnClickListener() {
@@ -88,6 +91,10 @@ public class MainActivity extends AppCompatActivity {
         schoolNameView.setVisibility(View.VISIBLE);
     }*/
 
+
+    public ServerConnection getServer() {
+        return server;
+    }
 
     /*@Override
     public boolean onCreateOptionsMenu(Menu menu) {
