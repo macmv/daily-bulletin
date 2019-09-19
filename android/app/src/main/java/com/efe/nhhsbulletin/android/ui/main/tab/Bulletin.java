@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CalendarView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.efe.nhhsbulletin.android.MainActivity;
@@ -44,6 +45,8 @@ public class Bulletin extends Fragment {
         TextView titleView = root.findViewById(R.id.titleView);
         Button calendarButton = root.findViewById(R.id.calendarButton);
 
+        ProgressBar pBar = root.findViewById(R.id.pBar);
+
         // get the reference of CalendarView
         CalendarView simpleCalendarView = root.findViewById(R.id.simpleCalendarView);
         // perform setOnDateChangeListener event on CalendarView
@@ -58,6 +61,8 @@ public class Bulletin extends Fragment {
             titleView.setVisibility(View.VISIBLE);
             titleView.setText(String.format(Locale.ENGLISH, "NHHS bulletin for %02d/%02d/%04d", month + 1, dayOfMonth, year));
             calendarButton.setVisibility(View.VISIBLE);
+            bulletinList.setPBar(pBar);
+            pBar.setVisibility(View.VISIBLE);
         });
 
         //onClickListener for calendar button that takes user back to calendar
@@ -68,6 +73,7 @@ public class Bulletin extends Fragment {
             bulletinListView.setVisibility(View.GONE);
             titleView.setVisibility(View.GONE);
             calendarButton.setVisibility(View.GONE);
+            pBar.setVisibility(View.GONE);
         });
         return root;
     }

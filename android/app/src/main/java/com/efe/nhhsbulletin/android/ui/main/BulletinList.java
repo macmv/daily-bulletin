@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.efe.nhhsbulletin.android.R;
@@ -20,10 +21,11 @@ public class BulletinList extends RecyclerView.Adapter {
     private static final String TAG = BulletinList.class.getSimpleName();
     private final BulletinManager bulletin;
     private final ArrayList<ListItem> items = new ArrayList<>();
-    private final Context context;
+    private final Activity context;
+    private ProgressBar pBar;
 
     public BulletinList(Context context, BulletinManager bulletin) {
-        this.context = context;
+        this.context = (Activity) context;
         this.bulletin = bulletin;
     }
 
@@ -51,17 +53,27 @@ public class BulletinList extends RecyclerView.Adapter {
 
     public void setDate(Date date) {
         Log.i(TAG, "setDate: Updating date to " + date);
+        clearItems();
         bulletin.getBulletin(date, info -> {
             hideLoading();
             items.clear();
             items.add(new ListItem("Title", info.getTitle()));
             items.add(new ListItem("Clubs", info.getClubs()));
-            ((Activity) context).runOnUiThread(this::notifyDataSetChanged);
+            context.runOnUiThread(this::notifyDataSetChanged);
         });
     }
 
     private void hideLoading() {
+        context.runOnUiThread(() -> pBar.setVisibility(View.GONE));
+    }
 
+    private void clearItems() {
+        items.clear();
+        context.runOnUiThread(this::notifyDataSetChanged);
+    }
+
+    public void setPBar(ProgressBar pBar) {
+        this.pBar = pBar;
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
