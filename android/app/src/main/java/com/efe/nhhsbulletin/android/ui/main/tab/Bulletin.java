@@ -1,5 +1,6 @@
 package com.efe.nhhsbulletin.android.ui.main.tab;
 
+import android.app.DatePickerDialog;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
@@ -9,7 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.CalendarView;
+import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -18,6 +19,7 @@ import com.efe.nhhsbulletin.android.R;
 import com.efe.nhhsbulletin.android.connection.BulletinManager;
 import com.efe.nhhsbulletin.android.ui.main.BulletinList;
 
+import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Locale;
@@ -28,6 +30,7 @@ public class Bulletin extends Fragment {
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        //root
         View root = inflater.inflate(R.layout.fragment_bulletin, container, false);
         bulletin = ((MainActivity) getContext()).getServer().getBulletinManager();
 
@@ -47,8 +50,33 @@ public class Bulletin extends Fragment {
 
         ProgressBar pBar = root.findViewById(R.id.pBar);
 
+        //calendar date picker
+        final Calendar myCalendar = Calendar.getInstance();
+
+        DatePickerDialog.OnDateSetListener date = (view, year, monthOfYear, dayOfMonth) -> {
+            myCalendar.set(Calendar.YEAR, year);
+            myCalendar.set(Calendar.MONTH, monthOfYear);
+            myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+
+            ((MainActivity) inflater.getContext()).hideSchoolName();
+            bulletinListView.setVisibility(View.VISIBLE);
+            bulletinList.setDate(new Date(new GregorianCalendar(year, monthOfYear, dayOfMonth).getTimeInMillis()));
+            titleView.setVisibility(View.VISIBLE);
+            titleView.setText(String.format(Locale.ENGLISH, "NHHS bulletin for %02d/%02d/%04d", monthOfYear + 1, dayOfMonth, year));
+            bulletinList.setPBar(pBar);
+            pBar.setVisibility(View.VISIBLE);
+        };
+
+        ImageButton calendarCaller = ((MainActivity) inflater.getContext()).findViewById(R.id.calendarButton);
+
+        calendarCaller.setOnClickListener(v -> {
+            new DatePickerDialog(((MainActivity) inflater.getContext()), date, myCalendar
+                    .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
+                    myCalendar.get(Calendar.DAY_OF_MONTH)).show();
+        });
+
         // get the reference of CalendarView
-        CalendarView simpleCalendarView = root.findViewById(R.id.simpleCalendarView);
+        /*CalendarView simpleCalendarView = root.findViewById(R.id.simpleCalendarView);
         // perform setOnDateChangeListener event on CalendarView
         simpleCalendarView.setOnDateChangeListener((view, year, month, dayOfMonth) -> {
             // add code to load current day's bulletin today
@@ -74,7 +102,7 @@ public class Bulletin extends Fragment {
             titleView.setVisibility(View.GONE);
             calendarButton.setVisibility(View.GONE);
             pBar.setVisibility(View.GONE);
-        });
+        });*/
         return root;
     }
 

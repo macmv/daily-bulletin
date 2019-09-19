@@ -15,4 +15,5 @@ xmlns:app="http://schemas.android.com/apk/res-auto"
     app:showAsAction="always"
     android:orderInCategory="0"/>
 
+    <!--Add a help item too-->
 </menu>
