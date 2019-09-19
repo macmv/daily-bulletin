@@ -78,7 +78,7 @@
         </LinearLayout>
         <!--Use this in java to set dates that we have no data for yet android:maxDate="09/22/2019"-->
         <android.support.v7.widget.RecyclerView
-            android:id="@+id/recyclerView"
+            android:id="@+id/bulletinList"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:visibility="gone" />
