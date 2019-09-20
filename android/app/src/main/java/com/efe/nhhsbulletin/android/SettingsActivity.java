@@ -13,10 +13,7 @@ public class SettingsActivity extends AppCompatActivity {
         setContentView(R.layout.settings);
     }
 
-    //go back to main activity when floating action button is pressed
     public void back(View v) {
-//        Intent intent = new Intent(this, MainActivity.class);
-//        startActivity(intent);
         this.onBackPressed();
     }
 }

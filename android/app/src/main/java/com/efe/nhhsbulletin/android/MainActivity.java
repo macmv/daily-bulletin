@@ -13,7 +13,7 @@ import android.widget.PopupMenu;
 import android.widget.TextView;
 
 import com.efe.nhhsbulletin.android.connection.ServerConnection;
-import com.efe.nhhsbulletin.android.ui.main.SectionsPagerAdapter;
+import com.efe.nhhsbulletin.android.ui.main.TabList;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -39,9 +39,9 @@ public class MainActivity extends AppCompatActivity {
 //            Log.i(TAG, "date: " + d);
 //        }
         //Log.i(TAG, info.getClubs());
-        SectionsPagerAdapter sectionsPagerAdapter = new SectionsPagerAdapter(this, getSupportFragmentManager());
+        TabList tabList = new TabList(this, getSupportFragmentManager());
         ViewPager viewPager = findViewById(R.id.view_pager);
-        viewPager.setAdapter(sectionsPagerAdapter);
+        viewPager.setAdapter(tabList);
         TabLayout tabs = findViewById(R.id.tabs);
         tabs.setupWithViewPager(viewPager);
         server = new ServerConnection();

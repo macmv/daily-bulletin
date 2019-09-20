@@ -48,12 +48,12 @@
                 android:background="@color/colorPrimary"
                 android:contentDescription="@string/calendar"
                 android:padding="20dp"
-                app:layout_constraintEnd_toStartOf="@+id/imageButton"
+                app:layout_constraintEnd_toStartOf="@+id/settingsMenuButton"
                 app:layout_constraintTop_toTopOf="parent"
                 app:srcCompat="@drawable/ic_date_range_white_24dp" />
 
             <ImageButton
-                android:id="@+id/imageButton"
+                android:id="@+id/settingsMenuButton"
                 style="@android:style/Widget.Material.ImageButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

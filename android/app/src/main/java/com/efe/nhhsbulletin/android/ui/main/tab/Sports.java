@@ -11,12 +11,7 @@ import com.efe.nhhsbulletin.android.R;
 
 public class Sports extends Fragment {
     @Override
-    public View onCreateView(
-            @NonNull LayoutInflater inflater, ViewGroup container,
-            Bundle savedInstanceState) {
-        final LayoutInflater inflaterF = inflater;
-
-        //root
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_sports, container, false);
 
         return root;

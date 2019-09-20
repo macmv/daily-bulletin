@@ -31,9 +31,7 @@ public class BulletinList extends RecyclerView.Adapter {
 
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        // infalte the item Layout
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.bulletin_layout, parent, false);
-        // set the view's size, margins, paddings and layout parameters
         return new MyViewHolder(v);
     }
 
