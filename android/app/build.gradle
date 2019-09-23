@@ -58,5 +58,10 @@ dependencies {
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
     implementation 'com.amazonaws:aws-android-sdk-s3:2.16.0'
     implementation 'com.amazonaws:aws-android-sdk-mobile-client:2.16.0'
+    //added extra dependencies so that gradle builds with lower material date picker version
+    implementation 'com.android.support:support-v13:28.0.0' //THIS
+    implementation 'com.android.support:support-media-compat:28.0.0' //AND THIS
 //    implementation 'com.wdullaer:materialdatetimepicker:4.2.3'
+    //had to downgrade so that gradle would compile correctly
+    implementation 'com.wdullaer:materialdatetimepicker:3.6.4'
 }

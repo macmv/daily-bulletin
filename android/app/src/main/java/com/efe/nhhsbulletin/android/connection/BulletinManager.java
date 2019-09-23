@@ -35,6 +35,7 @@ public class BulletinManager {
         final Date m = month;
         final List<String> files = new ArrayList<>();
         try {
+            //TODO: replace Runnable with lambda
             new RunInBackground(new Runnable() {
                 @Override
                 public void run() {
