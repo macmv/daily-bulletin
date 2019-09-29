@@ -1,27 +1,35 @@
 package com.efe.nhhsbulletin.server;
 
-import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
-import org.jsoup.nodes.Entities;
 import org.jsoup.parser.Parser;
 
+import javax.mail.BodyPart;
+import javax.mail.MessagingException;
+import javax.mail.Session;
+import javax.mail.internet.MimeMessage;
+import javax.mail.internet.MimeMultipart;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
+import java.util.*;
 import java.util.logging.Logger;
+import java.util.regex.Pattern;
 
 public class BulletinManager {
   private static final Logger log = Logger.getLogger(BulletinManager.class.getName());
   private static final DateFormat dateFormat = new SimpleDateFormat("yyyy-MM/dd");
   private final S3Manager s3Manager;
+  // NOTE: these are not spaces. They're \u00A0, which is not the same.
+  // Also, java.util.regex sucks, becuase \s, which should match whitespace, does not match \u00a0.
+  // See: https://stackoverflow.com/questions/4731055/whitespace-matching-regex-java
+  private final static Pattern emailSubjectPattern = Pattern.compile("^\\[Hale-Mail]   \\d+\\.\\d+\\.\\d+  Nathan Hale Daily Bulletin\\s*$");
 
   public BulletinManager(String bucketName) {
     s3Manager = new S3Manager(bucketName);
@@ -31,7 +39,7 @@ public class BulletinManager {
     return "./cache/bulletin/";
   }
 
-  public static String getKeyName(Date date) {
+  private static String getKeyName(Date date) {
     return "v0/bulletin/" + dateFormat.format(date) + ".json";
   }
 
@@ -74,8 +82,78 @@ public class BulletinManager {
     return null;
   }
 
-  public String getAvailableDates() {
-    return "available dates";
+  public void parseEmail(String emailRaw) {
+    Session s = Session.getInstance(new Properties());
+    InputStream is = new ByteArrayInputStream(emailRaw.getBytes());
+    MimeMessage message;
+    String content = null;
+    String subject;
+    try {
+      message = new MimeMessage(s, is);
+      MimeMultipart contentParts = (MimeMultipart) message.getContent();
+      subject = message.getSubject();
+      for (int i = 0; i < contentParts.getCount(); i++) {
+        BodyPart part = contentParts.getBodyPart(i);
+        if (part.isMimeType("text/plain")) {
+          content = (String) part.getContent();
+        }
+      }
+    } catch (MessagingException | IOException e) {
+      e.printStackTrace();
+      System.exit(1);
+      return;
+    }
+    log.info("Got email subject: " + subject);
+    boolean matches = emailSubjectPattern.matcher(subject).matches();
+    if (!emailSubjectPattern.matcher(subject).matches()) {
+      log.warning("Subject of email does not match bulletin regex");
+      System.exit(0);
+    }
+    if (content == null) {
+      log.severe("No text/plain content was found");
+      System.exit(1);
+    }
+    Date date = parseDateFromSubject(subject);
+    log.info("Got date from subject: " + date);
+    BulletinCache cache = new BulletinCache(s3Manager, date);
+    cache.readEmail(content);
+    log.info("Saving cache to S3");
+    cache.saveCache();
+  }
+
+  public void collectEmail(String messageId) {
+    log.info("Got email id: " + messageId);
+    String emailRaw = s3Manager.read("v0/email/" + messageId);
+
+    parseEmail(emailRaw);
+  }
+
+  public Date parseDateFromSubject(String subject) {
+    int month = -1, day = -1, year = -1;
+    for (int i = 0; i < subject.length(); i++) {
+      char let = subject.charAt(i);
+      int startIndex = i;
+      if (Character.isDigit(let)) {
+        for (int j = i; j < subject.length(); j++) {
+          char endLet = subject.charAt(j);
+          if (!Character.isDigit(endLet)) {
+            int value = Integer.parseInt(subject.substring(startIndex, j));
+            if (month == -1) {
+              month = value;
+            } else if (day == -1) {
+              day = value;
+            } else if (year == -1) {
+              year = value;
+            }
+            i = j;
+            break;
+          }
+        }
+      }
+    }
+    Calendar c = Calendar.getInstance();
+    c.set(year, month - 1, day);
+    return new Date(c.getTimeInMillis());
   }
 
   private static class BulletinCache {
@@ -89,7 +167,7 @@ public class BulletinManager {
     }
 
     /**
-     * Loads data from nhhs website into data
+     * Loads data from nhhs website into jsonData
      */
     public void readInternet() {
       Document doc;
@@ -130,13 +208,13 @@ public class BulletinManager {
       for (String section : sections) {
         section = section.trim();
         if (section.startsWith("NATHAN HALE HIGH SCHOOL DAILY")) {
-          json.put("title", section);
+          List lines = Arrays.asList(section.split("\n"));
+          json.put("title", lines.subList(0, 2));
+          json.put("sports", lines.subList(2, lines.size()));
         } else if (section.startsWith("CLUBS:")) {
-          json.put("clubs", section);
-        } else if (section.startsWith("Happenings")) {
-          json.put("sports", section);
+          json.put("clubs", Arrays.asList(section.split("\n")));
         } else if (section.startsWith("Lunch:")) {
-          json.put("lunch", section);
+          json.put("lunch", Arrays.asList(section.split("\n")));
         } else {
           if (!json.has("other")) {
             json.put("other", new JSONArray());
@@ -147,8 +225,18 @@ public class BulletinManager {
       return json.toString();
     }
 
+
+    /**
+     * Loads data from email content into jsonData
+     */
+    public void readEmail(String email) {
+      jsonData = generateJsonData(email).trim();
+      log.info("Generated JSON: " + jsonData);
+    }
+
     /**
      * Gets the current data stored
+     *
      * @return The current data is has stored
      */
     public String getJsonData() {

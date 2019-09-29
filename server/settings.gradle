@@ -9,4 +9,5 @@
 
 rootProject.name = 'com.efe.nhhsbulletin.server'
 include ':util', ':web', ':daily'
+include 'mail'
 

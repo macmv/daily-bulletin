@@ -1,0 +1,23 @@
+plugins {
+  id 'java'
+}
+
+version '1.0'
+
+sourceCompatibility = 1.8
+
+repositories {
+  mavenCentral()
+}
+
+dependencies {
+  compile project(':util')
+  implementation 'com.amazonaws:aws-lambda-java-core:1.0.0'
+}
+
+jar {
+  manifest {
+    attributes 'Main-Class': 'com.efe.nhhsbulletin.server.CollectEmail'
+  }
+  from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+}
