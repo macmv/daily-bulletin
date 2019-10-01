@@ -41,14 +41,25 @@ export default class BulletinScreen extends Component {
 }
 
 function Calendar(props) {
-  var calendarRows = [];
+  var date = new Date();
+  var year = date.getFullYear();
+  var month = date.getMonth();
+  var firstDay = new Date(year, month, 1);
+  var startDayOfWeek = firstDay.getDay(); // 0 = sunday, 6 = saturday
+  var daysInMonth = new Date(year, month, 0).getDate(); // js magic
 
+  var calendarRows = [];
   for (var y = 0; y < 5; y++) {
     var row = [];
     for (var x = 0; x < 7; x++) {
+      day = (y * 7 + x) - startDayOfWeek + 1;
+      disabled = false;
+      if (day < 1 || day > daysInMonth) {
+        disabled = true;
+      }
       row.push(
         <View style={styles.calendarNumber} key={y * 7 + x}>
-          <Button disabled={false} title={x.toString()} />
+          <Button disabled={disabled} title={day.toString()} />
         </View>
       );
     }
