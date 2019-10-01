@@ -12,33 +12,31 @@ import {
 
 import { MonoText } from '../components/StyledText';
 
-export default function HomeScreen() {
-
+export default function BulletinScreen() {
   return (
     <View style={styles.linearLayout}>
       <Text style={styles.text}>NHHS Daily Bulletin</Text>
       <Button onPress={pressCalendarButton} style={styles.calendarButton} title="Calendar">Hi</Button>
     </View>
-    
   );
 }
 
 async function pressCalendarButton() {
   try {
     const { action, year, month, day} = await DatePickerAndroid.open({
-		//September 30, 2019
+      //September 30, 2019
       date: new Date(2019, 8, 30),
     });
     if (action != DatePickerAndroid.dismissedAction) {
-		//selected year, month (0-11), day
-		Alert.alert("You selected: " + (month + 1) + ", " + day + ", " + year);
+      //selected year, month (0-11), day
+      Alert.alert("You selected: " + (month + 1) + ", " + day + ", " + year);
     }
   } catch ({code, message}) {
     console.warn('Cannot open date picker', message);
   }
 }
 
-HomeScreen.navigationOptions = {
+BulletinScreen.navigationOptions = {
   header: null,
 };
 
@@ -46,20 +44,20 @@ function DevelopmentModeNotice() {
   if (__DEV__) {
     const learnMoreButton = (
       <Text onPress={handleLearnMorePress} style={styles.helpLinkText}>
-        Learn more
+      Learn more
       </Text>
     );
 
     return (
       <Text style={styles.developmentModeText}>
-        Development mode is enabled: your app will be slower but you can use
-        useful development tools. {learnMoreButton}
+      Development mode is enabled: your app will be slower but you can use
+      useful development tools. {learnMoreButton}
       </Text>
     );
   } else {
     return (
       <Text style={styles.developmentModeText}>
-        You are not in development mode: your app will run at full speed.
+      You are not in development mode: your app will run at full speed.
       </Text>
     );
   }
@@ -89,22 +87,22 @@ const styles = StyleSheet.create({
     textAlign: 'left'
   },
   linearLayout: {
-	flex: 0,
-	flexDirection: "row", 
-	justifyContent: "space-between", 
-	backgroundColor: '#0185DE',
-	padding: 10
+    flex: 0,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    backgroundColor: '#0185DE',
+    padding: 10
   },
   calendarButton: {
-	backgroundColor: '#0185DE',
-	color: "#fff",
-	width: 20,
-	height: 20
+    backgroundColor: '#0185DE',
+    color: "#fff",
+    width: 20,
+    height: 20
   },
   text: {
     color: '#fff',
-    fontSize: 20, 
-    
+    fontSize: 20,
+
   },
   developmentModeText: {
     marginBottom: 20,

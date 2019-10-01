@@ -3,8 +3,8 @@ import { Platform } from 'react-native';
 import { createStackNavigator, createBottomTabNavigator } from 'react-navigation';
 
 import TabBarIcon from '../components/TabBarIcon';
-import HomeScreen from '../screens/HomeScreen';
-import LinksScreen from '../screens/LinksScreen';
+import BulletinScreen from '../screens/BulletinScreen';
+import SportsScreen from '../screens/SportsScreen';
 import SettingsScreen from '../screens/SettingsScreen';
 
 const config = Platform.select({
@@ -12,14 +12,14 @@ const config = Platform.select({
   default: {},
 });
 
-const HomeStack = createStackNavigator(
+const BulletinStack = createStackNavigator(
   {
-    Home: HomeScreen,
+    Home: BulletinScreen,
   },
   config
 );
 
-HomeStack.navigationOptions = {
+BulletinStack.navigationOptions = {
   tabBarLabel: 'Bulletin',
   tabBarIcon: ({ focused }) => (
     <TabBarIcon
@@ -33,23 +33,23 @@ HomeStack.navigationOptions = {
   ),
 };
 
-HomeStack.path = '';
+BulletinStack.path = '';
 
-const LinksStack = createStackNavigator(
+const SportsStack = createStackNavigator(
   {
-    Links: LinksScreen,
+    Sports: SportsScreen,
   },
   config
 );
 
-LinksStack.navigationOptions = {
+SportsStack.navigationOptions = {
   tabBarLabel: 'Sports',
   tabBarIcon: ({ focused }) => (
     <TabBarIcon focused={focused} name={Platform.OS === 'ios' ? 'ios-link' : 'md-american-football'} />
   ),
 };
 
-LinksStack.path = '';
+SportsStack.path = '';
 
 const SettingsStack = createStackNavigator(
   {
@@ -68,8 +68,8 @@ SettingsStack.navigationOptions = {
 SettingsStack.path = '';
 
 const tabNavigator = createBottomTabNavigator({
-  HomeStack,
-  LinksStack,
+  BulletinStack,
+  SportsStack,
   SettingsStack,
 });
 
