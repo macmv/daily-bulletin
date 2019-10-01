@@ -1,5 +1,7 @@
 import * as WebBrowser from 'expo-web-browser';
-import React from 'react';
+import React, {
+  Component
+} from 'react';
 import {
   Platform,
   StyleSheet,
@@ -7,61 +9,40 @@ import {
   Button,
   View,
   Alert,
-  DatePickerAndroid,
 } from 'react-native';
-
+import Modal from "react-native-modal";
 import { MonoText } from '../components/StyledText';
 
-export default function BulletinScreen() {
-  return (
-    <View style={styles.linearLayout}>
-      <Text style={styles.text}>NHHS Daily Bulletin</Text>
-      <Button onPress={pressCalendarButton} style={styles.calendarButton} title="Calendar">Hi</Button>
-    </View>
-  );
-}
+export default class BulletinScreen extends Component {
+  state = {
+    isModalVisible: false
+  };
 
-async function pressCalendarButton() {
-  try {
-    const { action, year, month, day} = await DatePickerAndroid.open({
-      //September 30, 2019
-      date: new Date(2019, 8, 30),
-    });
-    if (action != DatePickerAndroid.dismissedAction) {
-      //selected year, month (0-11), day
-      Alert.alert("You selected: " + (month + 1) + ", " + day + ", " + year);
-    }
-  } catch ({code, message}) {
-    console.warn('Cannot open date picker', message);
+  toggleModal = () => {
+    this.setState({isModalVisible: !this.state.isModalVisible});
+  };
+
+  render() {
+    return (
+      <View>
+        <View style={styles.linearLayout}>
+          <Text style={styles.text}>NHHS Daily Bulletin</Text>
+          <Button onPress={this.toggleModal} style={styles.calendarButton} title="Calendar"/>
+        </View>
+        <Modal isVisible={this.state.isModalVisible}>
+          <View style={styles.linearLayout}>
+            <Text style={styles.text}>I am the popup that we can add the custom calendar to</Text>
+            <Button onPress={this.toggleModal} title="Ok"/>
+          </View>
+        </Modal>
+      </View>
+    );
   }
 }
 
 BulletinScreen.navigationOptions = {
   header: null,
 };
-
-function DevelopmentModeNotice() {
-  if (__DEV__) {
-    const learnMoreButton = (
-      <Text onPress={handleLearnMorePress} style={styles.helpLinkText}>
-      Learn more
-      </Text>
-    );
-
-    return (
-      <Text style={styles.developmentModeText}>
-      Development mode is enabled: your app will be slower but you can use
-      useful development tools. {learnMoreButton}
-      </Text>
-    );
-  } else {
-    return (
-      <Text style={styles.developmentModeText}>
-      You are not in development mode: your app will run at full speed.
-      </Text>
-    );
-  }
-}
 
 function handleLearnMorePress() {
   WebBrowser.openBrowserAsync(
