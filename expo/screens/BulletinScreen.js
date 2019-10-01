@@ -53,15 +53,18 @@ function Calendar(props) {
     var row = [];
     for (var x = 0; x < 7; x++) {
       day = (y * 7 + x) - startDayOfWeek + 1;
-      disabled = false;
-      if (day < 1 || day > daysInMonth) {
-        disabled = true;
+      if (day > 0 && day <= daysInMonth) {
+        row.push(
+          <View style={styles.calendarNumber} key={y * 7 + x}>
+            <Button disabled={false} title={day.toString()} />
+          </View>
+        );
+      } else {
+        row.push(
+          <View style={styles.calendarNumber} key={y * 7 + x}>
+          </View>
+        );
       }
-      row.push(
-        <View style={styles.calendarNumber} key={y * 7 + x}>
-          <Button disabled={disabled} title={day.toString()} />
-        </View>
-      );
     }
     calendarRows.push(
       <View style={{flexDirection: 'row'}} key={y}>
