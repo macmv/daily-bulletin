@@ -12,6 +12,7 @@ import {
 } from 'react-native';
 import Modal from "react-native-modal";
 import { MonoText } from '../components/StyledText';
+import BulletinManager from "../util/BulletinManager";
 
 export default class BulletinScreen extends Component {
   state = {
@@ -40,6 +41,8 @@ export default class BulletinScreen extends Component {
   }
 }
 
+var bulletinManager = new BulletinManager("daily-bulletin")
+
 function Calendar(props) {
   var date = new Date();
   var year = date.getFullYear();
@@ -47,6 +50,7 @@ function Calendar(props) {
   var firstDay = new Date(year, month, 1);
   var startDayOfWeek = firstDay.getDay(); // 0 = sunday, 6 = saturday
   var daysInMonth = new Date(year, month, 0).getDate(); // js magic
+  var availableDates = bulletinManager.getAvailableDates(date);
 
   var calendarRows = [];
   for (var y = 0; y < 5; y++) {
@@ -72,8 +76,6 @@ function Calendar(props) {
       </View>
     )
   }
-
-  console.log(calendarRows);
 
   return (
     <View style={{flexDirection: 'column', width: '80%'}}>

@@ -26,3 +26,5 @@ local.properties
 *.orig.*
 */web-build/
 */web-report/
+
+**/creds.js
