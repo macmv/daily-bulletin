@@ -11,20 +11,28 @@ export default class S3Manager {
     this.bucketName = bucketName;
   }
 
-  list(prefix) {
+  // this is expensive; use minimally
+  list(prefix, callback) {
     this.s3.listObjects({Bucket: this.bucketName, Prefix: prefix}, function(err, data) {
       if (err) {
         console.log(err, err.stack);
       } else {
+        keys = [];
         contents = data.Contents;
         for (i = 0; i < contents.length; i++) {
-          console.log("Got key -> " + contents[i].Key);
+        key = contents[i].Key;
+          if (key.endsWith(".json")) {
+            dateStr = key.slice(12, 22);
+            dateStr = dateStr.replace("-", "/");
+            keys.push(new Date(dateStr).getTime());
+          }
         }
+        callback(keys);
       }
     })
   }
 
-  read(name) {
+  read(key) {
 
   }
 }

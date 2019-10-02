@@ -9,18 +9,25 @@ import {
   Button,
   View,
   Alert,
+  ActivityIndicator,
 } from 'react-native';
 import Modal from "react-native-modal";
 import { MonoText } from '../components/StyledText';
-import BulletinManager from "../util/BulletinManager";
+import BulletinManager from '../util/BulletinManager';
 
 export default class BulletinScreen extends Component {
   state = {
-    isModalVisible: false
+    isModalVisible: false,
+    validDates: []
   };
 
-  toggleModal = () => {
-    this.setState({isModalVisible: !this.state.isModalVisible});
+  showPopup = () => {
+    this.setState({isModalVisible: true});
+    bulletinManager.getAvailableDates(new Date(), this);
+  };
+
+  hidePopup = () => {
+    this.setState({isModalVisible: false, validDates: []});
   };
 
   render() {
@@ -28,12 +35,14 @@ export default class BulletinScreen extends Component {
       <View>
         <View style={styles.linearLayout}>
           <Text style={styles.text}>NHHS Daily Bulletin</Text>
-          <Button onPress={this.toggleModal} style={styles.calendarButton} title="Calendar"/>
+          <Button onPress={this.showPopup} style={styles.calendarButton} title="Calendar"/>
         </View>
         <Modal isVisible={this.state.isModalVisible}>
           <View style={styles.linearLayout}>
-            <Calendar/>
-            <Button onPress={this.toggleModal} style={{width: '20%'}} title="Ok"/>
+            <Calendar validDates={this.state.validDates} bulletinScreen={this}/>
+            {this.state.validDates.length == 0 ?
+              <ActivityIndicator size="small" color="#00ff00" /> : null}
+            <Button onPress={this.hidePopup} style={{width: '20%'}} title="Ok"/>
           </View>
         </Modal>
       </View>
@@ -49,8 +58,7 @@ function Calendar(props) {
   var month = date.getMonth();
   var firstDay = new Date(year, month, 1);
   var startDayOfWeek = firstDay.getDay(); // 0 = sunday, 6 = saturday
-  var daysInMonth = new Date(year, month, 0).getDate(); // js magic
-  var availableDates = bulletinManager.getAvailableDates(date);
+  var daysInMonth = new Date(year, month + 1, 0).getDate(); // js magic
 
   var calendarRows = [];
   for (var y = 0; y < 5; y++) {
@@ -58,9 +66,10 @@ function Calendar(props) {
     for (var x = 0; x < 7; x++) {
       day = (y * 7 + x) - startDayOfWeek + 1;
       if (day > 0 && day <= daysInMonth) {
+        disabled = !props.validDates.includes(new Date(year, month, day).getTime());
         row.push(
           <View style={styles.calendarNumber} key={y * 7 + x}>
-            <Button disabled={false} title={day.toString()} />
+            <Button disabled={disabled} title={day.toString()} />
           </View>
         );
       } else {
@@ -77,11 +86,13 @@ function Calendar(props) {
     )
   }
 
-  return (
+  component = (
     <View style={{flexDirection: 'column', width: '80%'}}>
       {calendarRows}
     </View>
   )
+
+  return component;
 }
 
 BulletinScreen.navigationOptions = {
