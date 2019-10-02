@@ -38,11 +38,14 @@ export default class BulletinScreen extends Component {
           <Button onPress={this.showPopup} style={styles.calendarButton} title="Calendar"/>
         </View>
         <Modal isVisible={this.state.isModalVisible}>
-          <View style={styles.linearLayout}>
+          <View style={styles.linearLayoutVertical}>
             <Calendar validDates={this.state.validDates} bulletinScreen={this}/>
             {this.state.validDates.length == 0 ?
               <ActivityIndicator size="small" color="#00ff00" /> : null}
-            <Button onPress={this.hidePopup} style={{width: '20%'}} title="Ok"/>
+            <View style={{flexDirection: 'row'}}>
+              <View style={{flex:1}}/>
+              <Button onPress={this.hidePopup} title="Ok"/>
+            </View>
           </View>
         </Modal>
       </View>
@@ -87,7 +90,7 @@ function Calendar(props) {
   }
 
   component = (
-    <View style={{flexDirection: 'column', width: '80%'}}>
+    <View style={{flexDirection: 'column'}}>
       {calendarRows}
     </View>
   )
@@ -113,6 +116,13 @@ const styles = StyleSheet.create({
   linearLayout: {
     flex: 0,
     flexDirection: "row",
+    justifyContent: "space-between",
+    backgroundColor: '#0185DE',
+    padding: 10
+  },
+  linearLayoutVertical: {
+    flex: 0,
+    flexDirection: "column",
     justifyContent: "space-between",
     backgroundColor: '#0185DE',
     padding: 10
