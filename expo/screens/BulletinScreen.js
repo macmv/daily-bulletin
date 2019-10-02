@@ -30,6 +30,11 @@ export default class BulletinScreen extends Component {
     this.setState({isModalVisible: false, validDates: []});
   };
 
+  printDate = (day) => {
+    Alert.alert("Day selected is: " + day);
+    this.hidePopup();
+  }
+
   render() {
     return (
       <View>
@@ -39,7 +44,7 @@ export default class BulletinScreen extends Component {
         </View>
         <Modal isVisible={this.state.isModalVisible}>
           <View style={styles.linearLayoutVertical}>
-            <Calendar validDates={this.state.validDates} bulletinScreen={this}/>
+            <Calendar validDates={this.state.validDates} bulletinScreen={this} onPress={this.printDate}/>
             {this.state.validDates.length == 0 ?
               <ActivityIndicator size="small" color="#00ff00" /> : null}
             <View style={{flexDirection: 'row'}}>
@@ -72,7 +77,7 @@ function Calendar(props) {
         disabled = !props.validDates.includes(new Date(year, month, day).getTime());
         row.push(
           <View style={styles.calendarNumber} key={y * 7 + x}>
-            <Button disabled={disabled} title={day.toString()} />
+            <Button disabled={disabled} title={day.toString()} onPress={props.onPress.bind(this, day)} />
           </View>
         );
       } else {
