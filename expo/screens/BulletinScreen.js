@@ -14,6 +14,7 @@ import {
 import Modal from "react-native-modal";
 import { MonoText } from '../components/StyledText';
 import BulletinManager from '../util/BulletinManager';
+import moment from 'moment';
 
 export default class BulletinScreen extends Component {
   state = {
@@ -22,7 +23,7 @@ export default class BulletinScreen extends Component {
   };
 
   showPopup = () => {
-    this.setState({isModalVisible: true});
+    this.setState({isModalVisible: true, selectedMonth: new Date()});
     bulletinManager.getAvailableDates(new Date(), this);
   };
 
@@ -35,6 +36,12 @@ export default class BulletinScreen extends Component {
     this.hidePopup();
   }
 
+  setMonth(month) {
+    console.log("Setting month to: " + month);
+    this.setState({selectedMonth: month, validDates: []});
+    bulletinManager.getAvailableDates(month, this);
+  }
+
   render() {
     return (
       <View>
@@ -44,10 +51,10 @@ export default class BulletinScreen extends Component {
         </View>
         <Modal isVisible={this.state.isModalVisible}>
           <View style={styles.linearLayoutVertical}>
-            <Calendar validDates={this.state.validDates} bulletinScreen={this} onPress={this.printDate}/>
-            {this.state.validDates.length == 0 ?
-              <ActivityIndicator size="small" color="#00ff00" /> : null}
+            <Calendar validDates={this.state.validDates} month={this.state.selectedMonth} bulletinScreen={this} onPress={this.printDate}/>
             <View style={{flexDirection: 'row'}}>
+              {this.state.loadedDates ? null :
+                <ActivityIndicator size="small" color="#00ff00" />}
               <View style={{flex:1}}/>
               <Button onPress={this.hidePopup} title="Ok"/>
             </View>
@@ -61,7 +68,7 @@ export default class BulletinScreen extends Component {
 var bulletinManager = new BulletinManager("daily-bulletin")
 
 function Calendar(props) {
-  var date = new Date();
+  var date = props.month;
   var year = date.getFullYear();
   var month = date.getMonth();
   var firstDay = new Date(year, month, 1);
@@ -96,6 +103,15 @@ function Calendar(props) {
 
   component = (
     <View style={{flexDirection: 'column'}}>
+      <View style={styles.linearLayout}>
+        <Button title="Prev" onPress={() => {
+          props.bulletinScreen.setMonth(new Date(props.month.getFullYear(), props.month.getMonth() - 1, 1));
+        }}/>
+        <Text style={styles.text}>{moment(props.month).format('MMMM')}</Text>
+        <Button title="Next" onPress={() => {
+          props.bulletinScreen.setMonth(new Date(props.month.getFullYear(), props.month.getMonth() + 1, 1));
+        }}/>
+      </View>
       {calendarRows}
     </View>
   )

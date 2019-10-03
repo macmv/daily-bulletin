@@ -7,6 +7,7 @@ export default class BulletinManager {
   }
 
   getAvailableDates(month, bulletinScreen) {
+    bulletinScreen.setState({loadedDates: false});
     var year = month.getFullYear();
     var month = month.getMonth() + 1;
     monthString = month.toString();
@@ -14,7 +15,7 @@ export default class BulletinManager {
       monthString = "0" + monthString;
     }
     this.s3.list("v0/bulletin/" + year.toString() + "-" + monthString, function(dates) {
-      bulletinScreen.setState({validDates: dates});
+      bulletinScreen.setState({validDates: dates, loadedDates: true});
     });
   }
 }
