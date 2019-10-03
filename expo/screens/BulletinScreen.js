@@ -89,15 +89,27 @@ function BulletinElement(props) {
       )
     }
     sections = [];
-    for (i = 1; i < bulletin.clubs.length; i++) {
+    sections.push(
+      <View>
+        <Text style={styles.title}>Sports</Text>
+        <Text style={styles.text}></Text>
+      </View>
+    )
+    for (i = 1; i < bulletin.sports.length; i++) {
       sections.push(
         <View>
-          <Text style={styles.text}>{bulletin.clubs[i]}</Text>
+          <Text style={styles.text}>{bulletin.sports[i]}</Text>
           <Text style={styles.text}></Text>
         </View>
       )
       key += 2;
     }
+    sections.push(
+      <View>
+        <Text style={styles.title}>Other</Text>
+        <Text style={styles.text}></Text>
+      </View>
+    )
     for (i = 1; i < bulletin.other.length; i++) {
       sections.push(
         <View>
