@@ -34,7 +34,13 @@ export default class S3Manager {
     })
   }
 
-  read(key) {
-
+  get(key, callback) {
+    this.s3.getObject({Bucket: this.bucketName, Key: key}, function(err, data) {
+      if (err) {
+        console.log(err, err.stack);
+      } else {
+        callback(JSON.parse(data.Body));
+      }
+    })
   }
 }

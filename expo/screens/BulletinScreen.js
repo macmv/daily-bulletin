@@ -18,7 +18,9 @@ import moment from 'moment';
 
 export default class BulletinScreen extends Component {
   state = {
-    isModalVisible: false
+    isModalVisible: false,
+    bulletinData: null,
+    loadingBulletin: false
   };
 
   showPopup = () => {
@@ -31,7 +33,8 @@ export default class BulletinScreen extends Component {
   };
 
   onSelectDate = (date) => {
-    Alert.alert("Day selected is: " + date);
+    this.setState({loadingBulletin: true, selectedDate: date});
+    bulletinManager.getData(date, this);
     this.hidePopup();
   }
 
@@ -44,27 +47,54 @@ export default class BulletinScreen extends Component {
   render() {
     return (
       <View>
-        <View style={styles.linearLayout}>
-          <Text style={styles.text}>NHHS Daily Bulletin</Text>
+        <View style={styles.linearLayoutBackground}>
+          <Text style={styles.titleLight}>NHHS Daily Bulletin</Text>
           <Button onPress={this.showPopup} style={styles.calendarButton} title="Calendar"/>
         </View>
         <Modal isVisible={this.state.isModalVisible}>
-          <View style={styles.linearLayoutVertical}>
+          <View style={styles.linearLayoutVerticalBackground}>
             <Calendar validDates={this.state.validDates} month={this.state.selectedMonth} bulletinScreen={this} onPress={this.onSelectDate}/>
             <View style={{flexDirection: 'row'}}>
-              {this.state.loadedDates ? null :
-                <ActivityIndicator size="small" color="#00ff00" />}
+              {this.state.loadingDates ?
+                <ActivityIndicator size="small" color="#00ff00" /> : null}
               <View style={{flex:1}}/>
               <Button onPress={this.hidePopup} title="Ok"/>
             </View>
           </View>
         </Modal>
+        <View style={styles.linearLayout}>
+          <BulletinElement date={this.state.selectedDate} bulletin={this.state.bulletinData} loading={this.state.loadingBulletin} />
+        </View>
       </View>
     );
   }
 }
 
 var bulletinManager = new BulletinManager("daily-bulletin")
+
+function BulletinElement(props) {
+  if (props.loading) {
+    return (
+      <View style={styles.linearLayout}>
+        <ActivityIndicator size="large" color="#00ff00" />
+      </View>
+    )
+  } else {
+    bulletin = props.bulletin
+    if (bulletin === null) {
+      return (
+        <View style={styles.linearLayout}>
+        </View>
+      )
+    }
+    return (
+      <View style={styles.linearLayout, {flex: 1}}>
+        <Text style={styles.title}>Daily bulletin for {moment(props.date).format('dddd, MMMM Do YYYY')}</Text>
+        <Text style={styles.text}>{bulletin.clubs[1]}</Text>
+      </View>
+    )
+  }
+}
 
 function Calendar(props) {
   var date = props.month;
@@ -107,7 +137,7 @@ function Calendar(props) {
         <Button title="Prev" onPress={() => {
           props.bulletinScreen.setMonth(new Date(props.month.getFullYear(), props.month.getMonth() - 1, 1));
         }}/>
-        <Text style={styles.text}>{moment(props.month).format('MMMM')}</Text>
+        <Text style={styles.text}>{moment(props.month).format('MMMM, YYYY')}</Text>
         <Button title="Next" onPress={() => {
           props.bulletinScreen.setMonth(new Date(props.month.getFullYear(), props.month.getMonth() + 1, 1));
         }}/>
@@ -124,6 +154,25 @@ BulletinScreen.navigationOptions = {
 };
 
 const styles = StyleSheet.create({
+  titleLight: {
+    color: '#fff',
+    fontSize: 20
+  },
+  title: {
+    color: '#222',
+    textAlign: 'center',
+    width: '100%',
+    padding: 20,
+    fontSize: 20
+  },
+  textLight: {
+    color: '#fff',
+    fontSize: 20,
+  },
+  text: {
+    color: '#222',
+    fontSize: 15,
+  },
   toolbar: {
     backgroundColor: '#fff',
     padding: 20,
@@ -134,14 +183,26 @@ const styles = StyleSheet.create({
     alignSelf: 'stretch',
     textAlign: 'left'
   },
-  linearLayout: {
+  linearLayoutBackground: {
     flex: 0,
     flexDirection: "row",
     justifyContent: "space-between",
     backgroundColor: '#0185DE',
     padding: 10
   },
+  linearLayout: {
+    flex: 0,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    padding: 10
+  },
   linearLayoutVertical: {
+    flex: 0,
+    flexDirection: "column",
+    justifyContent: "space-between",
+    padding: 10
+  },
+  linearLayoutVerticalBackground: {
     flex: 0,
     flexDirection: "column",
     justifyContent: "space-between",
@@ -153,10 +214,6 @@ const styles = StyleSheet.create({
     color: "#fff",
     width: 20,
     height: 20
-  },
-  text: {
-    color: '#fff',
-    fontSize: 20,
   },
   calendarNumber: {
     flex: 1,
