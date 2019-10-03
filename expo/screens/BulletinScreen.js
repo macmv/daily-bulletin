@@ -18,28 +18,27 @@ import moment from 'moment';
 
 export default class BulletinScreen extends Component {
   state = {
-    isModalVisible: false,
-    validDates: []
+    isModalVisible: false
   };
 
   showPopup = () => {
-    this.setState({isModalVisible: true, selectedMonth: new Date()});
     bulletinManager.getAvailableDates(new Date(), this);
+    this.setState({isModalVisible: true, selectedMonth: new Date()});
   };
 
   hidePopup = () => {
-    this.setState({isModalVisible: false, validDates: []});
+    this.setState({isModalVisible: false});
   };
 
-  printDate = (day) => {
-    Alert.alert("Day selected is: " + day);
+  onSelectDate = (date) => {
+    Alert.alert("Day selected is: " + date);
     this.hidePopup();
   }
 
   setMonth(month) {
     console.log("Setting month to: " + month);
-    this.setState({selectedMonth: month, validDates: []});
     bulletinManager.getAvailableDates(month, this);
+    this.setState({selectedMonth: month});
   }
 
   render() {
@@ -51,7 +50,7 @@ export default class BulletinScreen extends Component {
         </View>
         <Modal isVisible={this.state.isModalVisible}>
           <View style={styles.linearLayoutVertical}>
-            <Calendar validDates={this.state.validDates} month={this.state.selectedMonth} bulletinScreen={this} onPress={this.printDate}/>
+            <Calendar validDates={this.state.validDates} month={this.state.selectedMonth} bulletinScreen={this} onPress={this.onSelectDate}/>
             <View style={{flexDirection: 'row'}}>
               {this.state.loadedDates ? null :
                 <ActivityIndicator size="small" color="#00ff00" />}
@@ -82,9 +81,10 @@ function Calendar(props) {
       day = (y * 7 + x) - startDayOfWeek + 1;
       if (day > 0 && day <= daysInMonth) {
         disabled = !props.validDates.includes(new Date(year, month, day).getTime());
+        buttonDate = new Date(date.getFullYear(), date.getMonth(), day);
         row.push(
           <View style={styles.calendarNumber} key={y * 7 + x}>
-            <Button disabled={disabled} title={day.toString()} onPress={props.onPress.bind(this, day)} />
+            <Button disabled={disabled} title={day.toString()} onPress={props.onPress.bind(this, buttonDate)} />
           </View>
         );
       } else {

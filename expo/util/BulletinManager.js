@@ -7,7 +7,7 @@ export default class BulletinManager {
   }
 
   getAvailableDates(month, bulletinScreen) {
-    bulletinScreen.setState({loadedDates: false});
+    bulletinScreen.setState({loadedDates: false, validDates: []});
     var year = month.getFullYear();
     var month = month.getMonth() + 1;
     monthString = month.toString();
