@@ -9,6 +9,7 @@ import {
   Button,
   View,
   Alert,
+  ScrollView,
   ActivityIndicator,
 } from 'react-native';
 import Modal from "react-native-modal";
@@ -87,11 +88,30 @@ function BulletinElement(props) {
         </View>
       )
     }
+    sections = [];
+    for (i = 1; i < bulletin.clubs.length; i++) {
+      sections.push(
+        <View>
+          <Text style={styles.text}>{bulletin.clubs[i]}</Text>
+          <Text style={styles.text}></Text>
+        </View>
+      )
+      key += 2;
+    }
+    for (i = 1; i < bulletin.other.length; i++) {
+      sections.push(
+        <View>
+          <Text style={styles.text}>{bulletin.other[i]}</Text>
+          <Text style={styles.text}></Text>
+        </View>
+      )
+      key += 2;
+    }
     return (
-      <View style={styles.linearLayout, {flex: 1}}>
+      <ScrollView style={styles.linearLayout, {flex: 1}}>
         <Text style={styles.title}>Daily bulletin for {moment(props.date).format('dddd, MMMM Do YYYY')}</Text>
-        <Text style={styles.text}>{bulletin.clubs[1]}</Text>
-      </View>
+        {sections}
+      </ScrollView>
     )
   }
 }
