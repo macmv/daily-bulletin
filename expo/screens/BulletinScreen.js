@@ -120,7 +120,7 @@ function BulletinElement(props) {
       key += 2;
     }
     return (
-      <ScrollView style={styles.linearLayout, {flex: 1}}>
+      <ScrollView style={styles.linearLayout, {flex: 1, marginBottom: 100}}>
         <Text style={styles.title}>Daily bulletin for {moment(props.date).format('dddd, MMMM Do YYYY')}</Text>
         {sections}
       </ScrollView>
