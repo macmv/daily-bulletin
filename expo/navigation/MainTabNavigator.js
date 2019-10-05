@@ -5,6 +5,7 @@ import { createStackNavigator, createBottomTabNavigator } from 'react-navigation
 import TabBarIcon from '../components/TabBarIcon';
 import BulletinScreen from '../screens/BulletinScreen';
 import SportsScreen from '../screens/SportsScreen';
+import ScheduleScreen from '../screens/ScheduleScreen';
 import SettingsScreen from '../screens/SettingsScreen';
 
 const config = Platform.select({
@@ -51,6 +52,23 @@ SportsStack.navigationOptions = {
 
 SportsStack.path = '';
 
+//Bell SChedule tab
+const ScheduleStack = createStackNavigator(
+  {
+    Schedule: ScheduleScreen,
+  },
+  config
+);
+
+ScheduleStack.navigationOptions = {
+  tabBarLabel: 'Schedule',
+  tabBarIcon: ({ focused }) => (
+    <TabBarIcon focused={focused} name={Platform.OS === 'ios' ? 'ios-link' : 'md-clock'} />
+  ),
+};
+
+ScheduleStack.path = '';
+
 const SettingsStack = createStackNavigator(
   {
     Settings: SettingsScreen,
@@ -70,6 +88,7 @@ SettingsStack.path = '';
 const tabNavigator = createBottomTabNavigator({
   BulletinStack,
   SportsStack,
+  ScheduleStack,
   SettingsStack,
 });
 
