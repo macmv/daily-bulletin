@@ -1,7 +1,5 @@
 import * as WebBrowser from 'expo-web-browser';
-import React, {
-  Component
-} from 'react';
+import React, { Component } from 'react';
 import {
   Platform,
   StyleSheet,
@@ -15,6 +13,7 @@ import {
 } from 'react-native';
 import Modal from "react-native-modal";
 import { MonoText } from '../components/StyledText';
+import { Calendar } from '../components/Calendar';
 import BulletinManager from '../util/BulletinManager';
 import moment from 'moment';
 import PropTypes from 'prop-types';
@@ -148,74 +147,6 @@ function BulletinElement(props) {
   }
 }
 
-class Calendar extends Component {
-  static propTypes = {
-    validDates: PropTypes.array,
-    month: PropTypes.object,
-    bulletinScreen: PropTypes.object.isRequired,
-    onPress: PropTypes.func.isRequired,
-    isModalVisible: PropTypes.bool.isRequired
-  }
-
-  prevData = [];
-
-  rowHasChanged = (data) => {
-    hasChanged = this.prevData.length != data.length;
-    this.prevData = data;
-    return hasChanged;
-  }
-
-  render = () => {
-    var date = this.props.month;
-    var year = date.getFullYear();
-    var month = date.getMonth();
-    var firstDay = new Date(year, month, 1);
-    var startDayOfWeek = firstDay.getDay(); // 0 = sunday, 6 = saturday
-    var daysInMonth = new Date(year, month + 1, 0).getDate(); // js magic
-
-    var data = [];
-
-    for (var i = 0; i < 5 * 7; i++) {
-      day = i - startDayOfWeek + 1;
-      if (day > 0 && day <= daysInMonth) {
-        disabled = !this.props.validDates.includes(new Date(year, month, day).getTime());
-        buttonDate = new Date(date.getFullYear(), date.getMonth(), day);
-        data.push({
-          content: <Button disabled={disabled} title={day.toString()} onPress={this.props.onPress.bind(this, buttonDate)} />,
-          key: i
-        });
-      } else {
-        data.push({
-          content: null,
-          key: i
-        });
-      }
-    }
-
-    component = (
-      <View style={{flexDirection: 'column'}}>
-        <View style={styles.linearLayout}>
-          <Button title="Prev" onPress={() => {
-            this.props.bulletinScreen.setMonth(new Date(this.props.month.getFullYear(), this.props.month.getMonth() - 1, 1));
-          }}/>
-          <Text style={styles.text}>{moment(this.props.month).format('MMMM, YYYY')}</Text>
-          <Button title="Next" onPress={() => {
-            this.props.bulletinScreen.setMonth(new Date(this.props.month.getFullYear(), this.props.month.getMonth() + 1, 1));
-          }}/>
-        </View>
-        <FlatList style={styles.linearLayoutVertical}
-          data={data}
-          numColumns={7} // because its a calendar. This isn't going to change
-          rowHasChanged={({data}) => rowHasChanged(data)}
-          renderItem={({item}) => <View style={styles.calendarNumber}>{item.content}</View>}
-        />
-      </View>
-    )
-
-    return component;
-  }
-}
-
 BulletinScreen.navigationOptions = {
   header: null,
 };
@@ -238,10 +169,6 @@ const styles = StyleSheet.create({
     width: '100%',
     padding: 20,
     fontSize: 20
-  },
-  textLight: {
-    color: '#fff',
-    fontSize: 20,
   },
   text: {
     color: '#222',
@@ -287,10 +214,5 @@ const styles = StyleSheet.create({
     color: "#fff",
     width: 20,
     height: 20
-  },
-  calendarNumber: {
-    flex: 1,
-    aspectRatio: 1,
-    margin: 5
   }
 });
