@@ -49,18 +49,24 @@ export default class BulletinScreen extends Component {
   render() {
     return (
       <View>
+        <View style={styles.statusBarBackground} />
         <View style={styles.linearLayoutBackground}>
           <Text style={styles.titleLight}>NHHS Daily Bulletin</Text>
-          <Button onPress={this.showPopup} style={styles.calendarButton} title="Calendar"/>
+          <Button title="Calendar"
+            onPress={this.showPopup}
+            style={styles.calendarButton}
+            color={(Platform.OS === 'ios') ? "#fff" : ""} />
         </View>
         <Modal isVisible={this.state.isModalVisible}>
-          <View style={styles.linearLayoutVerticalBackground}>
+          <View style={styles.calendarPopup}>
             <Calendar isModalVisible={this.state.isModalVisible} validDates={this.state.validDates} month={this.state.selectedMonth} bulletinScreen={this} onPress={this.onSelectDate}/>
             <View style={{flexDirection: 'row'}}>
               {this.state.loadingDates ?
                 <ActivityIndicator size="small" color="#00ff00" /> : null}
               <View style={{flex:1}}/>
-              <Button onPress={this.hidePopup} title="Ok"/>
+              <Button title="Cancel"
+              color={(Platform.OS === 'ios') ? "#fff" : ""}
+              onPress={this.hidePopup} />
             </View>
           </View>
         </Modal>
@@ -214,5 +220,17 @@ const styles = StyleSheet.create({
     color: "#fff",
     width: 20,
     height: 20
+  },
+  statusBarBackground: {
+    height: (Platform.OS === 'ios') ? 18 : 0,
+    backgroundColor: "#0185DE",
+  },
+  calendarPopup: {
+    flex: 0,
+    flexDirection: "column",
+    justifyContent: "space-between",
+    backgroundColor: '#0185DE',
+    padding: 10,
+    borderRadius: 10
   }
 });

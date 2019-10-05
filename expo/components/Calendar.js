@@ -2,6 +2,7 @@ import React, {
   Component
 } from 'react';
 import {
+  Platform,
   View,
   Text,
   Button,
@@ -24,7 +25,7 @@ export class Calendar extends Component {
   prevData = [];
 
   rowHasChanged = (data) => {
-    hasChanged = this.prevData.length != data.length;
+    hasChanged = this.prevData.length != data.length || !bulletinScreen.state.isModalVisible;
     this.prevData = data;
     return hasChanged;
   }
@@ -45,7 +46,10 @@ export class Calendar extends Component {
         disabled = !this.props.validDates.includes(new Date(year, month, day).getTime());
         buttonDate = new Date(date.getFullYear(), date.getMonth(), day);
         data.push({
-          content: <Button disabled={disabled} title={day.toString()} onPress={this.props.onPress.bind(this, buttonDate)} />,
+          content: <Button title={day.toString()}
+            color={(Platform.OS === 'ios') ? "#fff" : ""}
+            disabled={disabled}
+            onPress={this.props.onPress.bind(this, buttonDate)} />,
           key: i
         });
       } else {
@@ -59,15 +63,20 @@ export class Calendar extends Component {
     component = (
       <View style={{flexDirection: 'column'}}>
         <View style={styles.linearLayout}>
-          <Button title="Prev" onPress={() => {
+          <Button title="Prev"
+            color={(Platform.OS === 'ios') ? "#fff" : ""}
+            onPress={() => {
             this.props.bulletinScreen.setMonth(new Date(this.props.month.getFullYear(), this.props.month.getMonth() - 1, 1));
           }}/>
           <Text style={styles.title}>{moment(this.props.month).format('MMMM, YYYY')}</Text>
-          <Button title="Next" onPress={() => {
+          <Button title="Next"
+            color={(Platform.OS === 'ios') ? "#fff" : ""}
+            onPress={() => {
             this.props.bulletinScreen.setMonth(new Date(this.props.month.getFullYear(), this.props.month.getMonth() + 1, 1));
           }}/>
         </View>
         <FlatList style={styles.linearLayoutVertical}
+          bounces={false}
           data={data}
           numColumns={7} // because its a calendar. This isn't going to change
           rowHasChanged={({data}) => rowHasChanged(data)}
