@@ -98,13 +98,31 @@ function BulletinElement(props) {
       </View>
     )
     for (i = 1; i < bulletin.sports.length; i++) {
-      sections.push(
-        <View>
-          <Text style={styles.text}>{bulletin.sports[i]}</Text>
-          <Text style={styles.text}></Text>
-        </View>
-      )
-      key += 2;
+      text = bulletin.sports[i];
+      regex = RegExp(', \\d+/\\d+:', 'g');
+      match = regex.exec(text);
+      if (match !== null) {
+        index = regex.lastIndex
+        sections.push(
+          <View>
+            <Text style={styles.subtitle}>{text.slice(0, regex.lastIndex - 1)}</Text>
+            <Text style={styles.text}></Text>
+          </View>
+        )
+        sections.push(
+          <View>
+            <Text style={styles.text}>{text.slice(regex.lastIndex + 1)}</Text>
+            <Text style={styles.text}></Text>
+          </View>
+        )
+      } else {
+        sections.push(
+          <View>
+            <Text style={styles.text}>{text}</Text>
+            <Text style={styles.text}></Text>
+          </View>
+        )
+      }
     }
     sections.push(
       <View>
@@ -187,7 +205,7 @@ class Calendar extends Component {
         </View>
         <FlatList style={styles.linearLayoutVertical}
           data={data}
-          numColumns={7}
+          numColumns={7} // because its a calendar. This isn't going to change
           rowHasChanged={({data}) => rowHasChanged(data)}
           renderItem={({item}) => <View style={styles.calendarNumber}>{item.content}</View>}
         />
@@ -206,6 +224,13 @@ const styles = StyleSheet.create({
   titleLight: {
     color: '#fff',
     fontSize: 20
+  },
+  subtitle: {
+    color: '#222',
+    width: '100%',
+    padding: 10,
+    paddingLeft: 20,
+    fontSize: 18
   },
   title: {
     color: '#222',
