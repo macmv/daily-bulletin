@@ -104,7 +104,7 @@ const styles = StyleSheet.create({
   linearLayoutVertical: {
     flex: 0,
     flexDirection: "column",
-    padding: 10
+    padding: 5
   },
   number: {
     flex: 1,
