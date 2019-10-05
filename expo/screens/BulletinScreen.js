@@ -1,7 +1,5 @@
 import * as WebBrowser from 'expo-web-browser';
-import React, {
-  Component
-} from 'react';
+import React, { Component } from 'react';
 import {
   Platform,
   StyleSheet,
@@ -10,12 +8,15 @@ import {
   View,
   Alert,
   ScrollView,
+  FlatList,
   ActivityIndicator,
 } from 'react-native';
 import Modal from "react-native-modal";
 import { MonoText } from '../components/StyledText';
+import { Calendar } from '../components/Calendar';
 import BulletinManager from '../util/BulletinManager';
 import moment from 'moment';
+import PropTypes from 'prop-types';
 
 export default class BulletinScreen extends Component {
   state = {
@@ -48,18 +49,24 @@ export default class BulletinScreen extends Component {
   render() {
     return (
       <View>
+        <View style={styles.statusBarBackground} />
         <View style={styles.linearLayoutBackground}>
           <Text style={styles.titleLight}>NHHS Daily Bulletin</Text>
-          <Button onPress={this.showPopup} style={styles.calendarButton} title="Calendar"/>
+          <Button title="Calendar"
+            onPress={this.showPopup}
+            style={styles.calendarButton}
+            color={(Platform.OS === 'ios') ? "#fff" : ""} />
         </View>
         <Modal isVisible={this.state.isModalVisible}>
-          <View style={styles.linearLayoutVerticalBackground}>
-            <Calendar validDates={this.state.validDates} month={this.state.selectedMonth} bulletinScreen={this} onPress={this.onSelectDate}/>
+          <View style={styles.calendarPopup}>
+            <Calendar isModalVisible={this.state.isModalVisible} validDates={this.state.validDates} month={this.state.selectedMonth} bulletinScreen={this} onPress={this.onSelectDate}/>
             <View style={{flexDirection: 'row'}}>
               {this.state.loadingDates ?
                 <ActivityIndicator size="small" color="#00ff00" /> : null}
               <View style={{flex:1}}/>
-              <Button onPress={this.hidePopup} title="Ok"/>
+              <Button title="Cancel"
+              color={(Platform.OS === 'ios') ? "#fff" : ""}
+              onPress={this.hidePopup} />
             </View>
           </View>
         </Modal>
@@ -96,13 +103,31 @@ function BulletinElement(props) {
       </View>
     )
     for (i = 1; i < bulletin.sports.length; i++) {
-      sections.push(
-        <View>
-          <Text style={styles.text}>{bulletin.sports[i]}</Text>
-          <Text style={styles.text}></Text>
-        </View>
-      )
-      key += 2;
+      text = bulletin.sports[i];
+      regex = RegExp(', \\d+/\\d+:', 'g');
+      match = regex.exec(text);
+      if (match !== null) {
+        index = regex.lastIndex
+        sections.push(
+          <View>
+            <Text style={styles.subtitle}>{text.slice(0, regex.lastIndex - 1)}</Text>
+            <Text style={styles.text}></Text>
+          </View>
+        )
+        sections.push(
+          <View>
+            <Text style={styles.text}>{text.slice(regex.lastIndex + 1)}</Text>
+            <Text style={styles.text}></Text>
+          </View>
+        )
+      } else {
+        sections.push(
+          <View>
+            <Text style={styles.text}>{text}</Text>
+            <Text style={styles.text}></Text>
+          </View>
+        )
+      }
     }
     sections.push(
       <View>
@@ -128,59 +153,6 @@ function BulletinElement(props) {
   }
 }
 
-function Calendar(props) {
-  var date = props.month;
-  var year = date.getFullYear();
-  var month = date.getMonth();
-  var firstDay = new Date(year, month, 1);
-  var startDayOfWeek = firstDay.getDay(); // 0 = sunday, 6 = saturday
-  var daysInMonth = new Date(year, month + 1, 0).getDate(); // js magic
-
-  var calendarRows = [];
-  for (var y = 0; y < 5; y++) {
-    var row = [];
-    for (var x = 0; x < 7; x++) {
-      day = (y * 7 + x) - startDayOfWeek + 1;
-      if (day > 0 && day <= daysInMonth) {
-        disabled = !props.validDates.includes(new Date(year, month, day).getTime());
-        buttonDate = new Date(date.getFullYear(), date.getMonth(), day);
-        row.push(
-          <View style={styles.calendarNumber} key={y * 7 + x}>
-            <Button disabled={disabled} title={day.toString()} onPress={props.onPress.bind(this, buttonDate)} />
-          </View>
-        );
-      } else {
-        row.push(
-          <View style={styles.calendarNumber} key={y * 7 + x}>
-          </View>
-        );
-      }
-    }
-    calendarRows.push(
-      <View style={{flexDirection: 'row'}} key={y}>
-        {row}
-      </View>
-    )
-  }
-
-  component = (
-    <View style={{flexDirection: 'column'}}>
-      <View style={styles.linearLayout}>
-        <Button title="Prev" onPress={() => {
-          props.bulletinScreen.setMonth(new Date(props.month.getFullYear(), props.month.getMonth() - 1, 1));
-        }}/>
-        <Text style={styles.text}>{moment(props.month).format('MMMM, YYYY')}</Text>
-        <Button title="Next" onPress={() => {
-          props.bulletinScreen.setMonth(new Date(props.month.getFullYear(), props.month.getMonth() + 1, 1));
-        }}/>
-      </View>
-      {calendarRows}
-    </View>
-  )
-
-  return component;
-}
-
 BulletinScreen.navigationOptions = {
   header: null,
 };
@@ -190,16 +162,19 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 20
   },
+  subtitle: {
+    color: '#222',
+    width: '100%',
+    padding: 10,
+    paddingLeft: 20,
+    fontSize: 18
+  },
   title: {
     color: '#222',
     textAlign: 'center',
     width: '100%',
     padding: 20,
     fontSize: 20
-  },
-  textLight: {
-    color: '#fff',
-    fontSize: 20,
   },
   text: {
     color: '#222',
@@ -231,7 +206,6 @@ const styles = StyleSheet.create({
   linearLayoutVertical: {
     flex: 0,
     flexDirection: "column",
-    justifyContent: "space-between",
     padding: 10
   },
   linearLayoutVerticalBackground: {
@@ -247,9 +221,16 @@ const styles = StyleSheet.create({
     width: 20,
     height: 20
   },
-  calendarNumber: {
-    flex: 1,
-    aspectRatio: 1,
-    margin: 5
+  statusBarBackground: {
+    height: (Platform.OS === 'ios') ? 18 : 0,
+    backgroundColor: "#0185DE",
+  },
+  calendarPopup: {
+    flex: 0,
+    flexDirection: "column",
+    justifyContent: "space-between",
+    backgroundColor: '#0185DE',
+    padding: 10,
+    borderRadius: 10
   }
 });
