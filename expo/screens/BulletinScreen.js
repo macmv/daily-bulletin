@@ -136,13 +136,38 @@ function BulletinElement(props) {
       </View>
     )
     for (i = 1; i < bulletin.other.length; i++) {
-      sections.push(
-        <View>
-          <Text style={styles.text}>{bulletin.other[i]}</Text>
-          <Text style={styles.text}></Text>
-        </View>
-      )
-      key += 2;
+      text = bulletin.other[i];
+      regex = RegExp('[A-Z]{2,}[A-Z,\\s]+[^\\sa-z]?', 'g');
+      match = regex.exec(text);
+      if (match !== null) {
+        subtitle = text.slice(0, regex.lastIndex).trim();
+        if (subtitle[subtitle.length - 1] === ".") {
+          subtitle = subtitle.slice(0, subtitle.length - 1);
+        }
+        if (subtitle === "***QUICK LINKS*") {
+          continue;
+        }
+        sections.push(
+          <View>
+            <Text style={styles.subtitle}>{subtitle}</Text>
+            <Text style={styles.text}></Text>
+          </View>
+        )
+        content = text.slice(regex.lastIndex).trim();
+        sections.push(
+          <View>
+            <Text style={styles.text}>{content}</Text>
+            <Text style={styles.text}></Text>
+          </View>
+        )
+      } else {
+        sections.push(
+          <View>
+            <Text style={styles.text}>{text}</Text>
+            <Text style={styles.text}></Text>
+          </View>
+        )
+      }
     }
     return (
       <ScrollView style={styles.linearLayout, {flex: 1, marginBottom: 100}}>
