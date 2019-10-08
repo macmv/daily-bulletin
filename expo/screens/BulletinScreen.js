@@ -17,6 +17,7 @@ import { Calendar } from '../components/Calendar';
 import BulletinManager from '../util/BulletinManager';
 import moment from 'moment';
 import PropTypes from 'prop-types';
+import UserInfoScreen from '../components/UserInfoScreen';
 
 export default class BulletinScreen extends Component {
   state = {
@@ -45,9 +46,15 @@ export default class BulletinScreen extends Component {
     bulletinManager.getAvailableDates(month, this);
     this.setState({selectedMonth: month});
   }
-
+  /*
+  //first time popup
+  <View>
+      <UserInfoScreen pagekey={"uniquekey"} title={"category title"} description={"topic description"}/>
+  </View>
+  */
   render() {
     return (
+      //bulletin elements
       <View>
         <View style={styles.statusBarBackground} />
         <View style={styles.linearLayoutBackground}>
@@ -72,6 +79,9 @@ export default class BulletinScreen extends Component {
         </Modal>
         <View style={styles.linearLayout}>
           <BulletinElement date={this.state.selectedDate} bulletin={this.state.bulletinData} loading={this.state.loadingBulletin} />
+          <View>
+            <UserInfoScreen pagekey={"uniquekey"} title={"category title"} description={"topic description"}/>
+          </View>
         </View>
       </View>
     );
