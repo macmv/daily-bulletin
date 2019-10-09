@@ -5,7 +5,7 @@ import {
   View,
   Text,
   TouchableHighlight,
-  StyleSheet
+  StyleSheet,
 } from "react-native";
 
 export default class UserInfoScreen extends Component {
@@ -20,13 +20,15 @@ export default class UserInfoScreen extends Component {
     AsyncStorage.getItem(this.props.pagekey, (err, result) => {
       if (err) {
       } else {
-        data = JSON.parse(result);
+        /*data = JSON.parse(result);
         if (data["value"] == null) {
           console.log("null value recieved", result);
           this.setModalVisible(true);
         } else {
           console.log("result", result);
-        }
+        }*/
+        this.setModalVisible(true);
+        console.log("result", result);
       }
     });
     AsyncStorage.setItem(this.props.pagekey, JSON.stringify({"value": true}), (err,result) => {
@@ -43,29 +45,29 @@ export default class UserInfoScreen extends Component {
         <Modal
           animationType={"slide"}
           transparent={true}
-          style={styles.UserInfoContainer}
+          style={styles.userInfoContainer}
           visible={this.state.modalVisible}
           onRequestClose={() => {
             alert("Modal has been closed.");
           }}
         >
-          <View style={styles.UserInfoContainer}>
-            <View style={styles.UserInfoTitleContainer}>
-              <Text style={styles.UserInfoTitle}>{this.props.title}</Text>
+          <View style={styles.userInfoContainer}>
+            <View style={styles.userInfoTitleContainer}>
+              <Text style={styles.userInfoTitle}>{this.props.title}</Text>
             </View>
-            <View style={styles.UserInfoDescriptionContainer}>
-              <Text style={styles.UserInfoDescription} allowFontScaling={true}>
+            <View style={styles.userInfoDescriptionContainer}>
+              <Text style={styles.userInfoDescription} allowFontScaling={true}>
                 {this.props.description}
               </Text>
             </View>
-            <View style={styles.UserInfoExitContainer}>
+            <View style={styles.userInfoExitContainer}>
               <TouchableHighlight
                 onPress={() => {
                   this.setModalVisible(!this.state.modalVisible);
                 }}
               >
-                <View style={styles.UserInfoExitButtonContainer}>
-                  <Text style={styles.UserInfoExitButtonText}>Exit</Text>
+                <View style={styles.userInfoExitButtonContainer}>
+                  <Text style={styles.userInfoExitButtonText}>Exit</Text>
                 </View>
               </TouchableHighlight>
             </View>
@@ -78,7 +80,7 @@ export default class UserInfoScreen extends Component {
 
 //define styles
 const styles = StyleSheet.create({
-ftreContainer:{
+  userInfoContainer:{
 		backgroundColor:'black',
 		flex:1,
 		marginTop:70,
@@ -89,46 +91,46 @@ ftreContainer:{
 		borderWidth:4,
 		borderColor:'red'
 	},
-	ftreTitle:{
+	userInfoTitle:{
 		color:'white',
         fontWeight:'bold',
 		fontSize:20,
 		textAlign:'center',
 		margin:10,
 	},
-	ftreDescription:{
+	userInfoDescription:{
 		color:'white',
         fontSize:15,
 		marginRight:20,
 		marginLeft:20
 	},
-	ftreCloseIcon:{
+	userInfoCloseIcon:{
 		alignSelf:'flex-end',
 		flex:0.5,
 		marginRight:10
 	},
-	ftreTitleContainer:{
+	userInfoTitleContainer:{
 		flex:1,
 		flexDirection:'row',
 		justifyContent:'center',
 		alignItems:'center'
 	},
-	ftreDescriptionContainer:{
+	userInfoDescriptionContainer:{
 		flex:6.5
 	},
-	ftreExitContainer:{
+	userInfoExitContainer:{
 		flex:2,
 		justifyContent:'flex-start',
 		alignItems:'center',
 	},
-	ftreExitButtonContainer:{
+	userInfoExitButtonContainer:{
 		width:200,
 		height:40,
 		backgroundColor:'red',
 		borderRadius:10,
 		justifyContent:'center',
 	},
-	ftreExitButtonText:{
+	userInfoExitButtonText:{
 		color:'white',
 		fontSize:20,
 		fontWeight:'bold',

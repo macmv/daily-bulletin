@@ -47,7 +47,6 @@ export default class BulletinScreen extends Component {
     this.setState({selectedMonth: month});
   }
   /*
-  //first time popup
   <View>
       <UserInfoScreen pagekey={"uniquekey"} title={"category title"} description={"topic description"}/>
   </View>
