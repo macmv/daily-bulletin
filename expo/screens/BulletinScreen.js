@@ -79,7 +79,7 @@ export default class BulletinScreen extends Component {
         <View style={styles.linearLayout}>
           <BulletinElement date={this.state.selectedDate} bulletin={this.state.bulletinData} loading={this.state.loadingBulletin} />
           <View>
-            <UserInfoScreen pagekey={"uniquekey"} title={"category title"} description={"topic description"}/>
+            <UserInfoScreen pagekey={"uniquekey"} title={"Enter your grade:"} description={"This will help us adjust the app to your individual schedule."}/>
           </View>
         </View>
       </View>

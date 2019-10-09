@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from "react";
 import {
+  Picker,
   AsyncStorage,
   Modal,
   View,
@@ -60,6 +61,15 @@ export default class UserInfoScreen extends Component {
                 {this.props.description}
               </Text>
             </View>
+            <Picker
+              selectedValue={this.state.language}
+              style={styles.userInfoGradePicker}
+              onValueChange={(itemValue, itemIndex) => this.setState({ language: itemValue })}>
+              <Picker.Item label="9th Grade" value="9" />
+              <Picker.Item label="10th Grade" value="10" />
+              <Picker.Item label="11th Grade" value="11" />
+              <Picker.Item label="12th Grade" value="12" />
+            </Picker>
             <View style={styles.userInfoExitContainer}>
               <TouchableHighlight
                 onPress={() => {
@@ -67,7 +77,7 @@ export default class UserInfoScreen extends Component {
                 }}
               >
                 <View style={styles.userInfoExitButtonContainer}>
-                  <Text style={styles.userInfoExitButtonText}>Exit</Text>
+                  <Text style={styles.userInfoExitButtonText}>Enter</Text>
                 </View>
               </TouchableHighlight>
             </View>
@@ -81,25 +91,26 @@ export default class UserInfoScreen extends Component {
 //define styles
 const styles = StyleSheet.create({
   userInfoContainer:{
-		backgroundColor:'black',
+		backgroundColor:'white',
 		flex:1,
 		marginTop:70,
 		marginBottom:40,
 		marginLeft:20,
 		marginRight:20,
-		borderRadius:20,
-		borderWidth:4,
-		borderColor:'red'
+		//borderRadius:20,
+		//borderWidth:4,
+		//borderColor:'#0185DE'
+    elevation: 10
 	},
 	userInfoTitle:{
-		color:'white',
+		color:'black',
         fontWeight:'bold',
 		fontSize:20,
 		textAlign:'center',
 		margin:10,
 	},
 	userInfoDescription:{
-		color:'white',
+		color:'black',
         fontSize:15,
 		marginRight:20,
 		marginLeft:20
@@ -116,18 +127,28 @@ const styles = StyleSheet.create({
 		alignItems:'center'
 	},
 	userInfoDescriptionContainer:{
-		flex:6.5
+		flex:1
+    //6.5
 	},
+  userInfoGradePicker: {
+    flex: 3,
+    alignSelf: 'center',
+    width: "50%",
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
 	userInfoExitContainer:{
-		flex:2,
+		flex:1,
 		justifyContent:'flex-start',
 		alignItems:'center',
 	},
 	userInfoExitButtonContainer:{
-		width:200,
-		height:40,
-		backgroundColor:'red',
-		borderRadius:10,
+		width:"100%",
+		height:"50%",
+    padding: 20,
+    borderRadius: 2,
+    elevation: 5,
+		backgroundColor:'#B61901',
 		justifyContent:'center',
 	},
 	userInfoExitButtonText:{
