@@ -16,6 +16,20 @@ export default class UserInfoScreen extends Component {
       modalVisible: false
     };
   }
+  setGrade = (grade) => {
+    //console.log("Setting grade to: " + grade);
+    this.setState({grade: grade});
+    this.state.grade = grade;
+  }
+  exitUserInfoScreen = () => {
+    //hide modal
+    this.setModalVisible(!this.state.modalVisible);
+    //store user's Grade
+    AsyncStorage.setItem(this.props.pagekey, JSON.stringify({"grade": this.state.grade}), (err,result) => {
+      console.log("error",err,"result",result);
+    });
+    console.log("Setting grade to: " + this.state.grade);
+  }
   //limit module from appearing more than once
   componentDidMount() {
     AsyncStorage.getItem(this.props.pagekey, (err, result) => {
@@ -52,7 +66,7 @@ export default class UserInfoScreen extends Component {
             alert("Modal has been closed.");
           }}
         >
-          <View style={styles.userInfoContainer}>
+          <View stDyle={styles.userInfoContainer}>
             <View style={styles.userInfoTitleContainer}>
               <Text style={styles.userInfoTitle}>{this.props.title}</Text>
             </View>
@@ -62,9 +76,9 @@ export default class UserInfoScreen extends Component {
               </Text>
             </View>
             <Picker
-              selectedValue={this.state.language}
+              selectedValue={this.state.grade}
               style={styles.userInfoGradePicker}
-              onValueChange={(itemValue, itemIndex) => this.setState({ language: itemValue })}>
+              onValueChange={(itemValue, itemIndex) => this.setGrade(itemValue)}>
               <Picker.Item label="9th Grade" value="9" />
               <Picker.Item label="10th Grade" value="10" />
               <Picker.Item label="11th Grade" value="11" />
@@ -72,12 +86,9 @@ export default class UserInfoScreen extends Component {
             </Picker>
             <View style={styles.userInfoExitContainer}>
               <TouchableHighlight
-                onPress={() => {
-                  this.setModalVisible(!this.state.modalVisible);
-                }}
-              >
+                onPress={this.exitUserInfoScreen } >
                 <View style={styles.userInfoExitButtonContainer}>
-                  <Text style={styles.userInfoExitButtonText}>Enter</Text>
+                  <Text style={styles.userInfoExitButtonText}>Save</Text>
                 </View>
               </TouchableHighlight>
             </View>
