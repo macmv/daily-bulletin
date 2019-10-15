@@ -16,6 +16,7 @@ public class SportsCache {
   private final Date date;
   private final Pattern sportsStartsWithDate = Pattern.compile("^[A-Z][a-z]+, [0-9]+/[0-9]+:");
   private final DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
+  private final DateFormat jsonDateFormat = new SimpleDateFormat("yyyy-dd-MM");
 
   public SportsCache(S3Manager s3Manager, Date date) {
     this.date = date;
@@ -23,16 +24,16 @@ public class SportsCache {
   }
 
   public void parseFromBulletin(BulletinCache bulletinCache) {
-    String json = bulletinCache.getJsonData();
-    JSONObject bulletinData = new JSONObject(json);
+    String bulletinJson = bulletinCache.getJsonData();
+    JSONObject bulletinData = new JSONObject(bulletinJson);
     List sportsRaw = ((JSONArray) bulletinData.get("sports")).toList();
     if (sportsRaw.get(0).equals("Happenings")) {
       sportsRaw.remove(0);
     }
     log.info("Got sports:" + sportsRaw);
-    Map<Date, List<String>> data = new HashMap<>();
-    Date thisDate = new Date();
-    sportsRaw.forEach(o -> {
+    Map<String, List<String>> data = new HashMap<>();
+    Date thisDate = null;
+    for (Object o : sportsRaw) {
       String line = o.toString();
       int startDataString = 0;
       if (sportsStartsWithDate.matcher(line).find()) {
@@ -43,7 +44,7 @@ public class SportsCache {
         String dateStr = line.substring(startDate, endDate) + "/" + cal.get(Calendar.YEAR);
         log.info("Parsed str date from line: " + dateStr);
         try {
-          thisDate.setTime(dateFormat.parse(dateStr).getTime());
+          thisDate = dateFormat.parse(dateStr);
         } catch (ParseException e) {
           log.severe("This should not have been called!\nWe have a regex to match a valid date, so that should protect against this.");
           System.exit(1);
@@ -51,11 +52,15 @@ public class SportsCache {
         log.info("Parsed date from line: " + thisDate);
         startDataString = endDate + 2;
       }
-      if (!data.containsKey(thisDate)) {
-        data.put(thisDate, new ArrayList<>());
+      // because everything is terrible and i cant reassign thisDate in forEach
+      String dateStr = jsonDateFormat.format(thisDate);
+      if (!data.containsKey(dateStr)) {
+        data.put(dateStr, new ArrayList<>());
       }
-      data.get(thisDate).add(line.substring(startDataString));
-    });
-    log.info("Generated data: " + data);
+      data.get(dateStr).add(line.substring(startDataString).trim());
+    }
+    String sportsJson = new JSONObject(data).toString(2);
+    log.info("Generated data:\n" + data.toString().replaceAll("], ", "],\n"));
+    log.info("Generated json:\n" + sportsJson);
   }
 }
