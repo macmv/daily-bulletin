@@ -10,20 +10,17 @@ import {
 } from "react-native";
 
 export default class UserInfoScreen extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      modalVisible: false
-    };
+  state = {
+    grade: 9,
+    useVisibleProp: true
   }
   setGrade = (grade) => {
     //console.log("Setting grade to: " + grade);
     this.setState({grade: grade});
-    this.state.grade = grade;
   }
   exitUserInfoScreen = () => {
     //hide modal
-    this.setModalVisible(!this.state.modalVisible);
+    this.setModalVisible(false);
     //store user's Grade
     AsyncStorage.setItem(this.props.pagekey, JSON.stringify({"grade": this.state.grade}), (err,result) => {
       console.log("error",err,"result",result);
@@ -32,6 +29,7 @@ export default class UserInfoScreen extends Component {
   }
   //limit module from appearing more than once
   componentDidMount() {
+    //console.log("modalVisible: " + this.state.modalVisible);
     AsyncStorage.getItem(this.props.pagekey, (err, result) => {
       if (err) {
       } else {
@@ -42,31 +40,32 @@ export default class UserInfoScreen extends Component {
         } else {
           console.log("result", result);
         }*/
-        this.setModalVisible(true);
+        this.setModalVisible(this.props.visible);
         console.log("result", result);
       }
     });
     AsyncStorage.setItem(this.props.pagekey, JSON.stringify({"value": true}), (err,result) => {
-      console.log("error",err,"result",result);
+      //console.log("error",err,"result",result);
     });
   }
   setModalVisible(visible) {
-    this.setState({ modalVisible: visible });
+    this.setState({ modalVisible: visible, useVisibleProp: false });
   }
   //display module popup
   render() {
+    //console.log("modalVisible: " + this.state.modalVisible);
     return (
       <View>
         <Modal
           animationType={"slide"}
           transparent={true}
           style={styles.userInfoContainer}
-          visible={this.state.modalVisible}
+          visible={this.state.useVisibleProp ? this.props.visible : this.state.modalVisible}
           onRequestClose={() => {
             alert("Modal has been closed.");
           }}
         >
-          <View stDyle={styles.userInfoContainer}>
+          <View style={styles.userInfoContainer}>
             <View style={styles.userInfoTitleContainer}>
               <Text style={styles.userInfoTitle}>{this.props.title}</Text>
             </View>
