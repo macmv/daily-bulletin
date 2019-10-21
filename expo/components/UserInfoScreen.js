@@ -12,24 +12,29 @@ import {
 export default class UserInfoScreen extends Component {
   state = {
     grade: 9,
-    useVisibleProp: true
+    modalVisible: this.props.visible,
   }
+  //previousVisible: null
   setGrade = (grade) => {
     //console.log("Setting grade to: " + grade);
     this.setState({grade: grade});
   }
   exitUserInfoScreen = () => {
     //hide modal
+    //this.previousVisible = true;
+    //this.props.visible = false;
+    //this.props.hideGradePopup(false)
     this.setModalVisible(false);
     //store user's Grade
     AsyncStorage.setItem(this.props.pagekey, JSON.stringify({"grade": this.state.grade}), (err,result) => {
-      console.log("error",err,"result",result);
+      //console.log("error",err,"result",result);
     });
     console.log("Setting grade to: " + this.state.grade);
+    this.props.foobar();
   }
   //limit module from appearing more than once
   componentDidMount() {
-    //console.log("modalVisible: " + this.state.modalVisible);
+    //this.previousVisible = this.props.visible
     AsyncStorage.getItem(this.props.pagekey, (err, result) => {
       if (err) {
       } else {
@@ -41,60 +46,73 @@ export default class UserInfoScreen extends Component {
           console.log("result", result);
         }*/
         this.setModalVisible(this.props.visible);
-        console.log("result", result);
+        //console.log("result", result);
       }
+      //console.log("modalVisible: " + this.state.modalVisible);
     });
     AsyncStorage.setItem(this.props.pagekey, JSON.stringify({"value": true}), (err,result) => {
       //console.log("error",err,"result",result);
     });
   }
   setModalVisible(visible) {
-    this.setState({ modalVisible: visible, useVisibleProp: false });
+    this.setState({ modalVisible: visible });
   }
   //display module popup
   render() {
-    //console.log("modalVisible: " + this.state.modalVisible);
-    return (
-      <View>
-        <Modal
-          animationType={"slide"}
-          transparent={true}
-          style={styles.userInfoContainer}
-          visible={this.state.useVisibleProp ? this.props.visible : this.state.modalVisible}
-          onRequestClose={() => {
-            alert("Modal has been closed.");
-          }}
-        >
-          <View style={styles.userInfoContainer}>
-            <View style={styles.userInfoTitleContainer}>
-              <Text style={styles.userInfoTitle}>{this.props.title}</Text>
+    /*if (!this.state.modalVisible && this.props.visible) {
+      this.setModalVisible(true);
+    }*/
+    console.log("modalVisible in UserInfoScreen: " + this.state.modalVisible);
+    console.log("props.visible " + this.props.visible);
+    //console.log("prevVis: " + this.previousVisible);
+    /*if (this.previousVisible != this.props.visible) {
+      this.previousVisible = this.props.visible;
+      this.setModalVisible(this.props.visible);
+      //console.log("prevVis: " + this.previousVisible);
+    }*/
+    if (this.props.visible) {
+      return (
+        <View>
+          <Modal
+            animationType={"slide"}
+            transparent={true}
+            style={styles.userInfoContainer}
+            onRequestClose={() => {
+              alert("Modal has been closed.");
+            }}>
+            <View style={styles.userInfoContainer}>
+              <View style={styles.userInfoTitleContainer}>
+                <Text style={styles.userInfoTitle}>{this.props.title}</Text>
+              </View>
+              <View style={styles.userInfoDescriptionContainer}>
+                <Text style={styles.userInfoDescription} allowFontScaling={true}>
+                  {this.props.description}
+                </Text>
+              </View>
+              <Picker
+                selectedValue={this.state.grade}
+                style={styles.userInfoGradePicker}
+                onValueChange={(itemValue, itemIndex) => this.setGrade(itemValue)}>
+                <Picker.Item label="9th Grade" value="9" />
+                <Picker.Item label="10th Grade" value="10" />
+                <Picker.Item label="11th Grade" value="11" />
+                <Picker.Item label="12th Grade" value="12" />
+              </Picker>
+              <View style={styles.userInfoExitContainer}>
+                <TouchableHighlight
+                  onPress={this.exitUserInfoScreen} >
+                  <View style={styles.userInfoExitButtonContainer}>
+                    <Text style={styles.userInfoExitButtonText}>Save</Text>
+                  </View>
+                </TouchableHighlight>
+              </View>
             </View>
-            <View style={styles.userInfoDescriptionContainer}>
-              <Text style={styles.userInfoDescription} allowFontScaling={true}>
-                {this.props.description}
-              </Text>
-            </View>
-            <Picker
-              selectedValue={this.state.grade}
-              style={styles.userInfoGradePicker}
-              onValueChange={(itemValue, itemIndex) => this.setGrade(itemValue)}>
-              <Picker.Item label="9th Grade" value="9" />
-              <Picker.Item label="10th Grade" value="10" />
-              <Picker.Item label="11th Grade" value="11" />
-              <Picker.Item label="12th Grade" value="12" />
-            </Picker>
-            <View style={styles.userInfoExitContainer}>
-              <TouchableHighlight
-                onPress={this.exitUserInfoScreen } >
-                <View style={styles.userInfoExitButtonContainer}>
-                  <Text style={styles.userInfoExitButtonText}>Save</Text>
-                </View>
-              </TouchableHighlight>
-            </View>
-          </View>
-        </Modal>
-      </View>
-    );
+          </Modal>
+        </View>
+      );
+    } else {
+      return <View />
+    }
   }
 }
 

@@ -21,6 +21,7 @@ import UserInfoScreen from '../components/UserInfoScreen';
 
 export default class BulletinScreen extends Component {
   state = {
+    gradePopupVisible: true,
     isModalVisible: false,
     bulletinData: null,
     loadingBulletin: false
@@ -48,7 +49,8 @@ export default class BulletinScreen extends Component {
   }
 
   setUserInfoScreenVisible = (visible) => {
-    console.log("Setting visibility");
+    console.log("Set the visibility to: " + visible);
+    this.setState({gradePopupVisible : visible});
   }
   /*
   <View>
@@ -80,10 +82,10 @@ export default class BulletinScreen extends Component {
             </View>
           </View>
         </Modal>
-        <View style={styles.linearLayout}>
+        <View style={styles.linearLayout} isVisible={this.state.gradePopupVisible}>
           <BulletinElement date={this.state.selectedDate} bulletin={this.state.bulletinData} loading={this.state.loadingBulletin} />
           <View>
-            <UserInfoScreen visible={true} pagekey={"uniquekey"} title={"Enter your grade:"} description={"This will help us adjust the app to your individual schedule."}/>
+            <UserInfoScreen foobar={this.setUserInfoScreenVisible.bind(this, false)} visible={this.state.gradePopupVisible} pagekey={"uniquekey"} title={"Enter your grade:"} description={"This will help us adjust the app to your individual schedule."}/>
           </View>
         </View>
       </View>

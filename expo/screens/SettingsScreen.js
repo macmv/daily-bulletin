@@ -17,6 +17,7 @@ export default class SettingsScreen extends Component {
   state = {
     modalVisible: false
   };
+  //this.setChanged = this.setChanged.bind(this);
   /**
    * Go ahead and delete ExpoConfigView and replace it with your content;
    * we just wanted to give you a quick view of your config.
@@ -24,9 +25,12 @@ export default class SettingsScreen extends Component {
   showGradePopup = () => {
     this.setState({modalVisible: true});
   };
+  hideGradePopup = () => {
+    this.setState({modalVisible: false});
+  };
   //return <ExpoConfigView />;
   render() {
-    //console.log("modalVisible: " + this.state.modalVisible);
+    console.log("modalVisible: " + this.state.modalVisible);
     return (
       <View>
         <View style={styles.statusBarBackground} />
@@ -34,9 +38,9 @@ export default class SettingsScreen extends Component {
           onPress={this.showGradePopup}
           style={styles.calendarButton}
           color={(Platform.OS === 'ios') ? "#fff" : ""} />
-          <View>
-            <UserInfoScreen visible={this.state.modalVisible} pagekey={"uniquekey"} title={"Enter your grade:"} description={"This will help us adjust the app to your individual schedule."}/>
-          </View>
+        <View>
+          <UserInfoScreen foobar={this.hideGradePopup.bind(this)} visible={this.state.modalVisible} pagekey={"uniquekey"} title={"Enter your grade:"} description={"This will help us adjust the app to your individual schedule."}/>
+        </View>
       </View>
     );
   }
