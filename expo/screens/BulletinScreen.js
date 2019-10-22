@@ -52,11 +52,6 @@ export default class BulletinScreen extends Component {
     console.log("Set the visibility to: " + visible);
     this.setState({gradePopupVisible : visible});
   }
-  /*
-  <View>
-      <UserInfoScreen pagekey={"uniquekey"} title={"category title"} description={"topic description"}/>
-  </View>
-  */
   render() {
     return (
       //bulletin elements
@@ -85,7 +80,7 @@ export default class BulletinScreen extends Component {
         <View style={styles.linearLayout} isVisible={this.state.gradePopupVisible}>
           <BulletinElement date={this.state.selectedDate} bulletin={this.state.bulletinData} loading={this.state.loadingBulletin} />
           <View>
-            <UserInfoScreen foobar={this.setUserInfoScreenVisible.bind(this, false)} visible={this.state.gradePopupVisible} pagekey={"uniquekey"} title={"Enter your grade:"} description={"This will help us adjust the app to your individual schedule."}/>
+            <UserInfoScreen hide={this.setUserInfoScreenVisible.bind(this, false)} visible={this.state.gradePopupVisible} pagekey={"gradekey"} title={"Enter your grade:"} description={"This will help us adjust the app to your individual schedule."}/>
           </View>
         </View>
       </View>

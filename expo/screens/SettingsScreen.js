@@ -39,7 +39,7 @@ export default class SettingsScreen extends Component {
           style={styles.calendarButton}
           color={(Platform.OS === 'ios') ? "#fff" : ""} />
         <View>
-          <UserInfoScreen foobar={this.hideGradePopup.bind(this)} visible={this.state.modalVisible} pagekey={"uniquekey"} title={"Enter your grade:"} description={"This will help us adjust the app to your individual schedule."}/>
+          <UserInfoScreen hide={this.hideGradePopup.bind(this)} visible={this.state.modalVisible} pagekey={"gradekey"} title={"Enter your grade:"} description={"This will help us adjust the app to your individual schedule."}/>
         </View>
       </View>
     );

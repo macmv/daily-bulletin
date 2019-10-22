@@ -12,7 +12,7 @@ import {
 export default class UserInfoScreen extends Component {
   state = {
     grade: 9,
-    modalVisible: this.props.visible,
+    modalLoaded: false,
   }
   //previousVisible: null
   setGrade = (grade) => {
@@ -20,57 +20,59 @@ export default class UserInfoScreen extends Component {
     this.setState({grade: grade});
   }
   exitUserInfoScreen = () => {
-    //hide modal
-    //this.previousVisible = true;
-    //this.props.visible = false;
-    //this.props.hideGradePopup(false)
-    this.setModalVisible(false);
     //store user's Grade
     AsyncStorage.setItem(this.props.pagekey, JSON.stringify({"grade": this.state.grade}), (err,result) => {
-      //console.log("error",err,"result",result);
+      console.log("error",err,"result",result);
     });
     console.log("Setting grade to: " + this.state.grade);
-    this.props.foobar();
+    //hide modal
+    this.props.hide();
   }
   //limit module from appearing more than once
   componentDidMount() {
-    //this.previousVisible = this.props.visible
+    //get the grade that was saved
     AsyncStorage.getItem(this.props.pagekey, (err, result) => {
+      //console.log(this.props.pagekey + " : " + JSON.parse(result)["grade"]);
       if (err) {
       } else {
-        /*data = JSON.parse(result);
-        if (data["value"] == null) {
-          console.log("null value recieved", result);
-          this.setModalVisible(true);
+        if (result == null) {
+          //if result is null
+          console.log("null value recieved");
+          this.state.modalLoaded = true;
+          console.log("Modal Loaded and got null: " + this.state.modalLoaded);
+          this.setState({grade: "9"});
         } else {
-          console.log("result", result);
-        }*/
-        this.setModalVisible(this.props.visible);
+          //otherwise, load in grade
+          data = JSON.parse(result);
+          this.state.modalLoaded = true;
+          console.log("Modal Loaded and got result: " + this.state.modalLoaded);
+          console.log("result", data["grade"]);
+          this.setState({grade: data["grade"]});
+        }
+      }
+    });
+
+    /*AsyncStorage.getItem(this.props.pagekey, (err, result) => {
+      if (err) {
+      } else {
+        data = JSON.parse(result);
+        if (data["value"] == null) {
+          //console.log("null value recieved", result);
+        } else {
+          //console.log("result", result);
+        }
         //console.log("result", result);
       }
       //console.log("modalVisible: " + this.state.modalVisible);
     });
     AsyncStorage.setItem(this.props.pagekey, JSON.stringify({"value": true}), (err,result) => {
       //console.log("error",err,"result",result);
-    });
-  }
-  setModalVisible(visible) {
-    this.setState({ modalVisible: visible });
+    });*/
   }
   //display module popup
   render() {
-    /*if (!this.state.modalVisible && this.props.visible) {
-      this.setModalVisible(true);
-    }*/
-    console.log("modalVisible in UserInfoScreen: " + this.state.modalVisible);
-    console.log("props.visible " + this.props.visible);
-    //console.log("prevVis: " + this.previousVisible);
-    /*if (this.previousVisible != this.props.visible) {
-      this.previousVisible = this.props.visible;
-      this.setModalVisible(this.props.visible);
-      //console.log("prevVis: " + this.previousVisible);
-    }*/
-    if (this.props.visible) {
+
+    if (this.state.modalLoaded && this.props.visible) {
       return (
         <View>
           <Modal
@@ -90,9 +92,9 @@ export default class UserInfoScreen extends Component {
                 </Text>
               </View>
               <Picker
-                selectedValue={this.state.grade}
+                selectedValue={this.state.grade + ""}
                 style={styles.userInfoGradePicker}
-                onValueChange={(itemValue, itemIndex) => this.setGrade(itemValue)}>
+                onValueChange={(itemValue, itemIndex) => this.setGrade(parseInt(itemValue))}>
                 <Picker.Item label="9th Grade" value="9" />
                 <Picker.Item label="10th Grade" value="10" />
                 <Picker.Item label="11th Grade" value="11" />
