@@ -6,6 +6,7 @@ import {
   Text,
   Button,
   View,
+  AsyncStorage,
   Alert,
   ScrollView,
   FlatList,
@@ -21,12 +22,11 @@ import UserInfoScreen from '../components/UserInfoScreen';
 
 export default class BulletinScreen extends Component {
   state = {
-    gradePopupVisible: true,
+    gradePopupVisible: false,
     isModalVisible: false,
     bulletinData: null,
     loadingBulletin: false
   };
-
   showPopup = () => {
     bulletinManager.getAvailableDates(new Date(), this);
     this.setState({isModalVisible: true, selectedMonth: new Date()});
@@ -52,6 +52,16 @@ export default class BulletinScreen extends Component {
     console.log("Set the visibility to: " + visible);
     this.setState({gradePopupVisible : visible});
   }
+
+  //resets the AsyncStorage
+  /*componentDidMount() {
+    AsyncStorage.clear((err) => {
+      if (err) {
+        console.log("Error: " + err);
+      }
+    });
+  }*/
+
   render() {
     return (
       //bulletin elements
@@ -77,10 +87,16 @@ export default class BulletinScreen extends Component {
             </View>
           </View>
         </Modal>
-        <View style={styles.linearLayout} isVisible={this.state.gradePopupVisible}>
+        <View style={styles.linearLayout}>
           <BulletinElement date={this.state.selectedDate} bulletin={this.state.bulletinData} loading={this.state.loadingBulletin} />
           <View>
-            <UserInfoScreen hide={this.setUserInfoScreenVisible.bind(this, false)} visible={this.state.gradePopupVisible} pagekey={"gradekey"} title={"Enter your grade:"} description={"This will help us adjust the app to your individual schedule."}/>
+            <UserInfoScreen
+              key={"Bulletin"}
+              hide={this.setUserInfoScreenVisible.bind(this, false)}
+              visible={this.state.gradePopupVisible}
+              title={"Enter your grade:"}
+              description={"This will help us adjust the app to your individual schedule."}
+            />
           </View>
         </View>
       </View>

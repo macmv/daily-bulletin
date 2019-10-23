@@ -13,7 +13,9 @@ export default class UserInfoScreen extends Component {
   state = {
     grade: 9,
     modalLoaded: false,
+    firstTimePopup: false,
   }
+  //pagekey: "gradepopup"
   //previousVisible: null
   setGrade = (grade) => {
     //console.log("Setting grade to: " + grade);
@@ -21,58 +23,65 @@ export default class UserInfoScreen extends Component {
   }
   exitUserInfoScreen = () => {
     //store user's Grade
-    AsyncStorage.setItem(this.props.pagekey, JSON.stringify({"grade": this.state.grade}), (err,result) => {
+    AsyncStorage.setItem("gradekey", JSON.stringify({"grade": this.state.grade}), (err,result) => {
       console.log("error",err,"result",result);
     });
     console.log("Setting grade to: " + this.state.grade);
+    this.state.firstTimePopup = false;
     //hide modal
     this.props.hide();
   }
-  //limit module from appearing more than once
+  //only called when the component is first being mounted in the app
   componentDidMount() {
     //get the grade that was saved
-    AsyncStorage.getItem(this.props.pagekey, (err, result) => {
+    AsyncStorage.getItem("gradekey", (err, result) => {
       //console.log(this.props.pagekey + " : " + JSON.parse(result)["grade"]);
-      if (err) {
-      } else {
+      if (!err) {
         if (result == null) {
           //if result is null
-          console.log("null value recieved");
+          //console.log("null value recieved");
           this.state.modalLoaded = true;
-          console.log("Modal Loaded and got null: " + this.state.modalLoaded);
+          this.state.firstTimePopup = true;
+          //console.log("Modal Loaded and got null: " + this.state.modalLoaded);
           this.setState({grade: "9"});
         } else {
           //otherwise, load in grade
           data = JSON.parse(result);
           this.state.modalLoaded = true;
-          console.log("Modal Loaded and got result: " + this.state.modalLoaded);
-          console.log("result", data["grade"]);
+          this.state.firstTimePopup = false;
+          //console.log("Modal Loaded and got result: " + this.state.modalLoaded);
+          //console.log("result", data["grade"]);
           this.setState({grade: data["grade"]});
         }
       }
     });
 
-    /*AsyncStorage.getItem(this.props.pagekey, (err, result) => {
+    //limit module from appearing more than once
+    /*AsyncStorage.getItem("gradekey", (err, result) => {
       if (err) {
       } else {
-        data = JSON.parse(result);
-        if (data["value"] == null) {
-          //console.log("null value recieved", result);
+        //console.log("key:" + this.props.key);
+        if (result == null) {
+          console.log("null value recieved", result);
+          this.firstTimePopup = true;
         } else {
-          //console.log("result", result);
+          data = JSON.parse(result);
+          console.log("result", data["hasGradeOpened"]);
+          if (data["hasGradeOpened"]) {
+            this.firstTimePopup = false;
+          }
         }
-        //console.log("result", result);
       }
-      //console.log("modalVisible: " + this.state.modalVisible);
     });
-    AsyncStorage.setItem(this.props.pagekey, JSON.stringify({"value": true}), (err,result) => {
-      //console.log("error",err,"result",result);
+    AsyncStorage.setItem("gradekey", JSON.stringify({"hasGradeOpened": true}), (err,result) => {
+      console.log("error",err,"result",result);
     });*/
   }
   //display module popup
   render() {
 
-    if (this.state.modalLoaded && this.props.visible) {
+    console.log("this.state.firstTimePopup: " + this.state.firstTimePopup);
+    if ((this.state.modalLoaded && this.props.visible) || this.state.firstTimePopup) {
       return (
         <View>
           <Modal
