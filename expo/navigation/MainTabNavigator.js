@@ -7,6 +7,7 @@ import BulletinScreen from '../screens/BulletinScreen';
 import SportsScreen from '../screens/SportsScreen';
 import ScheduleScreen from '../screens/ScheduleScreen';
 import SettingsScreen from '../screens/SettingsScreen';
+import ResourcesScreen from '../screens/ResourcesScreen';
 
 const config = Platform.select({
   web: { headerMode: 'screen' },
@@ -52,7 +53,7 @@ SportsStack.navigationOptions = {
 
 SportsStack.path = '';
 
-//Bell SChedule tab
+//Bell Schedule tab
 const ScheduleStack = createStackNavigator(
   {
     Schedule: ScheduleScreen,
@@ -85,11 +86,29 @@ SettingsStack.navigationOptions = {
 
 SettingsStack.path = '';
 
+//resources tab
+const ResourcesStack = createStackNavigator(
+  {
+    Resources: ResourcesScreen,
+  },
+  config
+);
+
+ResourcesStack.navigationOptions = {
+  tabBarLabel: 'Resources',
+  tabBarIcon: ({ focused }) => (
+    <TabBarIcon focused={focused} name={Platform.OS === 'ios' ? 'ios-link' : 'md-open'} />
+  ),
+};
+
+ResourcesStack.path = '';
+
 const tabNavigator = createBottomTabNavigator({
   BulletinStack,
   SportsStack,
   ScheduleStack,
   SettingsStack,
+  ResourcesStack,
 });
 
 tabNavigator.path = '';
