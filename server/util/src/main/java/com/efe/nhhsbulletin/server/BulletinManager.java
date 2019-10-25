@@ -107,9 +107,9 @@ public class BulletinManager {
     log.info("Saving cache to S3");
     bulletinCache.saveCache();
 
-    SportsCache sportsCache = new SportsCache(s3Manager, date);
+    SportsCache sportsCache = new SportsCache(s3Manager);
     sportsCache.parseFromBulletin(bulletinCache);
-//    sportsCache.overwriteS3();
+    sportsCache.saveCache();
   }
 
   public void collectEmail(String messageId) {
