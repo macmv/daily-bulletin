@@ -7,7 +7,7 @@ export default class SportsManager {
   }
 
   getAvailableDates(month, sportsScreen) {
-    sportsScreen.setState({loadingDates: true, validDates: []});
+    sportsScreen.setState({loadingSports: true, validDates: []});
     var year = month.getFullYear();
     var month = month.getMonth() + 1;
     monthString = month.toString();
@@ -15,25 +15,36 @@ export default class SportsManager {
       monthString = "0" + monthString;
     }
     this.s3.list("v0/sports/" + year.toString() + "-" + monthString, function(dates) {
-      sportsScreen.setState({validDates: dates, loadingDates: false});
+      sportsScreen.setState({validDates: dates, loadingSports: false});
     });
   }
 
-  getData(date, sportsScreen) {
+  getData(date, daysBack, sportsScreen) {
     sportsScreen.setState({sportsData: null, loadingSports: true});
-    var year = date.getFullYear();
-    var month = date.getMonth() + 1;
-    var day = date.getDate();
-    monthString = month.toString();
-    if (monthString.length == 1) {
-      monthString = "0" + monthString;
+    allData = {};
+    for (var i = 0; i < daysBack; i++) {
+      this.s3.get("v0/sports/" + generateDateString(date) + ".json", i, function(data, extra) {
+        allData[date.getTime()] = data;
+        console.log(extra);
+        if (i >= daysBack - 1) {
+          sportsScreen.setState({sportsData: allData, loadingSports: false});
+        }
+      });
     }
-    dayString = day.toString();
-    if (dayString.length == 1) {
-      dayString = "0" + dayString;
-    }
-    this.s3.get("v0/sports/" + year.toString() + "-" + monthString + "/" + dayString + ".json", function(data) {
-      sportsScreen.setState({sportsData: data, loadingSports: false});
-    });
   }
+}
+
+function generateDateString(date) {
+  var year = date.getFullYear();
+  var month = date.getMonth() + 1;
+  var day = date.getDate();
+  monthString = month.toString();
+  if (monthString.length == 1) {
+    monthString = "0" + monthString;
+  }
+  dayString = day.toString();
+  if (dayString.length == 1) {
+    dayString = "0" + dayString;
+  }
+  return year.toString() + "-" + monthString + "/" + dayString
 }
