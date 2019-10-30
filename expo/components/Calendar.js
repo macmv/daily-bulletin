@@ -31,6 +31,7 @@ export class Calendar extends Component {
   }
 
   render = () => {
+    if (!this.props.isModalVisible) { return null; }
     var date = this.props.month;
     var year = date.getFullYear();
     var month = date.getMonth();

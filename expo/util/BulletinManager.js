@@ -32,7 +32,7 @@ export default class BulletinManager {
     if (dayString.length == 1) {
       dayString = "0" + dayString;
     }
-    this.s3.get("v0/bulletin/" + year.toString() + "-" + monthString + "/" + dayString + ".json", function(data) {
+    this.s3.get("v0/bulletin/" + year.toString() + "-" + monthString + "/" + dayString + ".json", null, function(data, nothing) {
       bulletinScreen.setState({bulletinData: data, loadingBulletin: false});
     });
   }
