@@ -7,7 +7,7 @@ import {
   ActivityIndicator
 } from 'react-native';
 import { ExpoLinksView } from '@expo/samples';
-
+import moment from 'moment';
 import SportsManager from '../util/SportsManager';
 
 export default class SportsScreen extends Component {
@@ -38,30 +38,30 @@ function GenerateSportsScreen(props) {
       </View>
     )
   } else {
-    console.log("Sports data:", sportsData);
     sections = [];
-    for (var i = 0; i < Object.keys(sportsData).length; i++) {
-      dateString = Object.keys(sportsData)[i];
+    sportsDataKeys = Object.keys(sportsData);
+    sportsDataKeys.sort();
+    for (var i = 0; i < sportsDataKeys.length; i++) {
+      dateString = sportsDataKeys[i];
       events = sportsData[dateString]["events"];
       lines = []
       for (var j = 0; j < events.length; j++) {
         lines.push(
-          <Text>
+          <Text style={styles.text}>
             { events[j] }
           </Text>);
       }
       date = new Date(parseInt(dateString));
-      console.log("Date:", date);
       sections.push(
         <View>
-          <Text>{ date.getMonth() + 1 }/{ date.getDate() }</Text>
+          <Text style={styles.subtitle}>{ moment(date).format('dddd, MMMM Do') }</Text>
           <View>
             { lines }
           </View>
         </View>);
     }
     return (
-      <View>
+      <View style={styles.linearLayout, {flex: 1, marginBottom: 100}}>
         { sections }
       </View>
     )
@@ -80,5 +80,22 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingTop: 15,
     backgroundColor: '#fff',
+  },
+  subtitle: {
+    color: '#222',
+    width: '100%',
+    padding: 10,
+    fontSize: 18
+  },
+  text: {
+    color: '#222',
+    paddingLeft: 25,
+    fontSize: 15,
+  },
+  linearLayout: {
+    flex: 0,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    padding: 10,
   },
 });
