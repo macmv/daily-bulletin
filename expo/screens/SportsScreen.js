@@ -16,7 +16,7 @@ export default class SportsScreen extends Component {
     loadingSports: false
   }
   componentDidMount = () => {
-    sportsManager.getData(new Date(2019, 9, 28), this)
+    sportsManager.getData(new Date(2019, 9, 28), 7, this)
   }
   render() {
     return (
@@ -34,21 +34,35 @@ function GenerateSportsScreen(props) {
       <View>
         <ActivityIndicator
           barStyle="large"
-          color="#00ff00"/>
+          color="#00ffa0"/>
       </View>
     )
   } else {
-    events = sportsData["events"]
-    lines = []
-    for (var i = 0; i < events.length; i++) {
-      lines.push(
-        <Text>
-          { events[i] }
-        </Text>);
+    console.log("Sports data:", sportsData);
+    sections = [];
+    for (var i = 0; i < Object.keys(sportsData).length; i++) {
+      dateString = Object.keys(sportsData)[i];
+      events = sportsData[dateString]["events"];
+      lines = []
+      for (var j = 0; j < events.length; j++) {
+        lines.push(
+          <Text>
+            { events[j] }
+          </Text>);
+      }
+      date = new Date(parseInt(dateString));
+      console.log("Date:", date);
+      sections.push(
+        <View>
+          <Text>{ date.getMonth() + 1 }/{ date.getDate() }</Text>
+          <View>
+            { lines }
+          </View>
+        </View>);
     }
     return (
       <View>
-        { lines }
+        { sections }
       </View>
     )
   }

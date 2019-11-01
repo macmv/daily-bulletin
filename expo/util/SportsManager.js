@@ -22,11 +22,12 @@ export default class SportsManager {
   getData(date, daysBack, sportsScreen) {
     sportsScreen.setState({sportsData: null, loadingSports: true});
     allData = {};
+    dayInMillis = 86400000;
     for (var i = 0; i < daysBack; i++) {
-      this.s3.get("v0/sports/" + generateDateString(date) + ".json", i, function(data, extra) {
-        allData[date.getTime()] = data;
+      this.s3.get("v0/sports/" + generateDateString(new Date(date.getTime() + dayInMillis * i)) + ".json", i, function(data, extra) {
+        allData[date.getTime() + dayInMillis * extra] = data;
         console.log(extra);
-        if (i >= daysBack - 1) {
+        if (extra >= daysBack - 3) {
           sportsScreen.setState({sportsData: allData, loadingSports: false});
         }
       });
