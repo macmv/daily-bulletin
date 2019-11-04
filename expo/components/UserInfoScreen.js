@@ -10,6 +10,7 @@ import {
 } from "react-native";
 
 export default class UserInfoScreen extends Component {
+  //TODO: Increment the User's grade every school year automatically
   state = {
     grade: 9,
     modalLoaded: false,
