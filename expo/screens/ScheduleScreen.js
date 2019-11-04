@@ -1,9 +1,10 @@
-import React from 'react';
+import React, {Component} from 'react';
 import {
   ScrollView,
   StyleSheet,
   Text,
   View,
+  AsyncStorage,
 } from 'react-native';
 import { ExpoLinksView } from '@expo/samples';
 import { createAppContainer, createSwitchNavigator } from 'react-navigation';
@@ -11,15 +12,30 @@ import GradeScheduleNavigator from './schedulescreens/GradeScheduleNavigator';
 
 //const GradeIndex = createAppContainer(GradeScheduleNavigator);
 
-export default function ScheduleScreen() {
+export default class ScheduleScreen extends Component {
   state = {
-    grade: 10
+    grade: 9
   };
-  return (
-    <View>
-      <GradeScheduleNavigator currentGrade={this.state.grade}/>
-    </View>
-  );
+
+  render() {
+    //get the grade that was saved
+    AsyncStorage.getItem("gradekey", (err, result) => {
+      if (!err) {
+        if (result == null) {
+          this.setState({grade: "9"});
+        } else {
+          //otherwise, load in grade
+          data = JSON.parse(result);
+          this.setState({grade: data["grade"]});
+        }
+      }
+    });
+    return (
+      <View>
+        <GradeScheduleNavigator currentGrade={this.state.grade}/>
+      </View>
+    );
+  };
 }
 
 ScheduleScreen.navigationOptions = {
