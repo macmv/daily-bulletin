@@ -23,7 +23,7 @@ export default class S3Manager {
         key = contents[i].Key;
           if (key.endsWith(".json")) {
             // v0/bulletin/2019-10/01.json -> 2019-10/01
-            dateStr = key.slice(12, 22);
+            dateStr = key.slice(key.length - 15, key.length - 5);
             // js is stupid; 2019-10-1 gives prev day, 2019/10/1 gives correct day
             dateStr = dateStr.replace("-", "/");
             keys.push(new Date(dateStr).getTime());

@@ -16,7 +16,7 @@ export default class SportsScreen extends Component {
     loadingSports: false
   }
   componentDidMount = () => {
-    sportsManager.getData(new Date(2019, 9, 28), 7, this)
+    sportsManager.getData(new Date(2019, 10, 1), 30, this)
   }
   render() {
     return (
