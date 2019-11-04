@@ -11,6 +11,7 @@ import {
   ScrollView,
   FlatList,
   ActivityIndicator,
+  TouchableOpacity,
 } from 'react-native';
 import Modal from "react-native-modal";
 import { MonoText } from '../components/StyledText';
@@ -52,16 +53,7 @@ export default class BulletinScreen extends Component {
     console.log("Set the visibility to: " + visible);
     this.setState({gradePopupVisible : visible});
   }
-
-  //resets the AsyncStorage
-  /*componentDidMount() {
-    AsyncStorage.clear((err) => {
-      if (err) {
-        console.log("Error: " + err);
-      }
-    });
-  }*/
-
+  
   render() {
     return (
       //bulletin elements
@@ -69,10 +61,11 @@ export default class BulletinScreen extends Component {
         <View style={styles.statusBarBackground} />
         <View style={styles.linearLayoutBackground}>
           <Text style={styles.titleLight}>NHHS Daily Bulletin</Text>
-          <Button title="Calendar"
+          <TouchableOpacity
             onPress={this.showPopup}
-            style={styles.calendarButton}
-            color={(Platform.OS === 'ios') ? "#fff" : ""} />
+            color={(Platform.OS === 'ios') ? "#fff" : ""} >
+            <Text style={styles.titleLight}>Calendar</Text>
+          </TouchableOpacity>
         </View>
         <Modal isVisible={this.state.isModalVisible}>
           <View style={styles.calendarPopup}>
@@ -163,37 +156,12 @@ function BulletinElement(props) {
     )
     for (i = 1; i < bulletin.other.length; i++) {
       text = bulletin.other[i];
-      regex = RegExp('[A-Z]{2,}[A-Z,\\s]+[^\\sa-z]?', 'g');
-      match = regex.exec(text);
-      if (match !== null) {
-        subtitle = text.slice(0, regex.lastIndex).trim();
-        if (subtitle[subtitle.length - 1] === ".") {
-          subtitle = subtitle.slice(0, subtitle.length - 1);
-        }
-        if (subtitle === "***QUICK LINKS*") {
-          continue;
-        }
-        sections.push(
-          <View>
-            <Text style={styles.subtitle}>{subtitle}</Text>
-            <Text style={styles.text}></Text>
-          </View>
-        )
-        content = text.slice(regex.lastIndex).trim();
-        sections.push(
-          <View>
-            <Text style={styles.text}>{content}</Text>
-            <Text style={styles.text}></Text>
-          </View>
-        )
-      } else {
-        sections.push(
-          <View>
-            <Text style={styles.text}>{text}</Text>
-            <Text style={styles.text}></Text>
-          </View>
-        )
-      }
+      sections.push(
+        <View>
+          <Text style={styles.text}>{text}</Text>
+          <Text style={styles.text}></Text>
+        </View>
+      )
     }
     return (
       <ScrollView style={styles.linearLayout, {flex: 1, marginBottom: 100}}>
@@ -217,7 +185,6 @@ const styles = StyleSheet.create({
     color: '#222',
     width: '100%',
     padding: 10,
-    paddingLeft: 20,
     fontSize: 18
   },
   title: {
@@ -269,8 +236,6 @@ const styles = StyleSheet.create({
   calendarButton: {
     backgroundColor: '#0185DE',
     color: "#fff",
-    width: 20,
-    height: 20
   },
   statusBarBackground: {
     height: (Platform.OS === 'ios') ? 18 : 0,

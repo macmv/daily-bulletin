@@ -20,9 +20,14 @@ export default class SportsScreen extends Component {
   }
   render() {
     return (
-      <ScrollView style={styles.container}>
-        <GenerateSportsScreen data={this.state.sportsData} />
-      </ScrollView>
+      <View>
+        <View style={styles.linearLayoutBackground}>
+          <Text style={styles.titleLight}>Upcoming Events</Text>
+        </View>
+        <View style={styles.linearLayout}>
+          <GenerateSportsScreen data={this.state.sportsData} />
+        </View>
+      </View>
     );
   }
 }
@@ -48,7 +53,8 @@ function GenerateSportsScreen(props) {
       for (var j = 0; j < events.length; j++) {
         lines.push(
           <Text style={styles.text}>
-            { events[j] }
+            <Text style={{color:"#888888"}}>- </Text>
+            <Text>{ events[j] }</Text>
           </Text>);
       }
       date = new Date(parseInt(dateString));
@@ -61,31 +67,47 @@ function GenerateSportsScreen(props) {
         </View>);
     }
     return (
-      <View style={styles.linearLayout, {flex: 1, marginBottom: 100}}>
+      <ScrollView style={styles.linearLayout, {flex: 1, marginBottom: 100}}>
         { sections }
-      </View>
+      </ScrollView>
     )
   }
-  return null;
 }
 
 var sportsManager = new SportsManager("daily-bulletin");
 
 SportsScreen.navigationOptions = {
-  title: 'Sports',
+  header: null,
 };
 
 const styles = StyleSheet.create({
+  linearLayout: {
+    flex: 0,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    padding: 10
+  },
+  titleLight: {
+    color: '#fff',
+    fontSize: 20
+  },
+  linearLayoutBackground: {
+    flex: 0,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    backgroundColor: '#0185DE',
+    padding: 10
+  },
   container: {
     flex: 1,
     paddingTop: 15,
     backgroundColor: '#fff',
   },
   subtitle: {
-    color: '#222',
+    color: '#a22',
     width: '100%',
     padding: 10,
-    fontSize: 18
+    fontSize: 18,
   },
   text: {
     color: '#222',

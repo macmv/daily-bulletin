@@ -76,7 +76,7 @@ const SettingsStack = createStackNavigator(
   },
   config
 );
-//md-calendar
+
 SettingsStack.navigationOptions = {
   tabBarLabel: 'Settings',
   tabBarIcon: ({ focused }) => (
