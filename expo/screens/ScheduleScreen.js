@@ -8,7 +8,6 @@ import {
 } from 'react-native';
 import { ExpoLinksView } from '@expo/samples';
 import { createAppContainer, createSwitchNavigator } from 'react-navigation';
-import GradeScheduleNavigator from './schedulescreens/GradeScheduleNavigator';
 import GradeLoader from "./schedulescreens/GradeLoader";
 
 //const GradeIndex = createAppContainer(GradeScheduleNavigator);
@@ -28,7 +27,9 @@ export default class ScheduleScreen extends Component {
         } else {
           //otherwise, load in grade
           data = JSON.parse(result);
-          this.setState({grade: data["grade"]});
+          if (this.state.grade != data["grade"]) {
+            this.setState({grade: data["grade"]});
+          }
         }
       }
     });
