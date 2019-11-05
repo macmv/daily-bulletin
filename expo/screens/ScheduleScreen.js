@@ -1,25 +1,69 @@
-import React from 'react';
+import React, {Component} from 'react';
 import {
   ScrollView,
   StyleSheet,
   Text,
   View,
+  AsyncStorage,
 } from 'react-native';
 import { ExpoLinksView } from '@expo/samples';
 import { createAppContainer, createSwitchNavigator } from 'react-navigation';
 import GradeScheduleNavigator from './schedulescreens/GradeScheduleNavigator';
+import GradeLoader from "./schedulescreens/GradeLoader";
 
 //const GradeIndex = createAppContainer(GradeScheduleNavigator);
+var gradeLoader = new GradeLoader();
 
-export default function ScheduleScreen() {
+export default class ScheduleScreen extends Component {
   state = {
-    grade: 10
+    grade: 9
   };
-  return (
-    <View>
-      <GradeScheduleNavigator currentGrade={this.state.grade}/>
-    </View>
-  );
+
+  render() {
+    //get the grade that was saved
+    AsyncStorage.getItem("gradekey", (err, result) => {
+      if (!err) {
+        if (result == null) {
+          this.setState({grade: "9"});
+        } else {
+          //otherwise, load in grade
+          data = JSON.parse(result);
+          this.setState({grade: data["grade"]});
+        }
+      }
+    });
+    return gradeLoader.getView(this.state.grade);
+    /*switch (this.props.currentGrade) {
+      case (9):
+        return (
+          <View>
+            <NinthGrade/>
+          </View>
+        )
+      break;
+      case (10):
+        return (
+          <View>
+            <TenthGrade/>
+          </View>
+        )
+      break;
+      case (11):
+        return (
+          <View>
+            <EleventhTwelvethGrade/>
+          </View>
+        )
+      break;
+      case (12):
+        return (
+          <View>
+            <EleventhTwelvethGrade/>
+          </View>
+        )
+      break;
+    };*/
+  };
 }
 
 ScheduleScreen.navigationOptions = {
