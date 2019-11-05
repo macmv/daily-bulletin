@@ -9,8 +9,10 @@ import {
 import { ExpoLinksView } from '@expo/samples';
 import { createAppContainer, createSwitchNavigator } from 'react-navigation';
 import GradeScheduleNavigator from './schedulescreens/GradeScheduleNavigator';
+import GradeLoader from "./schedulescreens/GradeLoader";
 
 //const GradeIndex = createAppContainer(GradeScheduleNavigator);
+var gradeLoader = new GradeLoader();
 
 export default class ScheduleScreen extends Component {
   state = {
@@ -30,11 +32,37 @@ export default class ScheduleScreen extends Component {
         }
       }
     });
-    return (
-      <View>
-        <GradeScheduleNavigator currentGrade={this.state.grade}/>
-      </View>
-    );
+    return gradeLoader.getView(this.state.grade);
+    /*switch (this.props.currentGrade) {
+      case (9):
+        return (
+          <View>
+            <NinthGrade/>
+          </View>
+        )
+      break;
+      case (10):
+        return (
+          <View>
+            <TenthGrade/>
+          </View>
+        )
+      break;
+      case (11):
+        return (
+          <View>
+            <EleventhTwelvethGrade/>
+          </View>
+        )
+      break;
+      case (12):
+        return (
+          <View>
+            <EleventhTwelvethGrade/>
+          </View>
+        )
+      break;
+    };*/
   };
 }
 
