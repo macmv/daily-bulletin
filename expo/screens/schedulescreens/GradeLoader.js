@@ -1,4 +1,8 @@
-
+import React, {Component} from 'react';
+import {
+  View,
+  Text,
+} from 'react-native';
 const schedule = require('./schedule.json');
 
 export default class GradeLoader {
@@ -11,4 +15,3 @@ export default class GradeLoader {
     )
   }
 }
-
