@@ -28,7 +28,11 @@ export default class GradeLoader {
       days[day] =
         <View>
           <Text></Text>
-          <Text>{ day }</Text>
+          <View style={{flexDirection: "row"}}>
+            <Text style={[{flex: 1}, styles.header]}>{ moment().day(day).format('dddd') }</Text>
+            <Text style={[{flex: 1}, styles.headerSpacer]}></Text>
+            <Text style={[{flex: 1}, styles.headerSpacer]}></Text>
+          </View>
           <View style={{flexDirection: "row"}}>
             <Text style={[{flex: 1}, styles.boldLeft]}>Subject</Text>
             <Text style={[{flex: 1}, styles.bold]}>Start Time</Text>
@@ -57,6 +61,9 @@ export default class GradeLoader {
 function parseTimeInt(time) {
   hour = Math.floor(time / 100)
   minute = time % 100
+  if (("" + minute).length == 1) {
+    return hour + ":" + minute + "0";
+  }
   return hour + ":" + minute
 }
 
@@ -92,5 +99,17 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     paddingLeft: 5,
   },
+  header: {
+    borderTopWidth: 1,
+    borderRightWidth: 1,
+    borderLeftWidth: 1,
+    borderColor: "#000",
+    paddingLeft: 5,
+  },
+  headerSpacer: {
+    borderRightWidth: 1,
+    borderColor: "#fff",
+    paddingLeft: 5,
+  }
 });
 
