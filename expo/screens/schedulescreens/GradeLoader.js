@@ -6,11 +6,23 @@ import {
 const schedule = require('./schedule.json');
 
 export default class GradeLoader {
-  getView(grade) {
-    console.log(schedule);
+  getView(gradeNum) {
+    grade = schedule.grades[gradeNum];
+    table = [];
+    Object.entries(grade).forEach(item => {
+      data = item[1];
+      data.forEach(subject => {
+        table.push(
+          <View>
+            <Text>{ subject.title }</Text>
+          </View>
+        );
+      });
+    });
+    console.log(table);
     return (
       <View>
-        <Text>GRADE DATA HERE</Text>
+        { table }
       </View>
     )
   }

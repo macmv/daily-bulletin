@@ -1,8 +1,41 @@
 {
   "grades": {
-    9: {
-      "schedule": [
-        {"title": "1st Period"}
+    "9": {
+      "Monday/Friday": [
+        {"title": "Block I",    "start": 945,  "end": 1010},
+        {"title": "Block II",   "start": 1015, "end": 1140},
+        {"title": "4th Period", "start": 1145, "end": 1240},
+        {"title": "Lunch",      "start": 1245, "end": 115},
+        {"title": "5th Period", "start": 120,  "end": 215},
+        {"title": "6th Period", "start": 220,  "end": 315},
+        {"title": "Reading",    "start": 315,  "end": 335}
+      ],
+      "Tuesday": [
+        {"title": "Block I",    "start": 945,  "end": 1005},
+        {"title": "Block II",   "start": 1010, "end": 1125},
+        {"title": "4th Period", "start": 1130, "end": 1220},
+        {"title": "Lunch",      "start": 1225, "end": 1255},
+        {"title": "5th Period", "start": 100,  "end": 150},
+        {"title": "Support",    "start": 155,  "end": 225},
+        {"title": "6th Period", "start": 230,  "end": 320},
+        {"title": "Reading",    "start": 320,  "end": 335}
+      ],
+      "Wednesday": [
+        {"title": "Block I",    "start": 845,  "end": 1010},
+        {"title": "Mentorship", "start": 1015, "end": 1045},
+        {"title": "Block II",   "start": 1050, "end": 1215},
+        {"title": "Lunch",      "start": 1220, "end": 1250},
+        {"title": "5th Period", "start": 1255, "end": 220}
+      ],
+      "Thursday": [
+        {"title": "Block I",    "start": 845,  "end": 930},
+        {"title": "Block II",   "start": 935,  "end": 1015},
+        {"title": "Mentorship", "start": 1020, "end": 1050},
+        {"title": "Support",    "start": 1050, "end": 1120},
+        {"title": "4th Period", "start": 1125, "end": 1255},
+        {"title": "Lunch",      "start": 100,  "end": 130},
+        {"title": "6th Period", "start": 135,  "end": 305},
+        {"title": "Reading",    "start": 305,  "end": 335}
       ]
     }
   }
