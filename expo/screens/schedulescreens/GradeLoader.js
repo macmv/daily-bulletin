@@ -2,28 +2,95 @@ import React, {Component} from 'react';
 import {
   View,
   Text,
+  StyleSheet,
+  ScrollView,
 } from 'react-native';
+import moment from 'moment';
 const schedule = require('./schedule.json');
 
 export default class GradeLoader {
   getView(gradeNum) {
     grade = schedule.grades[gradeNum];
-    table = [];
+    days = {};
     Object.entries(grade).forEach(item => {
+      day = item[0];
       data = item[1];
+      rows = [];
       data.forEach(subject => {
-        table.push(
-          <View>
-            <Text>{ subject.title }</Text>
+        rows.push(
+          <View style={{flexDirection: "row"}}>
+            <Text style={[{flex: 1}, styles.itemLeft]}>{ subject.title }</Text>
+            <Text style={[{flex: 1}, styles.item]}>{ parseTimeInt(subject.start) }</Text>
+            <Text style={[{flex: 1}, styles.item]}>{ parseTimeInt(subject.end) }</Text>
           </View>
         );
       });
+      days[day] =
+        <View>
+          <Text></Text>
+          <Text>{ day }</Text>
+          <View style={{flexDirection: "row"}}>
+            <Text style={[{flex: 1}, styles.boldLeft]}>Subject</Text>
+            <Text style={[{flex: 1}, styles.bold]}>Start Time</Text>
+            <Text style={[{flex: 1}, styles.bold]}>End Time</Text>
+          </View>
+          { rows }
+        </View>;
     });
-    console.log(table);
+    table = [];
+    for (i = 0; i < 7; i++) {
+      day = moment().add(i, 'day').format('ddd');
+      console.log("keys", Object.keys(days));
+      console.log("key", day);
+      if (days[day] != undefined) {
+        table.push(days[day]);
+      }
+    }
     return (
-      <View>
+      <ScrollView style={styles.container}>
         { table }
-      </View>
+      </ScrollView>
     )
   }
 }
+
+function parseTimeInt(time) {
+  hour = Math.floor(time / 100)
+  minute = time % 100
+  return hour + ":" + minute
+}
+
+const styles = StyleSheet.create({
+  container: {
+    paddingLeft: 10,
+    paddingRight: 10,
+  },
+  item: {
+    borderBottomWidth: 1,
+    borderRightWidth: 1,
+    borderColor: "#000",
+    paddingLeft: 5,
+  },
+  itemLeft: {
+    borderBottomWidth: 1,
+    borderRightWidth: 1,
+    borderLeftWidth: 1,
+    borderColor: "#000",
+    paddingLeft: 5,
+  },
+  bold: {
+    borderBottomWidth: 1,
+    borderRightWidth: 1,
+    borderTopWidth: 1,
+    borderColor: "#000",
+    fontWeight: 'bold',
+    paddingLeft: 5,
+  },
+  boldLeft: {
+    borderWidth: 1,
+    borderColor: "#000",
+    fontWeight: 'bold',
+    paddingLeft: 5,
+  },
+});
+
