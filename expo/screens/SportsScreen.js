@@ -37,10 +37,10 @@ function GenerateSportsScreen(props) {
   sportsData = props["data"];
   if (sportsData === null) {
     return (
-      <View>
+      <View style={{justifyContent: 'center', width: '100%'}}>
         <ActivityIndicator
-          barStyle="large"
-          color="#00ffa0"/>
+          size="large"
+          color="#0185DE"/>
       </View>
     )
   } else {
@@ -54,7 +54,7 @@ function GenerateSportsScreen(props) {
       for (var j = 0; j < events.length; j++) {
         lines.push(
           <Text style={styles.text}>
-            <Text style={{color:"#888888"}}>- </Text>
+            <Text>- </Text>
             <Text>{ events[j] }</Text>
           </Text>);
       }
