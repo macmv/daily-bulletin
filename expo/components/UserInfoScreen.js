@@ -80,8 +80,7 @@ export default class UserInfoScreen extends Component {
   }
   //display module popup
   render() {
-
-    console.log("this.state.firstTimePopup: " + this.state.firstTimePopup);
+    //console.log("this.state.firstTimePopup: " + this.state.firstTimePopup);
     if ((this.state.modalLoaded && this.props.visible) || this.state.firstTimePopup) {
       return (
         <View>

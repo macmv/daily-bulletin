@@ -82,12 +82,6 @@ SportsScreen.navigationOptions = {
 };
 
 const styles = StyleSheet.create({
-  linearLayout: {
-    flex: 0,
-    flexDirection: "row",
-    justifyContent: "space-between",
-    padding: 10
-  },
   titleLight: {
     color: '#fff',
     fontSize: 20
@@ -98,11 +92,6 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     backgroundColor: '#0185DE',
     padding: 10
-  },
-  container: {
-    flex: 1,
-    paddingTop: 15,
-    backgroundColor: '#fff',
   },
   subtitle: {
     color: '#a22',
@@ -119,6 +108,6 @@ const styles = StyleSheet.create({
     flex: 0,
     flexDirection: "row",
     justifyContent: "space-between",
-    padding: 10,
+    padding: 0,
   },
 });

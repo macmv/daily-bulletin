@@ -26,8 +26,10 @@ export default class BulletinScreen extends Component {
     gradePopupVisible: false,
     isModalVisible: false,
     bulletinData: null,
-    loadingBulletin: false
+    loadingBulletin: false,
   };
+  lastMonth: [];
+  currentMonth: [];
   showPopup = () => {
     bulletinManager.getAvailableDates(new Date(), this);
     this.setState({isModalVisible: true, selectedMonth: new Date()});
@@ -53,7 +55,12 @@ export default class BulletinScreen extends Component {
     console.log("Set the visibility to: " + visible);
     this.setState({gradePopupVisible : visible});
   }
-  
+
+  componentDidMount() {
+    //set the last date that we have data for and load the bullletin
+    bulletinManager.getRecentDate(this);
+  }
+
   render() {
     return (
       //bulletin elements
@@ -108,6 +115,7 @@ function BulletinElement(props) {
     )
   } else {
     bulletin = props.bulletin
+    //if bulletin is null
     if (bulletin === null) {
       return (
         <View style={styles.linearLayout}>
@@ -219,7 +227,6 @@ const styles = StyleSheet.create({
     flex: 0,
     flexDirection: "row",
     justifyContent: "space-between",
-    padding: 10
   },
   linearLayoutVertical: {
     flex: 0,
