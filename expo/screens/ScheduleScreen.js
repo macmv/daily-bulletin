@@ -33,45 +33,33 @@ export default class ScheduleScreen extends Component {
         }
       }
     });
-    return gradeLoader.getView(this.state.grade);
-    /*switch (this.props.currentGrade) {
-      case (9):
-        return (
-          <View>
-            <NinthGrade/>
-          </View>
-        )
-      break;
-      case (10):
-        return (
-          <View>
-            <TenthGrade/>
-          </View>
-        )
-      break;
-      case (11):
-        return (
-          <View>
-            <EleventhTwelvethGrade/>
-          </View>
-        )
-      break;
-      case (12):
-        return (
-          <View>
-            <EleventhTwelvethGrade/>
-          </View>
-        )
-      break;
-    };*/
+    return (
+      <View>
+        <View style={styles.linearLayoutBackground}>
+          <Text style={styles.titleLight}>Bell Schedule</Text>
+        </View>
+        { gradeLoader.getView(this.state.grade) }
+      </View>
+    );
   };
 }
 
 ScheduleScreen.navigationOptions = {
-  title: 'Schedule',
+  header: null,
 };
 
 const styles = StyleSheet.create({
+  titleLight: {
+    color: '#fff',
+    fontSize: 20
+  },
+  linearLayoutBackground: {
+    flex: 0,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    backgroundColor: '#0185DE',
+    padding: 10
+  },
   container: {
     flex: 1,
     paddingTop: 15,
@@ -82,19 +70,4 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
   },
-  /*tab-list {
-    border-bottom: 1px solid #ccc;
-    padding-left: 0;
-  },
-  tab-list-item {
-    display: inline-block;
-    list-style: none;
-    margin-bottom: -1px;
-    padding: 0.5rem 0.75rem;
-  },
-  tab-list-active {
-    background-color: white;
-    border: solid #ccc;
-    border-width: 1px 1px 0 1px;
-  }*/
 });

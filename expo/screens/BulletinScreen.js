@@ -76,7 +76,12 @@ export default class BulletinScreen extends Component {
         </View>
         <Modal isVisible={this.state.isModalVisible}>
           <View style={styles.calendarPopup}>
-            <Calendar isModalVisible={this.state.isModalVisible} validDates={this.state.validDates} month={this.state.selectedMonth} bulletinScreen={this} onPress={this.onSelectDate}/>
+            <Calendar
+              isModalVisible={this.state.isModalVisible}
+              validDates={this.state.validDates}
+              month={this.state.selectedMonth}
+              bulletinScreen={this}
+              onPress={this.onSelectDate}/>
             <View style={{flexDirection: 'row'}}>
               {this.state.loadingDates ?
                 <ActivityIndicator size="small" color="#00ff00" /> : null}
@@ -172,7 +177,7 @@ function BulletinElement(props) {
       )
     }
     return (
-      <ScrollView style={styles.linearLayout, {flex: 1, marginBottom: 100}}>
+      <ScrollView style={styles.linearLayout, {flex: 1}}>
         <Text style={styles.title}>Daily bulletin for {moment(props.date).format('dddd, MMMM Do YYYY')}</Text>
         {sections}
       </ScrollView>
@@ -227,6 +232,8 @@ const styles = StyleSheet.create({
     flex: 0,
     flexDirection: "row",
     justifyContent: "space-between",
+    paddingLeft: 10,
+    paddingRight: 10,
   },
   linearLayoutVertical: {
     flex: 0,
