@@ -19,22 +19,30 @@ export default class GradeLoader {
       data.forEach(subject => {
         rows.push(
           <View style={{flexDirection: "row"}}>
-            <Text style={[{flex: 1}, styles.itemLeft]}>{ subject.title }</Text>
+            <Text style={[{flex: 2}, styles.itemLeft]}>{ subject.title }</Text>
             <Text style={[{flex: 1}, styles.item]}>{ parseTimeInt(subject.start) }</Text>
             <Text style={[{flex: 1}, styles.item]}>{ parseTimeInt(subject.end) }</Text>
           </View>
         );
       });
+      title = moment().day(day).format('dddd');
+      console.log(title);
+      if (title == "Monday") {
+        title += "/Friday";
+      }
+      if (moment().day(day).format('dddd') == moment().format('dddd')) {
+        title += " (Today)";
+      }
       days[day] =
         <View>
           <Text></Text>
           <View style={{flexDirection: "row"}}>
-            <Text style={[{flex: 1}, styles.header]}>{ moment().day(day).format('dddd') }</Text>
+            <Text style={[{flex: 2}, styles.header]}>{ title }</Text>
             <Text style={[{flex: 1}, styles.headerSpacer]}></Text>
             <Text style={[{flex: 1}, styles.headerSpacer]}></Text>
           </View>
           <View style={{flexDirection: "row"}}>
-            <Text style={[{flex: 1}, styles.boldLeft]}>Subject</Text>
+            <Text style={[{flex: 2}, styles.boldLeft]}>Subject</Text>
             <Text style={[{flex: 1}, styles.bold]}>Start Time</Text>
             <Text style={[{flex: 1}, styles.bold]}>End Time</Text>
           </View>
@@ -77,6 +85,7 @@ const styles = StyleSheet.create({
     borderRightWidth: 1,
     borderColor: "#000",
     paddingLeft: 5,
+    fontSize: 18,
   },
   itemLeft: {
     borderBottomWidth: 1,
@@ -84,6 +93,7 @@ const styles = StyleSheet.create({
     borderLeftWidth: 1,
     borderColor: "#000",
     paddingLeft: 5,
+    fontSize: 18,
   },
   bold: {
     borderBottomWidth: 1,
@@ -92,12 +102,14 @@ const styles = StyleSheet.create({
     borderColor: "#000",
     fontWeight: 'bold',
     paddingLeft: 5,
+    fontSize: 18,
   },
   boldLeft: {
     borderWidth: 1,
     borderColor: "#000",
     fontWeight: 'bold',
     paddingLeft: 5,
+    fontSize: 18,
   },
   header: {
     borderTopWidth: 1,
@@ -105,6 +117,7 @@ const styles = StyleSheet.create({
     borderLeftWidth: 1,
     borderColor: "#000",
     paddingLeft: 5,
+    fontSize: 18,
   },
   headerSpacer: {
     borderRightWidth: 1,
