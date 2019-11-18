@@ -43,7 +43,7 @@ export default class SettingsScreen extends Component {
             key={"Settings"}
             hide={this.hideGradePopup.bind(this)}
             visible={this.state.modalVisible}
-            title={"Enter your grade:"}
+            title={"Update your grade"}
             description={"This will help us adjust the app to your individual schedule."}
           />
         </View>

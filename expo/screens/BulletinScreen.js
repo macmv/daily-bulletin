@@ -99,7 +99,7 @@ export default class BulletinScreen extends Component {
               key={"Bulletin"}
               hide={this.setUserInfoScreenVisible.bind(this, false)}
               visible={this.state.gradePopupVisible}
-              title={"Enter your grade:"}
+              title={"Select your grade"}
               description={"This will help us adjust the app to your individual schedule."}
             />
           </View>
