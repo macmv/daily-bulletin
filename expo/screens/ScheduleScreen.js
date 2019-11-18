@@ -9,6 +9,7 @@ import {
 import { ExpoLinksView } from '@expo/samples';
 import { createAppContainer, createSwitchNavigator } from 'react-navigation';
 import GradeLoader from "./schedulescreens/GradeLoader";
+import Header from './Header';
 
 //const GradeIndex = createAppContainer(GradeScheduleNavigator);
 var gradeLoader = new GradeLoader();
@@ -35,9 +36,7 @@ export default class ScheduleScreen extends Component {
     });
     return (
       <View>
-        <View style={styles.linearLayoutBackground}>
-          <Text style={styles.titleLight}>Bell Schedule</Text>
-        </View>
+        <Header title={"Schedule"} />
         { gradeLoader.getView(this.state.grade) }
       </View>
     );

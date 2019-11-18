@@ -9,6 +9,7 @@ import {
 import { ExpoLinksView } from '@expo/samples';
 import moment from 'moment';
 import SportsManager from '../util/SportsManager';
+import Header from './Header';
 
 export default class SportsScreen extends Component {
   state = {
@@ -22,9 +23,7 @@ export default class SportsScreen extends Component {
   render() {
     return (
       <View>
-        <View style={styles.linearLayoutBackground}>
-          <Text style={styles.titleLight}>Upcoming Events</Text>
-        </View>
+        <Header title={"Upcoming Events"} />
         <View style={styles.linearLayout}>
           <GenerateSportsScreen data={this.state.sportsData} />
         </View>
