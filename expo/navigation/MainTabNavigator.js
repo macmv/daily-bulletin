@@ -4,7 +4,7 @@ import { createStackNavigator, createBottomTabNavigator } from 'react-navigation
 
 import TabBarIcon from '../components/TabBarIcon';
 import BulletinScreen from '../screens/BulletinScreen';
-import SportsScreen from '../screens/SportsScreen';
+import EventsScreen from '../screens/EventsScreen';
 import ScheduleScreen from '../screens/ScheduleScreen';
 import SettingsScreen from '../screens/SettingsScreen';
 import ResourcesScreen from '../screens/ResourcesScreen';
@@ -38,21 +38,21 @@ BulletinStack.navigationOptions = {
 
 BulletinStack.path = '';
 
-const SportsStack = createStackNavigator(
+const EventsStack = createStackNavigator(
   {
-    Sports: SportsScreen,
+    Events: EventsScreen,
   },
   config
 );
 
-SportsStack.navigationOptions = {
-  tabBarLabel: 'Sports',
+EventsStack.navigationOptions = {
+  tabBarLabel: 'Events',
   tabBarIcon: ({ focused }) => (
     <TabBarIcon focused={focused} name={Platform.OS === 'ios' ? 'ios-calendar' : 'md-calendar'} />
   ),
 };
 
-SportsStack.path = '';
+EventsStack.path = '';
 
 //Bell Schedule tab
 const ScheduleStack = createStackNavigator(
@@ -106,7 +106,7 @@ ResourcesStack.path = '';
 
 const tabNavigator = createBottomTabNavigator({
   BulletinStack,
-  SportsStack,
+  EventsStack,
   ScheduleStack,
   SettingsStack,
   ResourcesStack,
