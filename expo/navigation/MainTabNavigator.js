@@ -4,7 +4,7 @@ import { createStackNavigator, createBottomTabNavigator } from 'react-navigation
 
 import TabBarIcon from '../components/TabBarIcon';
 import BulletinScreen from '../screens/BulletinScreen';
-import SportsScreen from '../screens/SportsScreen';
+import EventsScreen from '../screens/EventsScreen';
 import ScheduleScreen from '../screens/ScheduleScreen';
 import SettingsScreen from '../screens/SettingsScreen';
 import ResourcesScreen from '../screens/ResourcesScreen';
@@ -28,7 +28,8 @@ BulletinStack.navigationOptions = {
       focused={focused}
       name={
         Platform.OS === 'ios'
-          ? `ios-information-circle${focused ? '' : '-outline'}`
+          /*? `ios-information-circle${focused ? '' : '-outline'}`*/
+          ? 'ios-list-box'
           : 'md-list-box'
       }
     />
@@ -37,21 +38,21 @@ BulletinStack.navigationOptions = {
 
 BulletinStack.path = '';
 
-const SportsStack = createStackNavigator(
+const EventsStack = createStackNavigator(
   {
-    Sports: SportsScreen,
+    Events: EventsScreen,
   },
   config
 );
 
-SportsStack.navigationOptions = {
-  tabBarLabel: 'Sports',
+EventsStack.navigationOptions = {
+  tabBarLabel: 'Events',
   tabBarIcon: ({ focused }) => (
-    <TabBarIcon focused={focused} name={Platform.OS === 'ios' ? 'ios-link' : 'md-american-football'} />
+    <TabBarIcon focused={focused} name={Platform.OS === 'ios' ? 'ios-calendar' : 'md-calendar'} />
   ),
 };
 
-SportsStack.path = '';
+EventsStack.path = '';
 
 //Bell Schedule tab
 const ScheduleStack = createStackNavigator(
@@ -64,7 +65,7 @@ const ScheduleStack = createStackNavigator(
 ScheduleStack.navigationOptions = {
   tabBarLabel: 'Schedule',
   tabBarIcon: ({ focused }) => (
-    <TabBarIcon focused={focused} name={Platform.OS === 'ios' ? 'ios-link' : 'md-clock'} />
+    <TabBarIcon focused={focused} name={Platform.OS === 'ios' ? 'ios-clock' : 'md-clock'} />
   ),
 };
 
@@ -80,7 +81,7 @@ const SettingsStack = createStackNavigator(
 SettingsStack.navigationOptions = {
   tabBarLabel: 'Settings',
   tabBarIcon: ({ focused }) => (
-    <TabBarIcon focused={focused} name={Platform.OS === 'ios' ? 'ios-options' : 'md-settings'} />
+    <TabBarIcon focused={focused} name={Platform.OS === 'ios' ? 'ios-settings' : 'md-settings'} />
   ),
 };
 
@@ -97,7 +98,7 @@ const ResourcesStack = createStackNavigator(
 ResourcesStack.navigationOptions = {
   tabBarLabel: 'Resources',
   tabBarIcon: ({ focused }) => (
-    <TabBarIcon focused={focused} name={Platform.OS === 'ios' ? 'ios-link' : 'md-open'} />
+    <TabBarIcon focused={focused} name={Platform.OS === 'ios' ? 'ios-open' : 'md-open'} />
   ),
 };
 
@@ -105,7 +106,7 @@ ResourcesStack.path = '';
 
 const tabNavigator = createBottomTabNavigator({
   BulletinStack,
-  SportsStack,
+  EventsStack,
   ScheduleStack,
   SettingsStack,
   ResourcesStack,

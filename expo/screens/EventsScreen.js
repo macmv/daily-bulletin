@@ -8,33 +8,33 @@ import {
 } from 'react-native';
 import { ExpoLinksView } from '@expo/samples';
 import moment from 'moment';
-import SportsManager from '../util/SportsManager';
 import Header from './Header';
+import EventsManager from '../util/EventsManager';
 
-export default class SportsScreen extends Component {
+export default class EventsScreen extends Component {
   state = {
-    sportsData: null,
-    loadingSports: false
+    eventsData: null,
+    loadingEvents: false
   }
   componentDidMount = () => {
     today = new Date();
-    sportsManager.getData(new Date(today.getFullYear(), today.getMonth(), today.getDate()), 30, this)
+    eventsManager.getData(new Date(today.getFullYear(), today.getMonth(), today.getDate()), 30, this)
   }
   render() {
     return (
       <View>
         <Header title={"Upcoming Events"} />
         <View style={styles.linearLayout}>
-          <GenerateSportsScreen data={this.state.sportsData} />
+          <GenerateEventsScreen data={this.state.eventsData} />
         </View>
       </View>
     );
   }
 }
 
-function GenerateSportsScreen(props) {
-  sportsData = props["data"];
-  if (sportsData === null) {
+function GenerateEventsScreen(props) {
+  eventsData = props["data"];
+  if (eventsData === null) {
     return (
       <View style={{justifyContent: 'center', width: '100%'}}>
         <ActivityIndicator
@@ -44,11 +44,11 @@ function GenerateSportsScreen(props) {
     )
   } else {
     sections = [];
-    sportsDataKeys = Object.keys(sportsData);
-    sportsDataKeys.sort();
-    for (var i = 0; i < sportsDataKeys.length; i++) {
-      dateString = sportsDataKeys[i];
-      events = sportsData[dateString]["events"];
+    eventsDataKeys = Object.keys(eventsData);
+    eventsDataKeys.sort();
+    for (var i = 0; i < eventsDataKeys.length; i++) {
+      dateString = eventsDataKeys[i];
+      events = eventsData[dateString]["events"];
       lines = []
       for (var j = 0; j < events.length; j++) {
         lines.push(
@@ -74,9 +74,9 @@ function GenerateSportsScreen(props) {
   }
 }
 
-var sportsManager = new SportsManager("daily-bulletin");
+var eventsManager = new EventsManager("daily-bulletin");
 
-SportsScreen.navigationOptions = {
+EventsScreen.navigationOptions = {
   header: null,
 };
 

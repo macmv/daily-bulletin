@@ -16,7 +16,8 @@ var gradeLoader = new GradeLoader();
 
 export default class ScheduleScreen extends Component {
   state = {
-    grade: 9
+    grade: 9,
+    //gradeTimer: 0
   };
 
   render() {

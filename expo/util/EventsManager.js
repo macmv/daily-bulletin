@@ -1,13 +1,13 @@
 
 import S3Manager from "./S3Manager";
 
-export default class SportsManager {
+export default class EventsManager {
   constructor(bucketName) {
     this.s3 = new S3Manager(bucketName);
   }
 
-  getAvailableDates(month, sportsScreen) {
-    sportsScreen.setState({loadingSports: true, validDates: []});
+  getAvailableDates(month, eventsScreen) {
+    eventsScreen.setState({loadingEvents: true, validDates: []});
     var year = month.getFullYear();
     var month = month.getMonth() + 1;
     monthString = month.toString();
@@ -15,12 +15,12 @@ export default class SportsManager {
       monthString = "0" + monthString;
     }
     this.s3.list("v0/sports/" + year.toString() + "-" + monthString, function(dates) {
-      sportsScreen.setState({validDates: dates, loadingSports: false});
+      eventsScreen.setState({validDates: dates, loadingEvents: false});
     });
   }
 
-  getData(date, daysBack, sportsScreen) {
-    sportsScreen.setState({sportsData: null, loadingSports: true});
+  getData(date, daysBack, eventsScreen) {
+    eventsScreen.setState({eventsData: null, loadingEvents: true});
     allData = {};
     dayInMillis = 86400000;
     var year = date.getFullYear();
@@ -48,7 +48,7 @@ export default class SportsManager {
             this.s3.get("v0/sports/" + generateDateString(new Date(date.getTime() - dayInMillis * i)) + ".json", i, function(data, extra) {
               allData[date.getTime() - dayInMillis * extra] = data;
               if (Object.keys(allData).length >= totalDays) {
-                sportsScreen.setState({sportsData: allData, loadingSports: false});
+                eventsScreen.setState({eventsData: allData, loadingEvents: false});
               }
             });
           }
