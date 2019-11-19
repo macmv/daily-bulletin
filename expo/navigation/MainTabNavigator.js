@@ -28,7 +28,8 @@ BulletinStack.navigationOptions = {
       focused={focused}
       name={
         Platform.OS === 'ios'
-          ? `ios-information-circle${focused ? '' : '-outline'}`
+          /*? `ios-information-circle${focused ? '' : '-outline'}`*/
+          ? 'ios-list-box'
           : 'md-list-box'
       }
     />
@@ -47,7 +48,7 @@ const SportsStack = createStackNavigator(
 SportsStack.navigationOptions = {
   tabBarLabel: 'Sports',
   tabBarIcon: ({ focused }) => (
-    <TabBarIcon focused={focused} name={Platform.OS === 'ios' ? 'ios-link' : 'md-american-football'} />
+    <TabBarIcon focused={focused} name={Platform.OS === 'ios' ? 'ios-calendar' : 'md-calendar'} />
   ),
 };
 
@@ -64,7 +65,7 @@ const ScheduleStack = createStackNavigator(
 ScheduleStack.navigationOptions = {
   tabBarLabel: 'Schedule',
   tabBarIcon: ({ focused }) => (
-    <TabBarIcon focused={focused} name={Platform.OS === 'ios' ? 'ios-link' : 'md-clock'} />
+    <TabBarIcon focused={focused} name={Platform.OS === 'ios' ? 'ios-clock' : 'md-clock'} />
   ),
 };
 
@@ -80,7 +81,7 @@ const SettingsStack = createStackNavigator(
 SettingsStack.navigationOptions = {
   tabBarLabel: 'Settings',
   tabBarIcon: ({ focused }) => (
-    <TabBarIcon focused={focused} name={Platform.OS === 'ios' ? 'ios-options' : 'md-settings'} />
+    <TabBarIcon focused={focused} name={Platform.OS === 'ios' ? 'ios-settings' : 'md-settings'} />
   ),
 };
 
@@ -97,7 +98,7 @@ const ResourcesStack = createStackNavigator(
 ResourcesStack.navigationOptions = {
   tabBarLabel: 'Resources',
   tabBarIcon: ({ focused }) => (
-    <TabBarIcon focused={focused} name={Platform.OS === 'ios' ? 'ios-link' : 'md-open'} />
+    <TabBarIcon focused={focused} name={Platform.OS === 'ios' ? 'ios-open' : 'md-open'} />
   ),
 };
 
