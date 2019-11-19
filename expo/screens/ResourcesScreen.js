@@ -9,13 +9,12 @@ import {
   Platform,
 } from 'react-native';
 import { ExpoLinksView } from '@expo/samples';
+import Header from './Header';
 
 export default function ResourcesScreen() {
   return (
     <View>
-      <View style={styles.linearLayoutBackground}>
-        <Text style={styles.titleLight}>Resources</Text>
-      </View>
+      <Header title={"Resources"} />
       <ScrollView>
         <GenerateLinks />
       </ScrollView>

@@ -9,6 +9,7 @@ import {
 import { ExpoLinksView } from '@expo/samples';
 import { createAppContainer, createSwitchNavigator, NavigationEvents } from 'react-navigation';
 import GradeLoader from "./schedulescreens/GradeLoader";
+import Header from './Header';
 
 //const GradeIndex = createAppContainer(GradeScheduleNavigator);
 var gradeLoader = new GradeLoader();

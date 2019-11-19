@@ -8,6 +8,7 @@ import {
 } from 'react-native';
 import { ExpoLinksView } from '@expo/samples';
 import moment from 'moment';
+import Header from './Header';
 import EventsManager from '../util/EventsManager';
 
 export default class EventsScreen extends Component {
@@ -22,9 +23,7 @@ export default class EventsScreen extends Component {
   render() {
     return (
       <View>
-        <View style={styles.linearLayoutBackground}>
-          <Text style={styles.titleLight}>Upcoming Events</Text>
-        </View>
+        <Header title={"Upcoming Events"} />
         <View style={styles.linearLayout}>
           <GenerateEventsScreen data={this.state.eventsData} />
         </View>

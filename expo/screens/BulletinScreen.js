@@ -20,6 +20,7 @@ import BulletinManager from '../util/BulletinManager';
 import moment from 'moment';
 import PropTypes from 'prop-types';
 import UserInfoScreen from '../components/UserInfoScreen';
+import Header from './Header';
 
 export default class BulletinScreen extends Component {
   state = {
@@ -66,14 +67,13 @@ export default class BulletinScreen extends Component {
       //bulletin elements
       <View>
         <View style={styles.statusBarBackground} />
-        <View style={styles.linearLayoutBackground}>
-          <Text style={styles.titleLight}>NHHS Daily Bulletin</Text>
+        <Header title={"NHHS Daily Bulletin"}>
           <TouchableOpacity
             onPress={this.showPopup}
             color={(Platform.OS === 'ios') ? "#fff" : ""} >
             <Text style={styles.titleLight}>Calendar</Text>
           </TouchableOpacity>
-        </View>
+        </Header>
         <Modal isVisible={this.state.isModalVisible}>
           <View style={styles.calendarPopup}>
             <Calendar

@@ -12,28 +12,23 @@ import {
   ActivityIndicator,
 } from 'react-native';
 import UserInfoScreen from '../components/UserInfoScreen';
+import Header from './Header';
 
 export default class SettingsScreen extends Component {
   state = {
     modalVisible: false
   };
-  //this.setChanged = this.setChanged.bind(this);
-  /**
-   * Go ahead and delete ExpoConfigView and replace it with your content;
-   * we just wanted to give you a quick view of your config.
-   */
   showGradePopup = () => {
     this.setState({modalVisible: true});
   };
   hideGradePopup = () => {
     this.setState({modalVisible: false});
   };
-  //return <ExpoConfigView />;
   render() {
     console.log("modalVisible: " + this.state.modalVisible);
     return (
       <View>
-        <View style={styles.statusBarBackground} />
+        <Header title={"Settings"} />
         <Button title="Set Grade"
           onPress={this.showGradePopup}
           style={styles.calendarButton}
@@ -53,7 +48,7 @@ export default class SettingsScreen extends Component {
 }
 
 SettingsScreen.navigationOptions = {
-  title: 'Settings',
+  header: null,
 };
 
 const styles = StyleSheet.create({
