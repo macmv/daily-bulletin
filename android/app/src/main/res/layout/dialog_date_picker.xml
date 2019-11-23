@@ -1,12 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
   android:layout_width="match_parent"
   android:layout_height="match_parent"
+  android:orientation="vertical"
   android:padding="@dimen/dialog_padding">
 
   <TextView
-    android:id="@+id/textView"
+    android:id="@+id/title"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:text="@string/date_picker_title" />
-</android.support.constraint.ConstraintLayout>
+    android:gravity="center"
+    android:text="@string/date_picker_title"
+    android:textSize="@dimen/mdtp_date_picker_title_height" />
+
+  <GridLayout
+    android:id="@+id/buttonGrid"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" />
+</LinearLayout>
