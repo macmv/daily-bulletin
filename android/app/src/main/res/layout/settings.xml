@@ -1,95 +1,94 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<LinearLayout xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  android:orientation="vertical"
+  tools:context=".SettingsActivity">
+
+  <android.support.design.widget.AppBarLayout
+    android:id="@+id/appBarLayout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context=".SettingsActivity">
+    android:layout_height="wrap_content"
+    android:padding="0dp"
+    android:theme="@style/AppTheme.AppBarOverlay"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="parent">
 
-    <android.support.design.widget.AppBarLayout
-        android:id="@+id/appBarLayout"
-        android:layout_width="match_parent"
+    <android.support.constraint.ConstraintLayout
+      android:layout_width="match_parent"
+      android:layout_height="match_parent">
+
+      <TextView
+        android:id="@+id/title"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:padding="0dp"
-        android:theme="@style/AppTheme.AppBarOverlay"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:gravity="start"
+        android:minHeight="?actionBarSize"
+        android:padding="@dimen/appbar_padding"
+        android:text="@string/settings"
+        android:textAppearance="@style/TextAppearance.Widget.AppCompat.Toolbar.Title"
+        app:layout_constraintStart_toEndOf="@+id/backButton"
+        app:layout_constraintTop_toTopOf="parent" />
+
+      <!--android.support.design.widget.FloatingActionButton
+          android:id="@+id/backButton"
+          android:layout_width="wrap_content"
+          android:layout_height="match_parent"
+          android:layout_marginStart="2dp"
+          android:layout_marginTop="2dp"
+          android:background="@color/colorPrimary"
+          android:backgroundTint="@color/colorPrimary"
+          android:clickable="true"
+          android:contentDescription="@string/back"
+          android:focusable="true"
+          android:onClick="back"
+          app:backgroundTint="@color/colorPrimary"
+          app:layout_constraintStart_toStartOf="parent"
+          app:layout_constraintTop_toTopOf="parent"
+          app:rippleColor="@color/colorPrimaryDark"
+          app:srcCompat="@drawable/ic_arrow_back_white_24dp" /-->
+
+      <ImageButton
+        android:id="@+id/backButton"
+        style="@android:style/Widget.Material.ImageButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimary"
+        android:clickable="true"
+        android:contentDescription="@string/settings"
+        android:focusable="true"
+        android:onClick="back"
+        android:padding="@dimen/appbar_padding"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_arrow_back_white_24dp" />
 
-        <android.support.constraint.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
+    </android.support.constraint.ConstraintLayout>
 
-            <TextView
-                android:id="@+id/title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="start"
-                android:minHeight="?actionBarSize"
-                android:padding="@dimen/appbar_padding"
-                android:text="@string/settings"
-                android:textAppearance="@style/TextAppearance.Widget.AppCompat.Toolbar.Title"
-                app:layout_constraintStart_toEndOf="@+id/backButton"
-                app:layout_constraintTop_toTopOf="parent" />
+  </android.support.design.widget.AppBarLayout>
 
-            <!--android.support.design.widget.FloatingActionButton
-                android:id="@+id/backButton"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_marginStart="2dp"
-                android:layout_marginTop="2dp"
-                android:background="@color/colorPrimary"
-                android:backgroundTint="@color/colorPrimary"
-                android:clickable="true"
-                android:contentDescription="@string/back"
-                android:focusable="true"
-                android:onClick="back"
-                app:backgroundTint="@color/colorPrimary"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:rippleColor="@color/colorPrimaryDark"
-                app:srcCompat="@drawable/ic_arrow_back_white_24dp" /-->
-
-            <ImageButton
-                android:id="@+id/backButton"
-                style="@android:style/Widget.Material.ImageButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@color/colorPrimary"
-                android:clickable="true"
-                android:contentDescription="@string/settings"
-                android:focusable="true"
-                android:onClick="back"
-                android:padding="@dimen/appbar_padding"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/ic_arrow_back_white_24dp" />
-
-        </android.support.constraint.ConstraintLayout>
-
-    </android.support.design.widget.AppBarLayout>
-
-    <!--LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="horizontal">
+  <!--LinearLayout
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:orientation="horizontal">
 
 
-        <Spinner
-            android:id="@+id/spinner"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1" >
+      <Spinner
+          android:id="@+id/spinner"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_weight="1" >
 
-            <TextView
-                android:id="@+id/textView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Change Grade"
-                android:textSize="24sp" />
-        </Spinner>
-    </LinearLayout-->
+          <TextView
+              android:id="@+id/textView"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:text="Change Grade"
+              android:textSize="24sp" />
+      </Spinner>
+  </LinearLayout-->
 
 </LinearLayout>

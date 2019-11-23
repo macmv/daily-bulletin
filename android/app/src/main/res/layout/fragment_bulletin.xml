@@ -1,75 +1,75 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/constraintLayout"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".ui.main.tab.Bulletin">
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:id="@+id/constraintLayout"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  tools:context=".ui.main.tab.Bulletin">
+
+  <LinearLayout
+    android:layout_width="0dp"
+    android:layout_height="0dp"
+    android:orientation="vertical"
+    app:layout_constraintBottom_toTopOf="@+id/space"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintHorizontal_bias="0.0"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="parent"
+    app:layout_constraintVertical_bias="0.0">
+
+    <!--CalendarView
+        android:id="@+id/simpleCalendarView"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" /-->
 
     <LinearLayout
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:orientation="vertical"
-        app:layout_constraintBottom_toTopOf="@+id/space"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0">
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:orientation="horizontal">
 
-        <!--CalendarView
-            android:id="@+id/simpleCalendarView"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content" /-->
+      <!--Button
+          android:id="@+id/calendarButton"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_weight="1"
+          android:text="Calendar"
+          android:visibility="gone" /-->
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <!--Button
-                android:id="@+id/calendarButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Calendar"
-                android:visibility="gone" /-->
-
-            <TextView
-                android:id="@+id/titleView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:padding="10dp"
-                android:text="NHHS bulletin for Month day, year"
-                android:textSize="18sp"
-                android:textStyle="bold" />
-        </LinearLayout>
-        <!--Use this in java to set dates that we have no data for yet android:maxDate="09/22/2019"-->
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/bulletinList"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-
-        <ProgressBar
-            android:id="@+id/pBar"
-            style="?android:attr/progressBarStyleLarge"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:visibility="gone" />
-
+      <TextView
+        android:id="@+id/titleView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:padding="10dp"
+        android:text="NHHS bulletin for Month day, year"
+        android:textSize="18sp"
+        android:textStyle="bold" />
     </LinearLayout>
-    <!--</ScrollView>-->
+    <!--Use this in java to set dates that we have no data for yet android:maxDate="09/22/2019"-->
+    <android.support.v7.widget.RecyclerView
+      android:id="@+id/bulletinList"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content" />
 
-    <Space
-        android:id="@+id/space"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/app_margin"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+    <ProgressBar
+      android:id="@+id/pBar"
+      style="?android:attr/progressBarStyleLarge"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_gravity="center"
+      android:visibility="gone" />
+
+  </LinearLayout>
+  <!--</ScrollView>-->
+
+  <Space
+    android:id="@+id/space"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/app_margin"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent" />
 
 </android.support.constraint.ConstraintLayout>

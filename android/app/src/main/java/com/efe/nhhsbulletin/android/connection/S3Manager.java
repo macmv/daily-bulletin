@@ -1,7 +1,5 @@
 package com.efe.nhhsbulletin.android.connection;
 
-import android.util.Log;
-
 import com.amazonaws.AmazonServiceException;
 import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.regions.Region;
@@ -23,62 +21,62 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class S3Manager {
-    public static final String TAG = S3Manager.class.getSimpleName();
+  public static final String TAG = S3Manager.class.getSimpleName();
 
-    private final String bucketName;
-    private final AmazonS3Client s3;
+  private final String bucketName;
+  private final AmazonS3Client s3;
 
-    public S3Manager(String bucketName) {
-        this.bucketName = bucketName;
-        String accessKey = BuildConfig.AWS_ACCESS_KEY_ID;
-        String secretKey = BuildConfig.AWS_SECRET_ACCESS_KEY;
-        BasicAWSCredentials creds = new BasicAWSCredentials(accessKey, secretKey);
-        s3 = new AmazonS3Client(creds, Region.getRegion(Regions.DEFAULT_REGION));
+  public S3Manager(String bucketName) {
+    this.bucketName = bucketName;
+    String accessKey = BuildConfig.AWS_ACCESS_KEY_ID;
+    String secretKey = BuildConfig.AWS_SECRET_ACCESS_KEY;
+    BasicAWSCredentials creds = new BasicAWSCredentials(accessKey, secretKey);
+    s3 = new AmazonS3Client(creds, Region.getRegion(Regions.DEFAULT_REGION));
+  }
+
+  public String read(String keyName) {
+    try {
+      S3Object obj = s3.getObject(new GetObjectRequest(bucketName, keyName));
+      S3ObjectInputStream is = obj.getObjectContent();
+      BufferedReader buf = new BufferedReader(new InputStreamReader(is));
+      StringBuilder sb = new StringBuilder();
+      String line;
+      while ((line = buf.readLine()) != null) {
+        sb.append(line).append("\n");
+      }
+      return sb.toString();
+    } catch (AmazonServiceException | IOException e) {
+      e.printStackTrace(System.err);
+      System.exit(1);
+      return null;
     }
+  }
 
-    public String read(String keyName) {
-        try {
-            S3Object obj = s3.getObject(new GetObjectRequest(bucketName, keyName));
-            S3ObjectInputStream is = obj.getObjectContent();
-            BufferedReader buf = new BufferedReader(new InputStreamReader(is));
-            StringBuilder sb = new StringBuilder();
-            String line;
-            while ((line = buf.readLine()) != null) {
-                sb.append(line).append("\n");
-            }
-            return sb.toString();
-        } catch (AmazonServiceException | IOException e) {
-            e.printStackTrace(System.err);
-            System.exit(1);
-            return null;
-        }
+  public void write(String keyName, InputStream data) {
+    try {
+      s3.putObject(new PutObjectRequest(bucketName, keyName, data, null)
+              .withCannedAcl(CannedAccessControlList.PublicRead));
+    } catch (AmazonServiceException e) {
+      e.printStackTrace(System.err);
+      System.exit(1);
     }
+  }
 
-    public void write(String keyName, InputStream data) {
-        try {
-            s3.putObject(new PutObjectRequest(bucketName, keyName, data, null)
-                    .withCannedAcl(CannedAccessControlList.PublicRead));
-        } catch (AmazonServiceException e) {
-            e.printStackTrace(System.err);
-            System.exit(1);
-        }
+  public boolean exists(String keyName) {
+    try {
+      return s3.doesObjectExist(bucketName, keyName);
+    } catch (AmazonServiceException e) {
+      e.printStackTrace(System.err);
+      System.exit(1);
+      return false;
     }
+  }
 
-    public boolean exists(String keyName) {
-        try {
-            return s3.doesObjectExist(bucketName, keyName);
-        } catch (AmazonServiceException e) {
-            e.printStackTrace(System.err);
-            System.exit(1);
-            return false;
-        }
+  public List<String> list(String prefix) {
+    List<String> files = new ArrayList<>();
+    for (S3ObjectSummary obj : s3.listObjects(bucketName, prefix).getObjectSummaries()) {
+      files.add(obj.getKey());
     }
-
-    public List<String> list(String prefix) {
-        List<String> files = new ArrayList<>();
-        for (S3ObjectSummary obj : s3.listObjects(bucketName, prefix).getObjectSummaries()) {
-            files.add(obj.getKey());
-        }
-        return files;
-    }
+    return files;
+  }
 }

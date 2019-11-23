@@ -7,13 +7,13 @@ import android.view.View;
 
 public class SettingsActivity extends AppCompatActivity {
 
-    @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.settings);
-    }
+  @Override
+  protected void onCreate(@Nullable Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+    setContentView(R.layout.settings);
+  }
 
-    public void back(View v) {
-        this.onBackPressed();
-    }
+  public void back(View v) {
+    this.onBackPressed();
+  }
 }
