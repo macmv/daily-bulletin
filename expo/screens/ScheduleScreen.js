@@ -7,7 +7,7 @@ import {
   AsyncStorage,
 } from 'react-native';
 import { ExpoLinksView } from '@expo/samples';
-import { createAppContainer, createSwitchNavigator } from 'react-navigation';
+import { createAppContainer, createSwitchNavigator, NavigationEvents } from 'react-navigation';
 import GradeLoader from "./schedulescreens/GradeLoader";
 import Header from './Header';
 
@@ -16,28 +16,30 @@ var gradeLoader = new GradeLoader();
 
 export default class ScheduleScreen extends Component {
   state = {
-    grade: 9,
-    //gradeTimer: 0
+    grade: 9
   };
 
   render() {
-    //get the grade that was saved
-    AsyncStorage.getItem("gradekey", (err, result) => {
-      if (!err) {
-        if (result == null) {
-          this.setState({grade: "9"});
-        } else {
-          //otherwise, load in grade
-          data = JSON.parse(result);
-          if (this.state.grade != data["grade"]) {
-            this.setState({grade: data["grade"]});
-          }
-        }
-      }
-    });
     return (
       <View>
-        <Header title={"Schedule"} />
+        <NavigationEvents
+          onWillFocus={payload => {
+            console.log("will focus", payload);
+            //get the grade that was saved
+            AsyncStorage.getItem("gradekey", (err, result) => {
+              if (!err) {
+                //otherwise, load in grade
+                data = JSON.parse(result);
+                if (this.state.grade != data["grade"]) {
+                  this.setState({grade: data["grade"]});
+                }
+              }
+            });
+          }}
+        />
+        <View style={styles.linearLayoutBackground}>
+          <Text style={styles.titleLight}>Bell Schedule</Text>
+        </View>
         { gradeLoader.getView(this.state.grade) }
       </View>
     );

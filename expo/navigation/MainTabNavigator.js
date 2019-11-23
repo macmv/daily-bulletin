@@ -27,10 +27,7 @@ BulletinStack.navigationOptions = {
     <TabBarIcon
       focused={focused}
       name={
-        Platform.OS === 'ios'
-          /*? `ios-information-circle${focused ? '' : '-outline'}`*/
-          ? 'ios-list-box'
-          : 'md-list-box'
+        Platform.OS === 'ios' ? 'ios-list-box' : 'md-list-box'
       }
     />
   ),
