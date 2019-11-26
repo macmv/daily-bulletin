@@ -10,6 +10,9 @@ const schedule = require('./schedule.json');
 
 export default class GradeLoader {
   getView(gradeNum) {
+    if (gradeNum == 12) {
+      gradeNum = 11;
+    }
     grade = schedule.grades[gradeNum];
     days = {};
     Object.entries(grade).forEach(item => {
@@ -26,7 +29,7 @@ export default class GradeLoader {
         );
       });
       title = moment().day(day).format('dddd');
-      console.log(title);
+      //console.log(title);
       if (title == "Monday") {
         title += "/Friday";
       }

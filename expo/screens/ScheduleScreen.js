@@ -34,7 +34,6 @@ export default class ScheduleScreen extends Component {
       <View>
         <NavigationEvents
           onWillFocus={payload => {
-            console.log("will focus", payload);
             //get the grade that was saved
             AsyncStorage.getItem("gradekey", (err, result) => {
               if (!err) {
