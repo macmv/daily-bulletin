@@ -5,6 +5,7 @@ import {
   Text,
   View,
   AsyncStorage,
+  Picker,
 } from 'react-native';
 import { ExpoLinksView } from '@expo/samples';
 import { createAppContainer, createSwitchNavigator, NavigationEvents } from 'react-navigation';
@@ -18,6 +19,15 @@ export default class ScheduleScreen extends Component {
   state = {
     grade: 9
   };
+
+  setGrade = (grade) => {
+    //store user's Grade
+    AsyncStorage.setItem("gradekey", JSON.stringify({"grade": grade}), (err,result) => {
+      console.log("error",err,"result",result);
+    });
+    console.log("Setting grade to: " + grade);
+    this.setState({grade: grade});
+  }
 
   render() {
     return (
@@ -37,9 +47,17 @@ export default class ScheduleScreen extends Component {
             });
           }}
         />
-        <View style={styles.linearLayoutBackground}>
-          <Text style={styles.titleLight}>Bell Schedule</Text>
-        </View>
+        <Header title={"Bell Schedule"}>
+          <Picker
+            selectedValue={this.state.grade + ""}
+            style={styles.gradePicker}
+            onValueChange={(itemValue, itemIndex) => this.setGrade(parseInt(itemValue))}>
+            <Picker.Item label="9th Grade" value="9" />
+            <Picker.Item label="10th Grade" value="10" />
+            <Picker.Item label="11th Grade" value="11" />
+            <Picker.Item label="12th Grade" value="12" />
+          </Picker>
+        </Header>
         { gradeLoader.getView(this.state.grade) }
       </View>
     );
@@ -51,25 +69,9 @@ ScheduleScreen.navigationOptions = {
 };
 
 const styles = StyleSheet.create({
-  titleLight: {
+  gradePicker: {
+    flex: 0.75,
     color: '#fff',
-    fontSize: 20
-  },
-  linearLayoutBackground: {
-    flex: 0,
-    flexDirection: "row",
-    justifyContent: "space-between",
-    backgroundColor: '#0185DE',
-    padding: 10
-  },
-  container: {
-    flex: 1,
-    paddingTop: 15,
-    backgroundColor: '#fff',
-  },
-  linearLayoutVertical: {
-    flex: 0,
-    flexDirection: "row",
-    justifyContent: "space-between",
+    height: 20
   },
 });
