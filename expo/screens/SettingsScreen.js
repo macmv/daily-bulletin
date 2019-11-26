@@ -15,6 +15,7 @@ import {
 } from 'react-native';
 import UserInfoScreen from '../components/UserInfoScreen';
 import Header from './Header';
+import { NavigationEvents } from 'react-navigation';
 
 export default class SettingsScreen extends Component {
   state = {
@@ -30,9 +31,23 @@ export default class SettingsScreen extends Component {
     this.setState({grade: grade});
   }
   render() {
-    //console.log("modalVisible: " + this.state.modalVisible);
     return (
       <View>
+        <NavigationEvents
+          onWillFocus={payload => {
+            console.log("will focus", payload);
+            //get the grade that was saved
+            AsyncStorage.getItem("gradekey", (err, result) => {
+              if (!err) {
+                //otherwise, load in grade
+                data = JSON.parse(result);
+                if (this.state.grade != data["grade"]) {
+                  this.setState({grade: data["grade"]});
+                }
+              }
+            });
+          }}
+        />
         <Header title={"Settings"} />
         <View style={styles.linearLayoutBackground}>
           <Text style={styles.gradeText}>Set Grade:</Text>
