@@ -22,8 +22,8 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-        buildConfigField "String", "AWS_ACCESS_KEY_ID", "\""+getAwsAccessKey()+"\""
-        buildConfigField "String", "AWS_SECRET_ACCESS_KEY", "\""+getAwsSecretKey()+"\""
+        buildConfigField "String", "AWS_ACCESS_KEY_ID", "\"" + getAwsAccessKey() + "\""
+        buildConfigField "String", "AWS_SECRET_ACCESS_KEY", "\"" + getAwsSecretKey() + "\""
     }
     buildTypes {
         release {

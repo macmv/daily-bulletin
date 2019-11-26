@@ -10,10 +10,10 @@ import android.view.ViewGroup;
 import com.efe.nhhsbulletin.android.R;
 
 public class Schedule extends Fragment {
-    @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View root = inflater.inflate(R.layout.fragment_schedule, container, false);
+  @Override
+  public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    View root = inflater.inflate(R.layout.fragment_schedule, container, false);
 
-        return root;
-    }
+    return root;
+  }
 }

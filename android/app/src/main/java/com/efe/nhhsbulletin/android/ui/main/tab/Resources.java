@@ -10,10 +10,10 @@ import android.view.ViewGroup;
 import com.efe.nhhsbulletin.android.R;
 
 public class Resources extends Fragment {
-    @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View root = inflater.inflate(R.layout.fragment_resources, container, false);
+  @Override
+  public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    View root = inflater.inflate(R.layout.fragment_resources, container, false);
 
-        return root;
-    }
+    return root;
+  }
 }
