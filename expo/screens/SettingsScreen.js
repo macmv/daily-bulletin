@@ -10,37 +10,41 @@ import {
   ScrollView,
   FlatList,
   ActivityIndicator,
+  Picker,
+  AsyncStorage,
 } from 'react-native';
 import UserInfoScreen from '../components/UserInfoScreen';
 import Header from './Header';
 
 export default class SettingsScreen extends Component {
   state = {
-    modalVisible: false
+    modalVisible: false,
+    grade: 9,
   };
-  showGradePopup = () => {
-    this.setState({modalVisible: true});
-  };
-  hideGradePopup = () => {
-    this.setState({modalVisible: false});
-  };
+  setGrade = (grade) => {
+    //store user's Grade
+    AsyncStorage.setItem("gradekey", JSON.stringify({"grade": grade}), (err,result) => {
+      console.log("error",err,"result",result);
+    });
+    console.log("Setting grade to: " + grade);
+    this.setState({grade: grade});
+  }
   render() {
-    console.log("modalVisible: " + this.state.modalVisible);
+    //console.log("modalVisible: " + this.state.modalVisible);
     return (
       <View>
         <Header title={"Settings"} />
-        <Button title="Set Grade"
-          onPress={this.showGradePopup}
-          style={styles.calendarButton}
-          color={(Platform.OS === 'ios') ? "#fff" : ""} />
-        <View>
-          <UserInfoScreen
-            key={"Settings"}
-            hide={this.hideGradePopup.bind(this)}
-            visible={this.state.modalVisible}
-            title={"Update your grade"}
-            description={"This will help us adjust the app to your individual schedule."}
-          />
+        <View style={styles.linearLayoutBackground}>
+          <Text style={styles.gradeText}>Set Grade:</Text>
+          <Picker
+            selectedValue={this.state.grade + ""}
+            style={styles.gradePicker}
+            onValueChange={(itemValue, itemIndex) => this.setGrade(parseInt(itemValue))}>
+            <Picker.Item label="9th Grade" value="9" />
+            <Picker.Item label="10th Grade" value="10" />
+            <Picker.Item label="11th Grade" value="11" />
+            <Picker.Item label="12th Grade" value="12" />
+          </Picker>
         </View>
       </View>
     );
@@ -52,8 +56,19 @@ SettingsScreen.navigationOptions = {
 };
 
 const styles = StyleSheet.create({
-  statusBarBackground: {
-    height: (Platform.OS === 'ios') ? 18 : 0,
-    backgroundColor: "#0185DE",
+  gradeText: {
+    flex: 1,
+    fontSize: 20,
+    padding: 10
   },
+  gradePicker: {
+    flex: 1
+  },
+  linearLayoutBackground: {
+    paddingTop: 10,
+    paddingBottom: 10,
+    flex: 0,
+    //backgroundColor: '#ff5c5c',
+    flexDirection: "row",
+  }
 });

@@ -52,8 +52,8 @@ export default class GradeLoader {
     table = [];
     for (i = 0; i < 7; i++) {
       day = moment().add(i, 'day').format('ddd');
-      console.log("keys", Object.keys(days));
-      console.log("key", day);
+      //console.log("keys", Object.keys(days));
+      //console.log("key", day);
       if (days[day] != undefined) {
         table.push(days[day]);
       }
