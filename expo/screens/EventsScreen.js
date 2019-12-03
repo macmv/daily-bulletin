@@ -18,7 +18,7 @@ export default class EventsScreen extends Component {
   }
   componentDidMount = () => {
     today = new Date();
-    eventsManager.getData(new Date(today.getFullYear(), today.getMonth(), today.getDate()), 30, this)
+    eventsManager.getData(new Date(today.getFullYear(), today.getMonth(), today.getDate() + 7), 28, this)
   }
   render() {
     return (
@@ -44,9 +44,10 @@ function GenerateEventsScreen(props) {
     )
   } else {
     sections = [];
+    console.log(eventsData);
     eventsDataKeys = Object.keys(eventsData);
     eventsDataKeys.sort();
-    for (var i = 0; i < eventsDataKeys.length; i++) {
+    for (var i = eventsDataKeys.length - 1; i >= 0; i--) {
       dateString = eventsDataKeys[i];
       events = eventsData[dateString]["events"];
       lines = []
@@ -90,7 +91,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     backgroundColor: '#0185DE',
-    padding: 10
+    padding: 10,
   },
   subtitle: {
     color: '#a22',
