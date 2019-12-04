@@ -17,6 +17,7 @@ export default function ResourcesScreen() {
       <Header title={"Resources"} />
       <ScrollView>
         <GenerateLinks />
+        <Text style={styles.credits}>NHHS Bulletin Application developed by Neil Macneale V and Ethan Erickson { "\u{1F600}" }.</Text>
       </ScrollView>
     </View>
   );
@@ -27,7 +28,7 @@ function GenerateLinks() {
     "Nathan Hale Foundation website:": "http://www.nathanhale.org",
     "Hale Sports Booster website:": "http://halesports.org",
     "Raider Gear:": "http://bit.ly/2cr6syY",
-    //"To purchase Yearbooks, ASB cards, pay fees and fines on-line:" Use parent/guardian Source Account then SchoolPay
+    "To purchase Yearbooks, ASB cards, pay fees and fines on-line:" : "Use parent/guardian Source Account then SchoolPay",
     "To pay for lunches on line:": "https://paypams.com/HomePage.aspx",
     "Seattle Schools website:": "http://www.seattleschools.org",
     "Scholarships/Colleges/Careers:": "http://halehs.seattleschools.org/services/counseling_office/colleges_and_careers",
@@ -37,7 +38,7 @@ function GenerateLinks() {
     "Senior Spree:": "https://nathanhalespree2020.shutterfly.com/",
     "Online Volunteer Application:": "https://seattlepublicschools.volunteerlocal.com/volunteer/",
     "Nathan Hale Music Boosters:": "https://nathanhalemusic.com/",
-    //"Seattle Promise Contact:" Francisco Ramos Francisco.Ramos@Seattlecolleges.edu
+    "Seattle Promise Contact:": "Francisco Ramos Francisco.Ramos@Seattlecolleges.edu"
   }
   list = [];
   for (name in links) {
@@ -45,12 +46,17 @@ function GenerateLinks() {
     list.push(
       <View>
         <Text style={styles.text}> { name } </Text>
-        <TouchableOpacity
-          onPress={ ((value) => Linking.openURL(value)).bind(this, link) }
-          color={(Platform.OS === 'ios') ? "#fff" : ""} >
-          <Text style={styles.link}> { link } </Text>
-        </TouchableOpacity>
-      </View>);
+          {
+          (link[0] + link[1] + link[2] + link[3]) == "http" ?
+          <TouchableOpacity
+            onPress={ ((value) => Linking.openURL(value)).bind(this, link) }
+            color={(Platform.OS === 'ios') ? "#fff" : ""} >
+            <Text style={styles.link}> { link } </Text>
+          </TouchableOpacity> :
+          <Text> { link } </Text>
+          }
+      </View>
+    );
   }
   return list;
 }
@@ -75,4 +81,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#0185DE',
     padding: 10
   },
+  credits: {
+    paddingTop: 30,
+    paddingBottom: 50
+  }
 });
