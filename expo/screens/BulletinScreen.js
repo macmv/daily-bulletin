@@ -111,6 +111,68 @@ export default class BulletinScreen extends Component {
 
 var bulletinManager = new BulletinManager("daily-bulletin")
 
+//parse lunch emojis for lunch foods :)
+function parseLunch(text) {
+  dict = {
+    "cheese" : "\u{1F9C0}",
+    "tomato" : "\u{1F345}",
+    "soup" : "\u{1F372}",
+    "bowl" : "\u{1F963}",
+    "steak" : "\u{1F356}",
+    "beef" : "\u{1F356}",
+    "meat" : "\u{1F356}",
+    "fries" : "\u{1F35F}",
+    "chicken" : "\u{1F357}",
+    "corndog" : "\u{1F32D}",
+    "hotdog" : "\u{1F32D}",
+    "sausage" : "\u{1F32D}",
+    "dog" : "\u{1F32D}",
+    "breadstick" : "\u{1F956}",
+    "baguette" : "\u{1F956}",
+    "choice" : "\u{1F468}\u{1F469}\u{1F373}",
+    "bread" : "\u{1F35E}",
+    "rolls" : "\u{1F35E}",
+    "toast" : "\u{1F35E}",
+    "rice" : "\u{1F35A}",
+    "pancakes" : "\u{1F95E}",
+    "salad" : "\u{1F957}",
+    "caesar" : "\u{1F957}",
+    "waffles" : "\u{1F9C7}",
+    "penne" : "\u{1F35D}",
+    "pasta" : "\u{1F35D}",
+    "fish" : "\u{1F41F}",
+    "chips" : "\u{1F35F}",
+    "potato" : "\u{1F954}",
+    "hashbrown" : "\u{1F954}",
+    "turkey" : "\u{1F983}",
+    "quesadilla" : "\u{1F32F}\u{1F9C0}",
+    "tacos" : "\u{1F32E}",
+    "hamburger" : "\u{1F354}",
+    "cheeseburger" : "\u{1F354}",
+    "pizza" : "\u{1F355}",
+    "burrito" : "\u{1F32F}",
+    "sandwich" : "\u{1F96A}",
+    "sandwiches" : "\u{1F96A}",
+    "peanut" : "\u{1F95C}",
+    "nuts" : "\u{1F95C}",
+    "squid" : "\u{1F991}\u{1F92E}"
+  };
+  emojiText = "";
+  words = ((text.replace(",", "")).toLowerCase()).split(" ");
+
+  for (var i = 0; i < words.length; i++) {
+    emojiText = emojiText.concat(words[i] + " ")
+    for (var key in dict) {
+      if (words[i] == key) {
+        emojiText = emojiText.concat(dict[key] + " ");
+      }
+    }
+  }
+  completeText = emojiText.charAt(0).toUpperCase() + emojiText.substring(1);
+
+  return completeText;
+}
+
 function BulletinElement(props) {
   if (props.loading) {
     return (
@@ -161,13 +223,32 @@ function BulletinElement(props) {
         )
       }
     }
+    //display lunch
+    if (bulletin.lunch != null) {
+      sections.push(
+        <View>
+          <Text style={styles.title}>Lunch</Text>
+          <Text style={styles.text}></Text>
+        </View>
+      )
+      for (i = 0; i < bulletin.lunch.length; i++) {
+        text = bulletin.lunch[i];
+        emojiText = parseLunch(text);
+        sections.push(
+          <View>
+            <Text style={styles.text}>{emojiText}</Text>
+            <Text style={styles.text}></Text>
+          </View>
+        )
+      }
+    }
     sections.push(
       <View>
         <Text style={styles.title}>Other</Text>
         <Text style={styles.text}></Text>
       </View>
     )
-    for (i = 1; i < bulletin.other.length; i++) {
+    for (i = 0; i < bulletin.other.length; i++) {
       text = bulletin.other[i];
       sections.push(
         <View>
