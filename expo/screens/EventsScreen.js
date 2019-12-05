@@ -44,7 +44,6 @@ function GenerateEventsScreen(props) {
     )
   } else {
     sections = [];
-    console.log(eventsData);
     eventsDataKeys = Object.keys(eventsData);
     eventsDataKeys.sort();
     for (var i = eventsDataKeys.length - 1; i >= 0; i--) {
@@ -52,6 +51,7 @@ function GenerateEventsScreen(props) {
       events = eventsData[dateString]["events"];
       lines = []
       for (var j = 0; j < events.length; j++) {
+        console.log(events[j]);
         lines.push(
           <Text style={styles.text}>
             <Text>- </Text>
@@ -61,7 +61,13 @@ function GenerateEventsScreen(props) {
       date = new Date(parseInt(dateString));
       sections.push(
         <View>
-          <Text style={styles.subtitle}>{ moment(date).format('dddd, MMMM Do') }</Text>
+          <Text style={styles.subtitle}>{
+            date.getFullYear() == new Date().getFullYear() &&
+            date.getMonth() == new Date().getMonth() &&
+            date.getDay() == new Date().getDay() ?
+            moment(date).format('dddd, MMMM Do') + " (Today)" :
+            moment(date).format('dddd, MMMM Do')
+          }</Text>
           <View>
             { lines }
           </View>
