@@ -130,39 +130,6 @@ function BulletinElement(props) {
     sections = [];
     sections.push(
       <View>
-        <Text style={styles.title}>Sports</Text>
-        <Text style={styles.text}></Text>
-      </View>
-    )
-    for (i = 1; i < bulletin.sports.length; i++) {
-      text = bulletin.sports[i];
-      regex = RegExp(', \\d+/\\d+:', 'g');
-      match = regex.exec(text);
-      if (match !== null) {
-        index = regex.lastIndex
-        sections.push(
-          <View>
-            <Text style={styles.subtitle}>{text.slice(0, regex.lastIndex - 1)}</Text>
-            <Text style={styles.text}></Text>
-          </View>
-        )
-        sections.push(
-          <View>
-            <Text style={styles.text}>{text.slice(regex.lastIndex + 1)}</Text>
-            <Text style={styles.text}></Text>
-          </View>
-        )
-      } else {
-        sections.push(
-          <View>
-            <Text style={styles.text}>{text}</Text>
-            <Text style={styles.text}></Text>
-          </View>
-        )
-      }
-    }
-    sections.push(
-      <View>
         <Text style={styles.title}>Other</Text>
         <Text style={styles.text}></Text>
       </View>
