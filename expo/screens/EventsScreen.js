@@ -32,6 +32,47 @@ export default class EventsScreen extends Component {
   }
 }
 
+//parse events emojis for different events :)
+function parseEvents(text) {
+  dict = {
+    "country" : "\u{1F3C3}",
+    "cross-country" : "\u{1F3C3}",
+    "track" : "\u{1F3C3}",
+    "basketball" : "\u{1F3C0}",
+    "volleyball" : "\u{1F3D0}",
+    "wrestling" : "\u{1F93C}",
+    "music" : "\u{1F3BC}",
+    "jazz" : "\u{1F3B7}",
+    "art" : "\u{1F3AD}",
+    "arts" : "\u{1F3AD}",
+    "swimming" : "\u{1F3CA}",
+    "gymnastics" : "\u{1F938}",
+    "golf" : "\u{1F3CC}",
+    "tennis" : "\u{1F3BE}",
+    "baseball" : "\u{1F6BE}",
+    "softball" : "\u{1F94E}",
+    "lacrosse" : "\u{1F94D}",
+    "soccer" : "\u{26BD}",
+    "futbal" : "\u{26BD}",
+    "frisbee" : "\u{1F24F}",
+    "football" : "\u{1F3C8}",
+    "rugby" : "\u{1F3C9}",
+    "athletes" : "\u{1F45F}",
+    "athletic" : "\u{1F45F}",
+  };
+  emojiText = "";
+  words = text.split(" ");
+  for (var i = 0; i < words.length; i++) {
+    emojiText = emojiText.concat(words[i] + " ")
+    for (var key in dict) {
+      if (words[i].toLowerCase() == key) {
+        emojiText = emojiText.concat(dict[key] + " ");
+      }
+    }
+  }
+  return emojiText;
+}
+
 function GenerateEventsScreen(props) {
   eventsData = props["data"];
   if (eventsData === null) {
@@ -51,11 +92,11 @@ function GenerateEventsScreen(props) {
       events = eventsData[dateString]["events"];
       lines = []
       for (var j = 0; j < events.length; j++) {
-        console.log(events[j]);
+        emojiText = parseEvents(events[j]);
         lines.push(
           <Text style={styles.text}>
             <Text>- </Text>
-            <Text>{ events[j] }</Text>
+            <Text>{ emojiText }</Text>
           </Text>);
       }
       date = new Date(parseInt(dateString));

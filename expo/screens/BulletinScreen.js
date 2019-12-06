@@ -158,19 +158,17 @@ function parseLunch(text) {
     "squid" : "\u{1F991}\u{1F92E}"
   };
   emojiText = "";
-  words = ((text.replace(",", "")).toLowerCase()).split(" ");
+  words = (text.replace(",", "")).split(" ");
 
   for (var i = 0; i < words.length; i++) {
     emojiText = emojiText.concat(words[i] + " ")
     for (var key in dict) {
-      if (words[i] == key) {
+      if (words[i].toLowerCase() == key) {
         emojiText = emojiText.concat(dict[key] + " ");
       }
     }
   }
-  completeText = emojiText.charAt(0).toUpperCase() + emojiText.substring(1);
-
-  return completeText;
+  return emojiText;
 }
 
 function BulletinElement(props) {
@@ -232,8 +230,7 @@ function BulletinElement(props) {
         </View>
       )
       for (i = 0; i < bulletin.lunch.length; i++) {
-        text = bulletin.lunch[i];
-        emojiText = parseLunch(text);
+        emojiText = parseLunch(bulletin.lunch[i]);
         sections.push(
           <View>
             <Text style={styles.text}>{emojiText}</Text>
