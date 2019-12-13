@@ -47,7 +47,7 @@ function GenerateLinks() {
       <View>
         <Text style={styles.text}> { name } </Text>
           {
-          (link[0] + link[1] + link[2] + link[3]) == "http" ?
+          link.startsWith("http") ?
           <TouchableOpacity
             onPress={ ((value) => Linking.openURL(value)).bind(this, link) }
             color={(Platform.OS === 'ios') ? "#fff" : ""} >
