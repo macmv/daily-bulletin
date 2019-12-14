@@ -190,7 +190,7 @@ function BulletinElement(props) {
     )
   } else {
     bulletin = props.bulletin
-    //if bulletin is null
+    // if bulletin is null
     if (bulletin === null) {
       return (
         <View style={styles.linearLayout}>
