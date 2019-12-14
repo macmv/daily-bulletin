@@ -1,5 +1,5 @@
 import * as WebBrowser from 'expo-web-browser';
-import React, { Component } from 'react';
+import React, { Component} from 'react';
 import {
   Platform,
   StyleSheet,
@@ -9,6 +9,7 @@ import {
   AsyncStorage,
   Alert,
   ScrollView,
+  Linking,
   FlatList,
   ActivityIndicator,
   TouchableOpacity,
@@ -158,17 +159,26 @@ function parseLunch(text) {
     "squid" : "\u{1F991}\u{1F92E}"
   };
   emojiText = "";
-  words = (text.replace(",", "")).split(" ");
+  bulletinWords = (text.replace(",", "")).split(" ");
 
-  for (var i = 0; i < words.length; i++) {
-    emojiText = emojiText.concat(words[i] + " ")
+  for (var i = 0; i < bulletinWords.length; i++) {
+    emojiText = emojiText.concat(bulletinWords[i] + " ")
     for (var key in dict) {
-      if (words[i].toLowerCase() == key) {
+      if (bulletinWords[i].toLowerCase() == key) {
         emojiText = emojiText.concat(dict[key] + " ");
       }
     }
   }
   return emojiText;
+}
+
+function inArray(item, arr) {
+  for (var i = 0; i < arr.length; i++) {
+    if (item == arr[i]) {
+      return true;
+    }
+  }
+  return false;
 }
 
 function BulletinElement(props) {
@@ -221,6 +231,7 @@ function BulletinElement(props) {
         )
       }
     }
+    //TODO: display clubs
     //display lunch
     if (bulletin.lunch != null) {
       sections.push(
@@ -245,11 +256,67 @@ function BulletinElement(props) {
         <Text style={styles.text}></Text>
       </View>
     )
-    for (i = 0; i < bulletin.other.length; i++) {
-      text = bulletin.other[i];
+    /*for (var i = 0; i < bulletin.other.length; i++) {
+      console.log(text);
+      //ellipses = "…"; <-- 2026
+      singlequote = "\u2019"; // <-- e2 80 99
+      apostrophe = "'";
+      //console.log(apostrophe);
+      text = bulletin.other[i].toString();
+      while (text.indexOf("\u2019") != -1) {
+        text = text.replace("\u2019", "\u0027");
+      }
+      while (text.indexOf("\u2026") != -1) {
+        //console.log("found one");
+        text = text.replace("\u2026", "\u002E\u002E\u002E");//
+      }
       sections.push(
         <View>
           <Text style={styles.text}>{text}</Text>
+          <Text style={styles.text}></Text>
+        </View>
+      )
+    }*/
+    bulletinWords = [];
+    for (i = 0; i < bulletin.other.length; i++) {
+      text = bulletin.other[i];
+      //console.log(text);
+      bulletinSections = [];
+      links = [];
+      //splits into words by spaces and newlines
+      bulletinWords = bulletin.other[i].split(/\s+/);
+      for (var j = 0; j < bulletinWords.length; j++) {
+        //checks if a word is a link and then checks if the next word is a link in parenthesis
+        if ((bulletinWords[j].startsWith("http") || bulletinWords[j].endsWith('org') || bulletinWords[j].endsWith('com') || bulletinWords[j].endsWith('edu'))) {
+          if (bulletinWords[j + 1].startsWith("(http") || bulletinWords[j + 1].endsWith('org)') || bulletinWords[j + 1].endsWith('com)') || bulletinWords[j + 1].endsWith('edu)')) {
+            //adds elements to a links objects that holds the name of the link and the location it takes you to
+            element = {};
+            element.word = bulletinWords[j];
+            element.link = bulletinWords[j + 1].substring(1, bulletinWords[j + 1].length - 1);
+            links.push(element);
+            //console.log(bulletinWords[j+1] + ": " + (bulletinWords[j+1].endsWith('org)') || bulletinWords[j+1].endsWith('com)') || bulletinWords[j+1].endsWith('edu)')));
+            //console.log("link: " + bulletinWords[j]);
+            //removes all of the links in the parenthesis from the text
+            text = text.replace(bulletinWords[j + 1], "");
+          }
+        }
+      }
+      //looks through the links object and makes a touchable opacity of the link's name that goes to the link's location
+      linkList = [];
+      for (var j = 0; j < links.length; j++) {
+        linkList.push(
+          <TouchableOpacity
+            onPress={ ((value) => Linking.openURL(value)).bind(this, links[j].link) }
+            color={(Platform.OS === 'ios') ? "#fff" : ""} >
+            <Text style={styles.link}> { links[j].word } </Text>
+          </TouchableOpacity>
+        )
+      }
+      //adds the bulletin paragraph and the list of links to the end of that paragraph
+      sections.push(
+        <View>
+          <Text style={styles.text}>{text}</Text>
+          {linkList}
           <Text style={styles.text}></Text>
         </View>
       )
@@ -288,6 +355,10 @@ const styles = StyleSheet.create({
   text: {
     color: '#222',
     fontSize: 15,
+  },
+  link: {
+    color: '#26f',
+    textDecorationLine: 'underline',
   },
   toolbar: {
     backgroundColor: '#fff',
