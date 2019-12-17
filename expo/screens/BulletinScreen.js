@@ -273,67 +273,36 @@ function BulletinElement(props) {
         <Text style={styles.text}></Text>
       </View>
     )
-    /*for (var i = 0; i < bulletin.other.length; i++) {
-      console.log(text);
-      //ellipses = "…"; <-- 2026
-      singlequote = "\u2019"; // <-- e2 80 99
-      apostrophe = "'";
-      //console.log(apostrophe);
-      text = bulletin.other[i].toString();
-      while (text.indexOf("\u2019") != -1) {
-        text = text.replace("\u2019", "\u0027");
-      }
-      while (text.indexOf("\u2026") != -1) {
-        //console.log("found one");
-        text = text.replace("\u2026", "\u002E\u002E\u002E");//
-      }
-      sections.push(
-        <View>
-          <Text style={styles.text}>{text}</Text>
-          <Text style={styles.text}></Text>
-        </View>
-      )
-    }*/
-    bulletinWords = [];
+    const regexp = /\((http|mailto)\S*\)/g;
     for (i = 0; i < bulletin.other.length; i++) {
       text = bulletin.other[i];
-      //console.log(text);
-      bulletinSections = [];
-      links = [];
-      //splits into words by spaces and newlines
-      bulletinWords = bulletin.other[i].split(/\s+/);
-      for (var j = 0; j < bulletinWords.length; j++) {
-        //checks if a word is a link and then checks if the next word is a link in parenthesis
-        if ((bulletinWords[j].startsWith("http") || bulletinWords[j].endsWith('org') || bulletinWords[j].endsWith('com') || bulletinWords[j].endsWith('edu'))) {
-          if (bulletinWords[j + 1].startsWith("(http") || bulletinWords[j + 1].endsWith('org)') || bulletinWords[j + 1].endsWith('com)') || bulletinWords[j + 1].endsWith('edu)')) {
-            //adds elements to a links objects that holds the name of the link and the location it takes you to
-            element = {};
-            element.word = bulletinWords[j];
-            element.link = bulletinWords[j + 1].substring(1, bulletinWords[j + 1].length - 1);
-            links.push(element);
-            //console.log(bulletinWords[j+1] + ": " + (bulletinWords[j+1].endsWith('org)') || bulletinWords[j+1].endsWith('com)') || bulletinWords[j+1].endsWith('edu)')));
-            //console.log("link: " + bulletinWords[j]);
-            //removes all of the links in the parenthesis from the text
-            text = text.replace(bulletinWords[j + 1], "");
-          }
-        }
-      }
-      //looks through the links object and makes a touchable opacity of the link's name that goes to the link's location
-      linkList = [];
-      for (var j = 0; j < links.length; j++) {
-        linkList.push(
+      content = [];
+      prevEnd = 0;
+      let match;
+      while ((match = regexp.exec(text)) !== null) {
+        console.log(`Found ${match[0]} start=${match.index} end=${regexp.lastIndex}.`);
+        link = match[0].trim();
+        link = link.slice(1, link.length - 2);
+        textSection = text.slice(prevEnd, match.index).trim();
+        prevEnd = regexp.lastIndex;
+        content.push(
+          <Text style={styles.text}>{textSection}</Text>
+        );
+        content.push(
           <TouchableOpacity
-            onPress={ ((value) => Linking.openURL(value)).bind(this, links[j].link) }
+            onPress={ ((value) => Linking.openURL(value)).bind(this, link) }
             color={(Platform.OS === 'ios') ? "#fff" : ""} >
-            <Text style={styles.link}> { links[j].word } </Text>
+            <Text style={styles.link}>Click Here</Text>
           </TouchableOpacity>
-        )
+        );
       }
-      //adds the bulletin paragraph and the list of links to the end of that paragraph
+      content.push(
+        <Text style={styles.text}>{text.slice(prevEnd)}</Text>
+      );
+
       sections.push(
         <View>
-          <Text style={styles.text}>{text}</Text>
-          {linkList}
+          {content}
           <Text style={styles.text}></Text>
         </View>
       )
