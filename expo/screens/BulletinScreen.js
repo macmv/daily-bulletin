@@ -231,7 +231,24 @@ function BulletinElement(props) {
         )
       }
     }
-    //TODO: display clubs
+    //display clubs
+    if (bulletin.clubs != null) {
+      sections.push(
+        <View>
+          <Text style={styles.title}>Clubs</Text>
+          <Text style={styles.text}></Text>
+        </View>
+      )
+      for (i = 0; i < bulletin.clubs.length; i++) {
+        text = bulletin.clubs[i];
+        sections.push(
+          <View>
+            <Text style={styles.text}>{text}</Text>
+            <Text style={styles.text}></Text>
+          </View>
+        )
+      }
+    }
     //display lunch
     if (bulletin.lunch != null) {
       sections.push(
