@@ -63,6 +63,7 @@ export default class GradeLoader {
     }
     return (
       <ScrollView style={styles.container}>
+      <Text style={styles.alert}>Bell Schedule is prone to change; see Bulletin for the most recent information.</Text>
         { table }
       </ScrollView>
     )
@@ -126,5 +127,10 @@ const styles = StyleSheet.create({
     borderRightWidth: 1,
     borderColor: "#fff",
     paddingLeft: 5,
-  }
+  },
+  alert: {
+    padding: 10,
+    fontSize: 15,
+    color: '#f00'
+  },
 });
