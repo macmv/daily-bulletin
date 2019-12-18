@@ -210,7 +210,7 @@ function BulletinElement(props) {
         text = bulletin.clubs[i];
         sections.push(
           <View>
-            <Text style={styles.text}>{text}</Text>
+            <Text selectable={true} style={styles.text}>{text}</Text>
             <Text style={styles.text}></Text>
           </View>
         )
@@ -228,7 +228,7 @@ function BulletinElement(props) {
         emojiText = parseLunch(bulletin.lunch[i]);
         sections.push(
           <View>
-            <Text style={styles.text}>{emojiText}</Text>
+            <Text selectable={true} style={styles.text}>{emojiText}</Text>
             <Text style={styles.text}></Text>
           </View>
         )
@@ -253,7 +253,7 @@ function BulletinElement(props) {
         textSection = text.slice(prevEnd, match.index).trim();
         prevEnd = regexp.lastIndex;
         content.push(
-          <Text style={styles.text}>{textSection}</Text>
+          <Text selectable={true} style={styles.text}>{textSection}</Text>
         );
         content.push(
           <TouchableOpacity
@@ -264,19 +264,19 @@ function BulletinElement(props) {
         );
       }
       content.push(
-        <Text style={styles.text}>{text.slice(prevEnd)}</Text>
+        <Text selectable={true} style={styles.text}>{text.slice(prevEnd)}</Text>
       );
 
       sections.push(
         <View>
           {content}
-          <Text style={styles.text}></Text>
+          <Text selectable={true} style={styles.text}></Text>
         </View>
       )
     }
     return (
       <ScrollView style={styles.linearLayout, {flex: 1}}>
-        <Text style={styles.title}>Daily Bulletin for {moment(props.date).format('dddd, MMMM Do YYYY')}</Text>
+        <Text selectable={true} style={styles.title}>Daily Bulletin for {moment(props.date).format('dddd, MMMM Do YYYY')}</Text>
         {sections}
       </ScrollView>
     )
