@@ -83,6 +83,7 @@ const styles = StyleSheet.create({
   container: {
     paddingLeft: 10,
     paddingRight: 10,
+    marginBottom: 50
   },
   item: {
     borderBottomWidth: 1,

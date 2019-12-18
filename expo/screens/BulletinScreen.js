@@ -198,39 +198,6 @@ function BulletinElement(props) {
       )
     }
     sections = [];
-    sections.push(
-      <View>
-        <Text style={styles.title}>Sports</Text>
-        <Text style={styles.text}></Text>
-      </View>
-    )
-    for (i = 1; i < bulletin.sports.length; i++) {
-      text = bulletin.sports[i];
-      regex = RegExp(', \\d+/\\d+:', 'g');
-      match = regex.exec(text);
-      if (match !== null) {
-        index = regex.lastIndex
-        sections.push(
-          <View>
-            <Text style={styles.subtitle}>{text.slice(0, regex.lastIndex - 1)}</Text>
-            <Text style={styles.text}></Text>
-          </View>
-        )
-        sections.push(
-          <View>
-            <Text style={styles.text}>{text.slice(regex.lastIndex + 1)}</Text>
-            <Text style={styles.text}></Text>
-          </View>
-        )
-      } else {
-        sections.push(
-          <View>
-            <Text style={styles.text}>{text}</Text>
-            <Text style={styles.text}></Text>
-          </View>
-        )
-      }
-    }
     //display clubs
     if (bulletin.clubs != null) {
       sections.push(
@@ -309,7 +276,7 @@ function BulletinElement(props) {
     }
     return (
       <ScrollView style={styles.linearLayout, {flex: 1}}>
-        <Text style={styles.title}>Daily bulletin for {moment(props.date).format('dddd, MMMM Do YYYY')}</Text>
+        <Text style={styles.title}>Daily Bulletin for {moment(props.date).format('dddd, MMMM Do YYYY')}</Text>
         {sections}
       </ScrollView>
     )
@@ -369,6 +336,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     paddingLeft: 10,
     paddingRight: 10,
+    marginBottom: 50
   },
   linearLayoutVertical: {
     flex: 0,
