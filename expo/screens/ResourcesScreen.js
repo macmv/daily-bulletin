@@ -15,9 +15,9 @@ export default function ResourcesScreen() {
   return (
     <View>
       <Header title={"Resources"} />
-      <ScrollView>
+      <ScrollView style={styles.linearLayout}>
         <GenerateLinks />
-        <Text style={styles.credits}>NHHS Bulletin Application developed by Neil Macneale V and Ethan Erickson { "\u{1F600}" }.</Text>
+        <Text style={styles.credits}>NHHS Bulletin Application developed by Neil Macneale and Ethan Erickson.</Text>
       </ScrollView>
     </View>
   );
@@ -66,13 +66,14 @@ ResourcesScreen.navigationOptions = {
 };
 
 const styles = StyleSheet.create({
+  text: {
+    color: '#222',
+    fontSize: 15,
+    paddingLeft: 10,
+  },
   link: {
     color: '#26f',
     textDecorationLine: 'underline',
-    paddingLeft: 10,
-  },
-  text: {
-    color: "#000",
     paddingLeft: 10,
   },
   credits: {

@@ -27,7 +27,6 @@ export default class ScheduleScreen extends Component {
       }
     });
     this.setState({grade: grade});
-    console.log("CALLED setGrade WITH GRADE:", grade);
   }
 
   render() {

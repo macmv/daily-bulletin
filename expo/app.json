@@ -28,6 +28,12 @@
     },
     "androidStatusBar": {
       "barColor": "#00ff00"
+    },
+    "android": {
+      "package": "com.efe.nhhsbulletin"
+    },
+    "ios": {
+      "bundleIdentifier": "com.efe.nhhsbulletin"
     }
   }
 }
