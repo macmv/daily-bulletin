@@ -45,15 +45,15 @@ function GenerateLinks() {
     link = links[name]
     list.push(
       <View>
-        <Text style={styles.text}> { name } </Text>
+        <Text style={styles.text}>{ name }</Text>
           {
           link.startsWith("http") ?
           <TouchableOpacity
             onPress={ ((value) => Linking.openURL(value)).bind(this, link) }
             color={(Platform.OS === 'ios') ? "#fff" : ""} >
-            <Text style={styles.link}> { link } </Text>
+            <Text style={styles.link}>{ link }</Text>
           </TouchableOpacity> :
-          <Text> { link } </Text>
+          <Text style={styles.text}>{ link }</Text>
           }
       </View>
     );
@@ -69,20 +69,15 @@ const styles = StyleSheet.create({
   link: {
     color: '#26f',
     textDecorationLine: 'underline',
+    paddingLeft: 10,
   },
-  titleLight: {
-    color: '#fff',
-    fontSize: 20
-  },
-  linearLayoutBackground: {
-    flex: 0,
-    flexDirection: "row",
-    justifyContent: "space-between",
-    backgroundColor: '#0185DE',
-    padding: 10
+  text: {
+    color: "#000",
+    paddingLeft: 10,
   },
   credits: {
     paddingTop: 30,
-    paddingBottom: 50
+    paddingBottom: 50,
+    paddingLeft: 10,
   }
 });

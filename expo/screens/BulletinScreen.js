@@ -256,11 +256,12 @@ function BulletinElement(props) {
           <Text selectable={true} style={styles.text}>{textSection}</Text>
         );
         content.push(
-          <TouchableOpacity
+          /*<TouchableOpacity
             onPress={ ((value) => Linking.openURL(value)).bind(this, link) }
             color={(Platform.OS === 'ios') ? "#fff" : ""} >
             <Text style={styles.link}>Click Here</Text>
-          </TouchableOpacity>
+          </TouchableOpacity>*/
+          <Text></Text>
         );
       }
       content.push(
