@@ -49,34 +49,13 @@ export default class UserInfoScreen extends Component {
           //otherwise, load in grade
           data = JSON.parse(result);
           this.state.modalLoaded = true;
-          this.state.firstTimePopup = false;
+          this.state.firstTimePopup = true;
           //console.log("Modal Loaded and got result: " + this.state.modalLoaded);
           //console.log("result", data["grade"]);
           this.setState({grade: data["grade"]});
         }
       }
     });
-
-    //limit module from appearing more than once
-    /*AsyncStorage.getItem("gradekey", (err, result) => {
-      if (err) {
-      } else {
-        //console.log("key:" + this.props.key);
-        if (result == null) {
-          console.log("null value recieved", result);
-          this.firstTimePopup = true;
-        } else {
-          data = JSON.parse(result);
-          console.log("result", data["hasGradeOpened"]);
-          if (data["hasGradeOpened"]) {
-            this.firstTimePopup = false;
-          }
-        }
-      }
-    });
-    AsyncStorage.setItem("gradekey", JSON.stringify({"hasGradeOpened": true}), (err,result) => {
-      console.log("error",err,"result",result);
-    });*/
   }
   //display module popup
   render() {
