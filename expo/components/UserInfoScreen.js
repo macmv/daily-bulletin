@@ -109,45 +109,43 @@ export default class UserInfoScreen extends Component {
 //define styles
 const styles = StyleSheet.create({
   userInfoContainer:{
-		backgroundColor:'white',
-		flex:1,
-		marginTop:70,
-		marginBottom:40,
-		marginLeft:20,
-		marginRight:20,
-		//borderRadius:20,
-		//borderWidth:4,
-		//borderColor:'#0185DE'
-    elevation: 10
-	},
-	userInfoTitle:{
-		color:'black',
+    backgroundColor:'white',
+    flex:1,
+    marginTop:70,
+    marginBottom:40,
+    marginLeft:20,
+    marginRight:20,
+    elevation: 10,
+    shadowOffset: {width: 10, height: 10}
+  },
+  userInfoTitle:{
+    color:'black',
         fontWeight:'bold',
-		fontSize:20,
-		textAlign:'center',
-		margin:10,
-	},
-	userInfoDescription:{
-		color:'black',
+    fontSize:20,
+    textAlign:'center',
+    margin:10,
+  },
+  userInfoDescription:{
+    color:'black',
         fontSize:15,
-		marginRight:20,
-		marginLeft:20
-	},
-	userInfoCloseIcon:{
-		alignSelf:'flex-end',
-		flex:0.5,
-		marginRight:10
-	},
-	userInfoTitleContainer:{
-		flex:1,
-		flexDirection:'row',
-		justifyContent:'center',
-		alignItems:'center'
-	},
-	userInfoDescriptionContainer:{
-		flex:1
+    marginRight:20,
+    marginLeft:20
+  },
+  userInfoCloseIcon:{
+    alignSelf:'flex-end',
+    flex:0.5,
+    marginRight:10
+  },
+  userInfoTitleContainer:{
+    flex:1,
+    flexDirection:'row',
+    justifyContent:'center',
+    alignItems:'center'
+  },
+  userInfoDescriptionContainer:{
+    flex:1
     //6.5
-	},
+  },
   userInfoGradePicker: {
     flex: 3,
     alignSelf: 'center',
@@ -155,25 +153,25 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center'
   },
-	userInfoExitContainer:{
-		flex:1,
-		justifyContent:'flex-start',
-		alignItems:'center',
-	},
-	userInfoExitButtonContainer:{
-		width:"100%",
-		height:"50%",
+  userInfoExitContainer:{
+    flex:1,
+    justifyContent:'flex-start',
+    alignItems:'center',
+  },
+  userInfoExitButtonContainer:{
+    width:"100%",
+    height:"50%",
     padding: 20,
     borderRadius: 2,
     elevation: 5,
-		backgroundColor:'#B61901',
-		justifyContent:'center',
-	},
-	userInfoExitButtonText:{
-		color:'white',
-		fontSize:20,
-		fontWeight:'bold',
-		textAlign:'center'
-	}
+    backgroundColor:'#B61901',
+    justifyContent:'center',
+  },
+  userInfoExitButtonText:{
+    color:'white',
+    fontSize:20,
+    fontWeight:'bold',
+    textAlign:'center'
+  }
 });
 //export default styles;
