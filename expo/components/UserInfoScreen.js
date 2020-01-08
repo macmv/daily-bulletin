@@ -72,15 +72,18 @@ export default class UserInfoScreen extends Component {
                   {this.props.description}
                 </Text>
               </View>
-              <Picker
-                selectedValue={this.state.grade + ""}
-                style={styles.userInfoGradePicker}
-                onValueChange={(itemValue, itemIndex) => this.setGrade(parseInt(itemValue))}>
-                <Picker.Item label="9th Grade" value="9" />
-                <Picker.Item label="10th Grade" value="10" />
-                <Picker.Item label="11th Grade" value="11" />
-                <Picker.Item label="12th Grade" value="12" />
-              </Picker>
+              <View style={styles.gradeSelector}>
+                <Text style={styles.gradeSelectorText}>Grade:</Text>
+                <Picker
+                  selectedValue={this.state.grade + ""}
+                  style={styles.gradeSelectorPicker}
+                  onValueChange={(itemValue, itemIndex) => this.setGrade(parseInt(itemValue))}>
+                  <Picker.Item label="9th Grade" value="9" />
+                  <Picker.Item label="10th Grade" value="10" />
+                  <Picker.Item label="11th Grade" value="11" />
+                  <Picker.Item label="12th Grade" value="12" />
+                </Picker>
+              </View>
               <View style={styles.userInfoExitContainer}>
                 <TouchableHighlight
                   onPress={this.exitUserInfoScreen} >
@@ -101,15 +104,32 @@ export default class UserInfoScreen extends Component {
 
 //define styles
 const styles = StyleSheet.create({
+  gradeSelector: {
+    flex: 1,
+    flexDirection: 'row',
+    width: '80%',
+    alignSelf: 'center',
+    alignItems: 'center',
+    height: '100%',
+  },
+  gradeSelectorText: {
+    flex: 1,
+    textAlign: 'center',
+    justifyContent: 'center',
+  },
+  gradeSelectorPicker: {
+    flex: 1,
+  },
   userInfoContainer: {
     backgroundColor: 'white',
-    flex: 1,
     marginTop: 70,
     marginBottom: 40,
     marginLeft: 20,
     marginRight: 20,
     elevation: 10,
-    shadowOffset: {width: 10, height: 10}
+    shadowOffset: {width: 10, height: 10},
+    flexDirection: 'column',
+    flex: 1
   },
   userInfoTitle: {
     color: 'black',
@@ -136,18 +156,12 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   },
   userInfoDescriptionContainer: {
-    flex: 1
-  },
-  userInfoGradePicker: {
-    flex: 3,
-    alignSelf: 'center',
-    width: "50%",
     justifyContent: 'center',
-    alignItems: 'center'
+    flex: 1
   },
   userInfoExitContainer: {
     flex: 1,
-    justifyContent: 'flex-start',
+    justifyContent: 'center',
     alignItems: 'center',
   },
   userInfoExitButtonContainer: {
