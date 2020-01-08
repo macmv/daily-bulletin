@@ -19,7 +19,6 @@ export default class UserInfoScreen extends Component {
   //pagekey: "gradepopup"
   //previousVisible: null
   setGrade = (grade) => {
-    //console.log("Setting grade to: " + grade);
     this.setState({grade: grade});
   }
   exitUserInfoScreen = () => {
@@ -36,22 +35,17 @@ export default class UserInfoScreen extends Component {
   componentDidMount() {
     //get the grade that was saved
     AsyncStorage.getItem("gradekey", (err, result) => {
-      //console.log(this.props.pagekey + " : " + JSON.parse(result)["grade"]);
       if (!err) {
         if (result == null) {
           //if result is null
-          //console.log("null value recieved");
           this.state.modalLoaded = true;
           this.state.firstTimePopup = true;
-          //console.log("Modal Loaded and got null: " + this.state.modalLoaded);
           this.setState({grade: "9"});
         } else {
           //otherwise, load in grade
           data = JSON.parse(result);
           this.state.modalLoaded = true;
           this.state.firstTimePopup = true;
-          //console.log("Modal Loaded and got result: " + this.state.modalLoaded);
-          //console.log("result", data["grade"]);
           this.setState({grade: data["grade"]});
         }
       }
@@ -59,7 +53,6 @@ export default class UserInfoScreen extends Component {
   }
   //display module popup
   render() {
-    //console.log("this.state.firstTimePopup: " + this.state.firstTimePopup);
     if ((this.state.modalLoaded && this.props.visible) || this.state.firstTimePopup) {
       return (
         <View>
@@ -108,43 +101,42 @@ export default class UserInfoScreen extends Component {
 
 //define styles
 const styles = StyleSheet.create({
-  userInfoContainer:{
-    backgroundColor:'white',
-    flex:1,
-    marginTop:70,
-    marginBottom:40,
-    marginLeft:20,
-    marginRight:20,
+  userInfoContainer: {
+    backgroundColor: 'white',
+    flex: 1,
+    marginTop: 70,
+    marginBottom: 40,
+    marginLeft: 20,
+    marginRight: 20,
     elevation: 10,
     shadowOffset: {width: 10, height: 10}
   },
-  userInfoTitle:{
-    color:'black',
-        fontWeight:'bold',
-    fontSize:20,
-    textAlign:'center',
-    margin:10,
+  userInfoTitle: {
+    color: 'black',
+    fontWeight: 'bold',
+    fontSize: 20,
+    textAlign: 'center',
+    margin: 10,
   },
-  userInfoDescription:{
-    color:'black',
-        fontSize:15,
-    marginRight:20,
-    marginLeft:20
+  userInfoDescription: {
+    color: 'black',
+    fontSize: 15,
+    marginRight: 20,
+    marginLeft: 20
   },
-  userInfoCloseIcon:{
-    alignSelf:'flex-end',
-    flex:0.5,
-    marginRight:10
+  userInfoCloseIcon: {
+    alignSelf: 'flex-end',
+    flex: 0.5,
+    marginRight: 10
   },
   userInfoTitleContainer:{
-    flex:1,
-    flexDirection:'row',
-    justifyContent:'center',
-    alignItems:'center'
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent:' center',
+    alignItems: 'center'
   },
-  userInfoDescriptionContainer:{
-    flex:1
-    //6.5
+  userInfoDescriptionContainer: {
+    flex: 1
   },
   userInfoGradePicker: {
     flex: 3,
@@ -153,25 +145,24 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center'
   },
-  userInfoExitContainer:{
-    flex:1,
-    justifyContent:'flex-start',
-    alignItems:'center',
+  userInfoExitContainer: {
+    flex: 1,
+    justifyContent: 'flex-start',
+    alignItems: 'center',
   },
-  userInfoExitButtonContainer:{
-    width:"100%",
-    height:"50%",
+  userInfoExitButtonContainer: {
+    width: "100%",
+    height: "50%",
     padding: 20,
     borderRadius: 2,
     elevation: 5,
-    backgroundColor:'#B61901',
-    justifyContent:'center',
+    backgroundColor: '#B61901',
+    justifyContent: 'center',
   },
-  userInfoExitButtonText:{
-    color:'white',
-    fontSize:20,
-    fontWeight:'bold',
-    textAlign:'center'
+  userInfoExitButtonText: {
+    color: 'white',
+    fontSize: 20,
+    fontWeight: 'bold',
+    textAlign: 'center'
   }
 });
-//export default styles;
