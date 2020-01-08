@@ -132,7 +132,7 @@ const styles = StyleSheet.create({
   userInfoTitleContainer:{
     flex: 1,
     flexDirection: 'row',
-    justifyContent:' center',
+    justifyContent: 'center',
     alignItems: 'center'
   },
   userInfoDescriptionContainer: {
